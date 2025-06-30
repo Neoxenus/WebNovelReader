@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public interface UserService {
     User saveUser(User user);
-    User getUser(String userName);
+    User getUser(String username);
     List<User> getUsers();
 
     boolean existsByUsername(String username);
