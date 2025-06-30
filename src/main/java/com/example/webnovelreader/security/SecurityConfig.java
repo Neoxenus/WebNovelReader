@@ -1,6 +1,7 @@
     package com.example.webnovelreader.security;
 
     import lombok.RequiredArgsConstructor;
+    import org.springframework.beans.factory.annotation.Value;
     import org.springframework.context.annotation.Bean;
     import org.springframework.context.annotation.Configuration;
     import org.springframework.context.annotation.Lazy;
@@ -21,13 +22,13 @@
     @RequiredArgsConstructor
     @Lazy
     public class SecurityConfig  {
-        private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
+        @Value("${jwt.secret}")
+        private String secret;
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authManager, bCryptPasswordEncoder);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authManager, secret);
             jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
 
             return http.csrf(AbstractHttpConfigurer::disable)
@@ -44,7 +45,7 @@
 
 
                     .addFilter(jwtAuthenticationFilter)
-                    .addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(new JwtAuthorizationFilter(secret), UsernamePasswordAuthenticationFilter.class)
                     .build();
         }
 

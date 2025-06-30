@@ -20,12 +20,15 @@ services:
       - db
     ports:
       - "8080:8080"
+    volumes:
+      - /src/main/resources/secrets.properties:/app/secrets.properties
     environment:
+      SPRING_CONFIG_IMPORT: optional:secrets.properties
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/web-reader?characterEncoding=UTF-8
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 1111
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
       SPRING_JPA_SHOW_SQL: "true"
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"

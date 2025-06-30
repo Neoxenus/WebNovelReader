@@ -12,5 +12,5 @@ public interface UserService {
     User getUser(String userName);
     List<User> getUsers();
 
-    boolean existsByUserName(String userName);
+    boolean existsByUsername(String username);
 }

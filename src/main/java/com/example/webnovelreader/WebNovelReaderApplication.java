@@ -18,7 +18,7 @@ public class WebNovelReaderApplication {
     @Bean
     CommandLineRunner run(UserService userService){
         return args -> {
-            boolean adminExists = userService.existsByUserName("admin");
+            boolean adminExists = userService.existsByUsername("admin");
             if(!adminExists) {
                 userService.saveUser(new User(null, "admin", "admin", UserRole.ADMIN));
                 userService.saveUser(new User(null, "user", "user", UserRole.USER));
