@@ -12,19 +12,19 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/user/all")
+    @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers(){
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user").toUriString());
-        return ResponseEntity.created(uri).body(userService.getUsers());
+        return ResponseEntity.ok().body(userService.getUsers());
     }
 
-    @PostMapping("/user/save")
+    @PostMapping("/users/save")
     public ResponseEntity<User> saveUser(@RequestBody User user){
-        return ResponseEntity.ok().body(userService.saveUser(user));
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user").toUriString());
+        return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
 

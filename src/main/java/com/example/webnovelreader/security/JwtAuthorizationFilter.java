@@ -11,10 +11,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -56,7 +58,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 } catch (Exception e){
                     log.error("Error logging in: {}", e.getMessage());
                     response.setHeader("error", e.getMessage());
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.setStatus(HttpStatus.FORBIDDEN.value());
                     Map<String, String> errors = new HashMap<>();
                     errors.put("error", e.getMessage());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
