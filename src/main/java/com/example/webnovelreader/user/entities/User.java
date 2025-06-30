@@ -1,24 +1,25 @@
 package com.example.webnovelreader.user.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
-    private String userName;
+    @Column(nullable = false)
+    private String username;
+    @Column(nullable = false)
     private String password;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 }

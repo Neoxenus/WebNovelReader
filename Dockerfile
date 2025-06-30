@@ -1,4 +1,4 @@
-FROM openjdk:25-ea-23-jdk-bullseye
+FROM openjdk:24-jdk
 WORKDIR /app
-COPY /out/artifacts/WebNovelReader_jar/WebNovelReader.jar /app/WebNovelReader.jar
-ENTRYPOINT ["java", "-jar", "LessonJPA.jar"]
+COPY target/WebNovelReader-0.0.1-SNAPSHOT.jar /app/WebNovelReader.jar
+ENTRYPOINT ["java", "-jar", "WebNovelReader.jar"]

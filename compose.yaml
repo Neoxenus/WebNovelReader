@@ -15,8 +15,6 @@ services:
   app:
 
     build: .
-    stdin_open: true
-    tty: true
     container_name: web-novel-reader-app
     depends_on:
       - db
