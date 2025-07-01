@@ -1,17 +1,13 @@
-package com.example.webnovelreader.user.controller;
+package com.neoxenus.webnovelreader.user.controller;
 
-import com.example.webnovelreader.security.TokenService;
-import com.example.webnovelreader.user.entities.User;
-import com.example.webnovelreader.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.neoxenus.webnovelreader.user.entities.User;
+import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -21,7 +17,6 @@ import java.util.List;
 @Slf4j
 public class UserController {
     private final UserService userService;
-    private final TokenService tokenService;
 
 
     @GetMapping("/users")
@@ -35,8 +30,5 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
-    @GetMapping("/token/refresh")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        tokenService.refreshToken(request, response);
-    }
+
 }

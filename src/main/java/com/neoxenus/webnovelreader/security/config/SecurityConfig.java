@@ -1,8 +1,8 @@
-package com.example.webnovelreader.security.config;
+package com.neoxenus.webnovelreader.security.config;
 
-import com.example.webnovelreader.security.JwtService;
-import com.example.webnovelreader.security.filters.JwtAuthenticationFilter;
-import com.example.webnovelreader.security.filters.JwtAuthorizationFilter;
+import com.neoxenus.webnovelreader.util.JwtService;
+import com.neoxenus.webnovelreader.security.filters.JwtAuthenticationFilter;
+import com.neoxenus.webnovelreader.security.filters.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +46,7 @@ public class SecurityConfig  {
 
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(             "/api/login", "/api/token/refresh").permitAll()
-                        .requestMatchers(GET, "/api/user/**").hasAnyAuthority("ADMIN")
+                        .requestMatchers(GET, "api/users", "/api/users/**").hasAnyAuthority("ADMIN")
                         .anyRequest().permitAll()
                 )
                 .addFilter(jwtAuthenticationFilter(authManager))

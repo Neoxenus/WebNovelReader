@@ -1,4 +1,4 @@
-package com.example.webnovelreader;
+package com.neoxenus.webnovelreader;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

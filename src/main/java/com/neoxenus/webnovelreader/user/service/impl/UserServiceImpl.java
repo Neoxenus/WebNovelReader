@@ -1,8 +1,8 @@
-package com.example.webnovelreader.user.service.impl;
+package com.neoxenus.webnovelreader.user.service.impl;
 
-import com.example.webnovelreader.user.entities.User;
-import com.example.webnovelreader.user.repo.UserRepository;
-import com.example.webnovelreader.user.service.UserService;
+import com.neoxenus.webnovelreader.user.entities.User;
+import com.neoxenus.webnovelreader.user.repo.UserRepository;
+import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

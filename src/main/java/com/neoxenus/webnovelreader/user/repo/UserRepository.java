@@ -1,6 +1,6 @@
-package com.example.webnovelreader.user.repo;
+package com.neoxenus.webnovelreader.user.repo;
 
-import com.example.webnovelreader.user.entities.User;
+import com.neoxenus.webnovelreader.user.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

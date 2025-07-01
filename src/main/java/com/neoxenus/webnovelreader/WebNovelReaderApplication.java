@@ -1,8 +1,8 @@
-package com.example.webnovelreader;
+package com.neoxenus.webnovelreader;
 
-import com.example.webnovelreader.user.entities.User;
-import com.example.webnovelreader.user.entities.UserRole;
-import com.example.webnovelreader.user.service.UserService;
+import com.neoxenus.webnovelreader.user.entities.User;
+import com.neoxenus.webnovelreader.user.entities.UserRole;
+import com.neoxenus.webnovelreader.user.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

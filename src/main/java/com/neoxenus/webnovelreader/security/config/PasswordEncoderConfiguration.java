@@ -1,4 +1,4 @@
-package com.example.webnovelreader.security.config;
+package com.neoxenus.webnovelreader.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

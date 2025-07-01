@@ -1,4 +1,4 @@
-package com.example.webnovelreader.user.entities;
+package com.neoxenus.webnovelreader.user.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

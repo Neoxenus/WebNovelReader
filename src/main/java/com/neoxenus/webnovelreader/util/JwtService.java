@@ -1,4 +1,4 @@
-package com.example.webnovelreader.security;
+package com.neoxenus.webnovelreader.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -38,7 +38,7 @@ public class JwtService {
         JWTVerifier verifier = JWT.require(getAlgorithm()).build();
         return verifier.verify(token);
     }
-    public Algorithm getAlgorithm() {
+    private Algorithm getAlgorithm() {
         return Algorithm.HMAC256(secret.getBytes());
     }
 }

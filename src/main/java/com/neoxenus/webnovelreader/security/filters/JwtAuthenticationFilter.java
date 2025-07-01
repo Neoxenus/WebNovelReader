@@ -1,6 +1,6 @@
-package com.example.webnovelreader.security.filters;
+package com.neoxenus.webnovelreader.security.filters;
 
-import com.example.webnovelreader.security.JwtService;
+import com.neoxenus.webnovelreader.util.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;

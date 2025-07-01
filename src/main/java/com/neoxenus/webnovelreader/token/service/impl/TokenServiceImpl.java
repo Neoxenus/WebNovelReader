@@ -1,11 +1,13 @@
-package com.example.webnovelreader.security;
+package com.neoxenus.webnovelreader.token.service.impl;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.webnovelreader.user.entities.User;
-import com.example.webnovelreader.user.repo.UserRepository;
+import com.neoxenus.webnovelreader.token.service.TokenService;
+import com.neoxenus.webnovelreader.util.JwtService;
+import com.neoxenus.webnovelreader.user.entities.User;
+import com.neoxenus.webnovelreader.user.repo.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +28,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class TokenService {
+public class TokenServiceImpl implements TokenService {
 
     @Value("${jwt.secret}")
     private String secret;
