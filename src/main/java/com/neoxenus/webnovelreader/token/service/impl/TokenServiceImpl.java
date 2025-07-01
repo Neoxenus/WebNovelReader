@@ -4,11 +4,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neoxenus.webnovelreader.token.service.TokenService;
-import com.neoxenus.webnovelreader.util.JwtService;
 import com.neoxenus.webnovelreader.user.entities.User;
 import com.neoxenus.webnovelreader.user.repo.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.neoxenus.webnovelreader.util.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -47,7 +46,7 @@ public class TokenServiceImpl implements TokenService {
                 User user = userRepository.findByUsername(username);
 
                 String accessToken =
-                        jwtService.generateAccessToken(user.getUsername(), List.of(user.getRole().name()), request);
+                        jwtService.generateAccessToken(user.getUsername(), user.getRoles().stream().map(Enum::name).toList(), request);
                 Map<String, String> tokens = Map.of(
                         "access_token", accessToken,
                         "refresh_token", refreshToken
