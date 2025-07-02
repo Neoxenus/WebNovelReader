@@ -2,11 +2,12 @@ package com.neoxenus.webnovelreader;
 
 import com.neoxenus.webnovelreader.user.entities.User;
 import com.neoxenus.webnovelreader.user.entities.UserRole;
-import com.neoxenus.webnovelreader.user.service.UserService;
+import com.neoxenus.webnovelreader.user.repo.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Set;
 
@@ -18,20 +19,20 @@ public class WebNovelReaderApplication {
     }
 
     @Bean
-    CommandLineRunner run(UserService userService){
+    CommandLineRunner run(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
         return args -> {
-            boolean adminExists = userService.existsByUsername("admin");
+            boolean adminExists = userRepository.existsByUsername("admin");
             if(!adminExists) {
-                userService.saveUser(User.builder()
+                userRepository.save(User.builder()
                         .username("admin")
-                        .password("admin")
+                        .password(bCryptPasswordEncoder.encode("admin"))
                         .email("admin@admin")
                         .roles(Set.of(UserRole.ADMIN, UserRole.USER))
                         .build());
 
-                userService.saveUser(User.builder()
+                userRepository.save(User.builder()
                         .username("user")
-                        .password("user")
+                        .password(bCryptPasswordEncoder.encode("user"))
                         .email("user@user")
                         .roles(Set.of(UserRole.USER))
                         .build());

@@ -1,6 +1,10 @@
 package com.neoxenus.webnovelreader.user.service.impl;
 
 import com.neoxenus.webnovelreader.user.entities.User;
+import com.neoxenus.webnovelreader.user.entities.dtos.UserCreateRequest;
+import com.neoxenus.webnovelreader.user.entities.dtos.UserDto;
+import com.neoxenus.webnovelreader.user.entities.dtos.UserUpdateRequest;
+import com.neoxenus.webnovelreader.user.mapper.UserMapper;
 import com.neoxenus.webnovelreader.user.repo.UserRepository;
 import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +19,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service @RequiredArgsConstructor @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -38,27 +46,48 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public User saveUser(User user) {
+    public UserDto saveUser(UserCreateRequest user) {
         log.info("Saving new user {} to the database", user.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        User userEntity = userMapper.mapCreateRequestToUser(user);
+        userEntity = userRepository.save(userEntity);
+        userRepository.flush();
+        return userMapper.mapUserToDto(userEntity);
     }
 
     @Override
-    public User getUser(String userName) {
-        log.info("Getting user {} from database", userName);
-        return userRepository.findByUsername(userName);
+    public Optional<UserDto> getUser(Long id) {
+        log.info("Getting user with id {} from database", id);
+        return userRepository.findById(id).map(userMapper::mapUserToDto);
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<UserDto> getUsers() {
         log.info("Getting all users from database");
-        return userRepository.findAll();
+        return userRepository.findAll().stream().map(userMapper::mapUserToDto).toList();
+    }
+
+    @Override
+    @Transactional
+    public UserDto updateUser(Long id, UserUpdateRequest userUpdateRequest) throws NoSuchElementException {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            userUpdateRequest.setPassword(bCryptPasswordEncoder.encode(userUpdateRequest.getPassword()));
+            User user = userMapper.mapUpdateRequestToUser(optionalUser.get(), userUpdateRequest);
+            return userMapper.mapUserToDto(userRepository.save(user));
+        } else {
+            throw new NoSuchElementException("No user for such and id");
+        }
     }
 
     @Override
     public boolean existsByUsername(String userName) {
         return userRepository.existsByUsername(userName);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
 
