@@ -1,5 +1,7 @@
 package com.neoxenus.webnovelreader.user.service.impl;
 
+import com.neoxenus.webnovelreader.exceptions.NoSuchUserException;
+import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
 import com.neoxenus.webnovelreader.user.entities.User;
 import com.neoxenus.webnovelreader.user.entities.dtos.UserCreateRequest;
 import com.neoxenus.webnovelreader.user.entities.dtos.UserDto;
@@ -19,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service @RequiredArgsConstructor @Slf4j
@@ -46,7 +47,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public UserDto saveUser(UserCreateRequest user) {
+    public UserDto saveUser(UserCreateRequest user) throws UsernameExistsException {
+        if(userRepository.existsByUsername(user.getUsername())){
+            log.info("Username {} already exists", user.getUsername());
+            throw new UsernameExistsException("Username " + user.getUsername() + " already exists");
+        }
+
         log.info("Saving new user {} to the database", user.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         User userEntity = userMapper.mapCreateRequestToUser(user);
@@ -69,14 +75,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public UserDto updateUser(Long id, UserUpdateRequest userUpdateRequest) throws NoSuchElementException {
+    public UserDto updateUser(Long id, UserUpdateRequest userUpdateRequest) throws NoSuchUserException, UsernameExistsException {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
+            User userByUsername = userRepository.findByUsername(userUpdateRequest.getUsername());
+            if(userByUsername != null && !userByUsername.getId().equals(id))
+                throw new UsernameExistsException("Username " + userUpdateRequest.getUsername() + " already exists");
+
             userUpdateRequest.setPassword(bCryptPasswordEncoder.encode(userUpdateRequest.getPassword()));
             User user = userMapper.mapUpdateRequestToUser(optionalUser.get(), userUpdateRequest);
             return userMapper.mapUserToDto(userRepository.save(user));
         } else {
-            throw new NoSuchElementException("No user for such and id");
+            throw new NoSuchUserException("No user for such and id");
         }
     }
 

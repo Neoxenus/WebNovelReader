@@ -34,17 +34,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(
+            HttpServletRequest request,
+            HttpServletResponse response) throws AuthenticationException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         log.info("Username is: {}", username); log.info("Password is: {}", password);
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password );
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(username, password );
 
         return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
+    protected void successfulAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            FilterChain chain,
+                                            Authentication authentication) throws IOException {
         User user = (User) authentication.getPrincipal();
         List<String> roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         String accessToken = jwtService.generateAccessToken(user.getUsername(), roles, request);

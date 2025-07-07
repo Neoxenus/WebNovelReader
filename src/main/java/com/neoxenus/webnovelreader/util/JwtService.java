@@ -17,11 +17,15 @@ import java.util.Date;
 public class JwtService {
     @Value("${jwt.secret}")
     private String secret;
+    @Value("${jwt.access-expiration}")
+    private Long accessExpirationMillis;
 
+    @Value("${jwt.refresh-expiration}")
+    private Long refreshExpirationMillis;
     public String generateAccessToken(String username, Collection<String> roles, HttpServletRequest request){
         return JWT.create()
                 .withSubject(username)
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + accessExpirationMillis))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", roles.stream().toList())
                 .sign(getAlgorithm());
@@ -29,7 +33,7 @@ public class JwtService {
     public String generateRefreshToken(String username, HttpServletRequest request){
         return JWT.create()
                 .withSubject(username)
-                .withExpiresAt(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + refreshExpirationMillis))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(getAlgorithm());
     }

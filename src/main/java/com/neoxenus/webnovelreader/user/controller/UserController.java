@@ -1,5 +1,7 @@
 package com.neoxenus.webnovelreader.user.controller;
 
+import com.neoxenus.webnovelreader.exceptions.NoSuchUserException;
+import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
 import com.neoxenus.webnovelreader.user.entities.dtos.UserCreateRequest;
 import com.neoxenus.webnovelreader.user.entities.dtos.UserDto;
 import com.neoxenus.webnovelreader.user.entities.dtos.UserUpdateRequest;
@@ -7,6 +9,7 @@ import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,7 +31,8 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<UserDto> saveUser(@RequestBody UserCreateRequest user){
+    public ResponseEntity<UserDto> saveUser(@Validated @RequestBody UserCreateRequest user)
+                                            throws UsernameExistsException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
@@ -43,7 +47,9 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest userUpdateRequest) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id,
+                                              @RequestBody UserUpdateRequest userUpdateRequest)
+                                              throws NoSuchUserException, UsernameExistsException {
         UserDto user = userService.updateUser(id, userUpdateRequest);
 
         return ResponseEntity.ok().body(user);

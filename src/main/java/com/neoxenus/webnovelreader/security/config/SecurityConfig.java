@@ -16,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 @EnableWebSecurity
@@ -45,6 +46,7 @@ public class SecurityConfig  {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers(POST, "api/users").permitAll()
                         .requestMatchers(             "/api/login", "/api/token/refresh").permitAll()
                         .requestMatchers(GET, "api/users", "/api/users/**").hasAnyAuthority("ADMIN")
                         .anyRequest().permitAll()
