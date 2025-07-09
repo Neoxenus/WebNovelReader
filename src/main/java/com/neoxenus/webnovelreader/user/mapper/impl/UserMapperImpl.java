@@ -1,0 +1,54 @@
+package com.neoxenus.webnovelreader.user.mapper.impl;
+
+import com.neoxenus.webnovelreader.user.entities.User;
+import com.neoxenus.webnovelreader.user.entities.UserRole;
+import com.neoxenus.webnovelreader.user.entities.dtos.UserCreateRequest;
+import com.neoxenus.webnovelreader.user.entities.dtos.UserDto;
+import com.neoxenus.webnovelreader.user.entities.dtos.UserUpdateRequest;
+import com.neoxenus.webnovelreader.user.mapper.UserMapper;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Set;
+
+@Component
+public class UserMapperImpl implements UserMapper {
+    public UserDto mapUserToDto(User user){
+        if(user == null)
+            return null;
+        return UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .roles(user.getRoles())
+                .createdAt(user.getCreatedAt())
+                .build();
+    }
+
+    public List<UserDto> mapUserToDto(List<User> users){
+        if(users == null)
+            return null;
+        return users.stream().map(this::mapUserToDto).toList();
+    }
+
+    public User mapCreateRequestToUser(UserCreateRequest user){
+        if(user == null)
+            return null;
+        return User.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .roles(Set.of(UserRole.USER))
+                .build();
+    }
+
+    public User mapUpdateRequestToUser(User user, UserUpdateRequest userUpdateRequest){
+        if(user == null || userUpdateRequest == null)
+            return null;
+        user.setUsername(userUpdateRequest.getUsername());
+        user.setEmail(userUpdateRequest.getEmail());
+        user.setPassword(userUpdateRequest.getPassword());
+        user.setRoles(userUpdateRequest.getRoles());
+        return user;
+    }
+}

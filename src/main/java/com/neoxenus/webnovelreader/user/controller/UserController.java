@@ -33,7 +33,7 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<UserDto> saveUser(@Validated @RequestBody UserCreateRequest user)
                                             throws UsernameExistsException {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 

@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<UserDto> getUsers() {
         log.info("Getting all users from database");
-        return userRepository.findAll().stream().map(userMapper::mapUserToDto).toList();
+        return userMapper.mapUserToDto(userRepository.findAll());
     }
 
     @Override
