@@ -1,6 +1,7 @@
 package com.neoxenus.webnovelreader.books.controller;
 
 import com.neoxenus.webnovelreader.books.entities.BookCreateRequest;
+import com.neoxenus.webnovelreader.books.entities.BookUpdateRequest;
 import com.neoxenus.webnovelreader.books.services.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,5 +34,15 @@ public class BookController {
     @GetMapping("/books")
     public ResponseEntity<?> getAllBooks(){
         return ResponseEntity.ok().body(bookService.getAllBooks());
+    }
+
+    @PatchMapping("/books/{id}")
+    public ResponseEntity<?> updateBook(@PathVariable Long id, @RequestBody BookUpdateRequest bookUpdateRequest) {
+        return ResponseEntity.ok().body(bookService.updateBook(id, bookUpdateRequest));
+    }
+
+    @DeleteMapping("/books/{id}")
+    public void deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
     }
 }

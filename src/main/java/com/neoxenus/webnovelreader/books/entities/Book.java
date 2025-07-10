@@ -21,7 +21,7 @@ public class Book {
     @GeneratedValue
     private Long id;
 
-    private String title;
+    private String title;   //{title + author} => unique?
 
     private String yearOfPublishing;
 

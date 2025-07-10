@@ -1,5 +1,6 @@
 package com.neoxenus.webnovelreader.books.services.impl;
 
+import com.neoxenus.webnovelreader.books.entities.Book;
 import com.neoxenus.webnovelreader.books.entities.BookCreateRequest;
 import com.neoxenus.webnovelreader.books.entities.BookDto;
 import com.neoxenus.webnovelreader.books.entities.BookUpdateRequest;
@@ -10,6 +11,7 @@ import com.neoxenus.webnovelreader.exceptions.NoSuchBookException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
 
     @Override
+    @Transactional
     public BookDto saveBook(BookCreateRequest book) {
         return bookMapper.toDto(
                 bookRepository.save(
@@ -42,11 +45,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto updateBook(Long id, BookUpdateRequest book) {
-        return null;
+    @Transactional
+    public BookDto updateBook(Long id, BookUpdateRequest bookRequest) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        if(optionalBook.isPresent()) {
+
+            //todo: check unique fields
+            Book bookById = optionalBook.get();
+            Book updatedBook = bookMapper.toBook(bookById, bookRequest);
+            return bookMapper.toDto(bookRepository.save(updatedBook));
+        } else {
+            throw new NoSuchBookException("No book for this id: " + id);
+        }
     }
 
     @Override
+    @Transactional
     public void deleteBook(Long id) {
         if(bookRepository.existsById(id)){
             log.info("Deleting book with id: {}", id);
