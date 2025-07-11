@@ -21,5 +21,6 @@ public class BookDto {
 
     private final LocalDateTime updatedAt;
 
+    //@JsonManagedReference
     private final List<Chapter> chapterList;
 }

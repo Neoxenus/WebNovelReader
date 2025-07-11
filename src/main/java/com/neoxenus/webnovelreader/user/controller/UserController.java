@@ -19,18 +19,18 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 @Slf4j
 public class UserController {
     private final UserService userService;
 
 
-    @GetMapping("/users")
+    @GetMapping
     public ResponseEntity<List<UserDto>> getUsers(){
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<UserDto> saveUser(@Validated @RequestBody UserCreateRequest user)
                                             throws UsernameExistsException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users").toUriString());
@@ -38,7 +38,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id){
         Optional<UserDto> userOptional = userService.getUser(id);
         return userOptional
@@ -46,7 +46,7 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id,
                                               @RequestBody UserUpdateRequest userUpdateRequest)
                                               throws NoSuchUserException, UsernameExistsException {
@@ -54,7 +54,7 @@ public class UserController {
 
         return ResponseEntity.ok().body(user);
     }
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
     }

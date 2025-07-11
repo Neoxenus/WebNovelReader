@@ -14,6 +14,7 @@ public class Chapter {
     private Long id;
 
     @ManyToOne
+    //@JsonBackReference
     private Book book;
 
     private String title;

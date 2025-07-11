@@ -32,6 +32,7 @@ public class Book {
 
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     @OrderBy("chapterNumber DESC")
+    //@JsonManagedReference
     private List<Chapter> chapterList;
 
     @Transient

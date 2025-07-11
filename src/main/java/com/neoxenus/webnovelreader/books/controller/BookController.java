@@ -13,35 +13,35 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/books")
 @Slf4j
 public class BookController {
 
     private final BookService bookService;
 
-    @PostMapping("/books")
+    @PostMapping
     public ResponseEntity<?> createBook(@RequestBody BookCreateRequest book){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/books").toUriString());
         return ResponseEntity.created(uri).body(bookService.saveBook(book));
     }
 
-    @GetMapping("/books/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getBook(@PathVariable Long id){
         return bookService.getBook(id)
                 .map(ResponseEntity.ok()::body)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @GetMapping("/books")
+    @GetMapping
     public ResponseEntity<?> getAllBooks(){
         return ResponseEntity.ok().body(bookService.getAllBooks());
     }
 
-    @PatchMapping("/books/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<?> updateBook(@PathVariable Long id, @RequestBody BookUpdateRequest bookUpdateRequest) {
         return ResponseEntity.ok().body(bookService.updateBook(id, bookUpdateRequest));
     }
 
-    @DeleteMapping("/books/{id}")
+    @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
     }

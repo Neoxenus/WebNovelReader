@@ -13,12 +13,12 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/token")
 @Slf4j
 public class TokenController {
     private final TokenService tokenService;
 
-    @GetMapping("/token/refresh")
+    @GetMapping("/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         tokenService.refreshToken(request, response);
     }
