@@ -30,7 +30,8 @@ public class Book {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @OrderBy("chapterNumber DESC")
     private List<Chapter> chapterList;
 
     @Transient

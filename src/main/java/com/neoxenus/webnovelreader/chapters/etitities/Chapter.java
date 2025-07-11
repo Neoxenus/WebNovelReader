@@ -3,7 +3,6 @@ package com.neoxenus.webnovelreader.chapters.etitities;
 import com.neoxenus.webnovelreader.books.entities.Book;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.context.annotation.Lazy;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +20,8 @@ public class Chapter {
 
     private Integer chapterNumber;
 
-    @Lazy
+    @Lob
+    @Basic(fetch = FetchType.LAZY) // Lazy load the large text field
     private String content; // need to choose type carefully and how to store content !!!!!!!!!!
 
 //    private LocalDateTime createdAt;
