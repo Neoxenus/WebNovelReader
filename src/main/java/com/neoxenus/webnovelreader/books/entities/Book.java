@@ -30,23 +30,21 @@ public class Book {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book")
     @OrderBy("chapterNumber DESC")
     //@JsonManagedReference
     private List<Chapter> chapterList;
 
-    @Transient
-    public Integer getNumberOfChapters() {
-        return chapterList == null ? 0 : chapterList.size();
-    }
+//    @Transient
+//    public Integer getNumberOfChapters() {
+//        return chapterList == null ? 0 : chapterList.size();
+//    }
 
     /*
     status in COO(ongoing, dropped, hiatus, completed)
 	status of translation
 	number of chapters in original
 	number of chapters Available/translated
-	year of publishing
-	language
 	authors
 	translators -> new entity (id, name)
 	publishers -> new entity (id, name)

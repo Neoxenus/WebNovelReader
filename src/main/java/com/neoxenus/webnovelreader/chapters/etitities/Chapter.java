@@ -3,6 +3,7 @@ package com.neoxenus.webnovelreader.chapters.etitities;
 import com.neoxenus.webnovelreader.books.entities.Book;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -21,11 +22,11 @@ public class Chapter {
 
     private Integer chapterNumber;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY) // Lazy load the large text field
-    private String content; // need to choose type carefully and how to store content !!!!!!!!!!
+    @OneToOne(mappedBy = "chapter", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    private ChapterContent content;
 
 //    private LocalDateTime createdAt;
+    @CreationTimestamp
     private LocalDateTime datePublished;
 
     //private List<Comment> commentList;

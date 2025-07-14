@@ -1,6 +1,6 @@
 package com.neoxenus.webnovelreader.books.entities;
 
-import com.neoxenus.webnovelreader.chapters.etitities.Chapter;
+import com.neoxenus.webnovelreader.chapters.etitities.dtos.ChapterSummary;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,6 +21,5 @@ public class BookDto {
 
     private final LocalDateTime updatedAt;
 
-    //@JsonManagedReference
-    private final List<Chapter> chapterList;
+    private final List<ChapterSummary> chapterList;
 }

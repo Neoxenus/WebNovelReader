@@ -7,15 +7,12 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class ChapterDto {
+public class ChapterSummary {
+    private Long id;
 
     private String title;
 
     private Integer chapterNumber;
 
-    private String content;
-
     private LocalDateTime datePublished;
-
-    private Long bookId;
 }

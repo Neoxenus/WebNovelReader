@@ -35,8 +35,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public Optional<BookDto> getBook(Long id) {
-        return bookMapper.toDto(bookRepository.findById(id));
+        Optional<Book> bookOptional = bookRepository.findById(id);
+        return bookMapper.toDto(bookOptional);
     }
 
     @Override

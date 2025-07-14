@@ -5,6 +5,8 @@ import com.neoxenus.webnovelreader.books.entities.BookCreateRequest;
 import com.neoxenus.webnovelreader.books.entities.BookDto;
 import com.neoxenus.webnovelreader.books.entities.BookUpdateRequest;
 import com.neoxenus.webnovelreader.books.mapper.BookMapper;
+import com.neoxenus.webnovelreader.chapters.mapper.ChapterMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,7 +14,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class BookMapperImpl implements BookMapper {
+
+    private final ChapterMapper chapterMapper;
+
 
     @Override
     public BookDto toDto(Book book) {
@@ -23,8 +29,8 @@ public class BookMapperImpl implements BookMapper {
                 .title(book.getTitle())
                 .yearOfPublishing(book.getYearOfPublishing())
                 .languageOfOriginal(book.getLanguageOfOriginal())
+                .chapterList(chapterMapper.toSummary(book.getChapterList()))
                 .updatedAt(book.getUpdatedAt())
-                .chapterList(book.getChapterList())
                 .build();
     }
 
@@ -35,11 +41,23 @@ public class BookMapperImpl implements BookMapper {
         return Optional.of(toDto(book.get()));
     }
 
+    private BookDto toDtoWithoutChapters(Book book) {
+        if(book == null)
+            return null;
+        return BookDto.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .yearOfPublishing(book.getYearOfPublishing())
+                .languageOfOriginal(book.getLanguageOfOriginal())
+                .updatedAt(book.getUpdatedAt())
+                .build();
+    }
+
     @Override
     public List<BookDto> toDto(List<Book> bookList) {
         if(bookList == null)
             return null;
-        return bookList.stream().map(this::toDto).toList();
+        return bookList.stream().map(this::toDtoWithoutChapters).toList();
     }
 
     @Override
