@@ -1,6 +1,6 @@
 package com.neoxenus.webnovelreader.user.controller;
 
-import com.neoxenus.webnovelreader.exceptions.NoSuchUserException;
+import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
 import com.neoxenus.webnovelreader.user.entities.dtos.UserCreateRequest;
 import com.neoxenus.webnovelreader.user.entities.dtos.UserDto;
@@ -49,7 +49,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id,
                                               @RequestBody UserUpdateRequest userUpdateRequest)
-                                              throws NoSuchUserException, UsernameExistsException {
+                                              throws NoSuchEntityException, UsernameExistsException {
         UserDto user = userService.updateUser(id, userUpdateRequest);
 
         return ResponseEntity.ok().body(user);

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({UsernameExistsException.class, NoSuchUserException.class, NoSuchBookException.class})
+    @ExceptionHandler({UsernameExistsException.class, NoSuchEntityException.class})
     public ProblemDetail handleUsernameExistsException(Exception ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
     }

@@ -9,7 +9,7 @@ import com.neoxenus.webnovelreader.chapters.etitities.dtos.ChapterUpdateRequest;
 import com.neoxenus.webnovelreader.chapters.mapper.ChapterMapper;
 import com.neoxenus.webnovelreader.chapters.repo.ChapterRepository;
 import com.neoxenus.webnovelreader.chapters.services.ChapterService;
-import com.neoxenus.webnovelreader.exceptions.NoSuchBookException;
+import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,9 +31,9 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     @Transactional
-    public ChapterDto addChapter(Long bookId, ChapterCreateRequest chapterCreateRequest) throws NoSuchBookException {
+    public ChapterDto addChapter(Long bookId, ChapterCreateRequest chapterCreateRequest) throws NoSuchEntityException {
         Chapter chapter = chapterMapper.toChapter(chapterCreateRequest);
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new NoSuchBookException("No such book for id: " + bookId));
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new NoSuchEntityException("No such book for id: " + bookId));
         chapter.setBook(book);
         return chapterMapper.toDto(
                 chapterRepository.save(chapter)

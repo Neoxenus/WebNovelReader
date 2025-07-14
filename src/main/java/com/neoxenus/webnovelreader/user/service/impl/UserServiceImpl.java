@@ -1,6 +1,6 @@
 package com.neoxenus.webnovelreader.user.service.impl;
 
-import com.neoxenus.webnovelreader.exceptions.NoSuchUserException;
+import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
 import com.neoxenus.webnovelreader.user.entities.User;
 import com.neoxenus.webnovelreader.user.entities.dtos.UserCreateRequest;
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public UserDto updateUser(Long id, UserUpdateRequest userUpdateRequest) throws NoSuchUserException, UsernameExistsException {
+    public UserDto updateUser(Long id, UserUpdateRequest userUpdateRequest) throws NoSuchEntityException, UsernameExistsException {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User userByUsername = userRepository.findByUsername(userUpdateRequest.getUsername());
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             User user = userMapper.mapUpdateRequestToUser(optionalUser.get(), userUpdateRequest);
             return userMapper.mapUserToDto(userRepository.save(user));
         } else {
-            throw new NoSuchUserException("No user for such and id");
+            throw new NoSuchEntityException("No user for such and id");
         }
     }
 

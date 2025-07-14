@@ -1,7 +1,7 @@
 package com.neoxenus.webnovelreader.user.service;
 
 
-import com.neoxenus.webnovelreader.exceptions.NoSuchUserException;
+import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
 import com.neoxenus.webnovelreader.user.entities.dtos.UserCreateRequest;
 import com.neoxenus.webnovelreader.user.entities.dtos.UserDto;
@@ -19,7 +19,7 @@ public interface UserService {
     Optional<UserDto> getUser(Long id);
     List<UserDto> getUsers();
 
-    UserDto updateUser(Long id, UserUpdateRequest user) throws NoSuchUserException, UsernameExistsException;
+    UserDto updateUser(Long id, UserUpdateRequest user) throws NoSuchEntityException, UsernameExistsException;
     boolean existsByUsername(String username);
 
     void deleteUser(Long id);

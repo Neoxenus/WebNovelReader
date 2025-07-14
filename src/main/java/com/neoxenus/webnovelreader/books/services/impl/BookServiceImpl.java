@@ -7,7 +7,7 @@ import com.neoxenus.webnovelreader.books.entities.BookUpdateRequest;
 import com.neoxenus.webnovelreader.books.mapper.BookMapper;
 import com.neoxenus.webnovelreader.books.repo.BookRepository;
 import com.neoxenus.webnovelreader.books.services.BookService;
-import com.neoxenus.webnovelreader.exceptions.NoSuchBookException;
+import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -57,7 +57,7 @@ public class BookServiceImpl implements BookService {
             Book updatedBook = bookMapper.toBook(bookById, bookRequest);
             return bookMapper.toDto(bookRepository.save(updatedBook));
         } else {
-            throw new NoSuchBookException("No book for this id: " + id);
+            throw new NoSuchEntityException("No book for this id: " + id);
         }
     }
 
@@ -70,7 +70,7 @@ public class BookServiceImpl implements BookService {
         }
         else{
             log.error("No book for this id: {}", id);
-            throw new NoSuchBookException("No book for this id: " + id);
+            throw new NoSuchEntityException("No book for this id: " + id);
         }
     }
 }
