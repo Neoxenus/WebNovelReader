@@ -48,7 +48,7 @@ public class Comment {
     @ManyToOne
     private Comment parent;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Comment> replies = new ArrayList<>();
 
     @CreationTimestamp

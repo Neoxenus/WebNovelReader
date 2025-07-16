@@ -10,8 +10,10 @@ import java.util.List;
 public interface CommentMapper {
 
     CommentDto toDto(Comment comment);
-
+    CommentDto toDtoWithoutReplies(Comment comment);
     List<CommentDto> toDto(List<Comment> comment);
+    List<CommentDto> toDtoWithoutReplies(List<Comment> comment);
+
 
     Comment toComment(CommentCreateRequest createRequest);
 

@@ -35,6 +35,21 @@ public class CommentMapperImpl implements CommentMapper {
                 .build();
     }
 
+    @Override
+    public CommentDto toDtoWithoutReplies(Comment comment) {
+        if(Objects.isNull(comment))
+            return null;
+        return CommentDto.builder()
+                .id(comment.getId())
+                .user(userMapper.toDto(comment.getUser()))
+                .bookId(getNullable(comment.getBook(), Book::getId))
+                .chapterId(getNullable(comment.getChapter(), Chapter::getId))
+                .content(comment.getContent())
+                .parentId(getNullable(comment.getParent(), Comment::getId))
+                .createdAt(comment.getCreatedAt())
+                .build();
+    }
+
     private  <T, R> R getNullable(T obj, Function<T, R> getter) {
         return obj != null ? getter.apply(obj) : null;
     }
@@ -42,6 +57,11 @@ public class CommentMapperImpl implements CommentMapper {
     @Override
     public List<CommentDto> toDto(List<Comment> comment) {
         return comment.stream().map(this::toDto).toList();
+    }
+
+    @Override
+    public List<CommentDto> toDtoWithoutReplies(List<Comment> comment) {
+        return comment.stream().map(this::toDtoWithoutReplies).toList();
     }
 
     @Override
