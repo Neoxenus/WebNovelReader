@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -32,13 +31,6 @@ public class BookMapperImpl implements BookMapper {
                 .chapterList(chapterMapper.toSummary(book.getChapterList()))
                 .updatedAt(book.getUpdatedAt())
                 .build();
-    }
-
-    @Override
-    public Optional<BookDto> toDto(Optional<Book> book) {
-        if(book.isEmpty())
-            return Optional.empty();
-        return Optional.of(toDto(book.get()));
     }
 
     private BookDto toDtoWithoutChapters(Book book) {

@@ -15,7 +15,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,10 +39,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id){
-        Optional<UserDto> userOptional = userService.getUser(id);
-        return userOptional
-                .map(ResponseEntity.ok()::body)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        UserDto user = userService.getUser(id);
+        return ResponseEntity.ok().body(user);
     }
 
     @PutMapping("/{id}")

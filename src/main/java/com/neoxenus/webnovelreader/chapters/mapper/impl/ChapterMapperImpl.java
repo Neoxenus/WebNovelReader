@@ -10,7 +10,6 @@ import com.neoxenus.webnovelreader.chapters.mapper.ChapterMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ChapterMapperImpl implements ChapterMapper {
@@ -28,11 +27,6 @@ public class ChapterMapperImpl implements ChapterMapper {
         } else {
             return null;
         }
-    }
-
-    @Override
-    public Optional<ChapterDto> toDto(Optional<Chapter> chapter) {
-        return Optional.ofNullable(toDto(chapter.orElse(null)));
     }
 
     @Override

@@ -6,14 +6,13 @@ import com.neoxenus.webnovelreader.books.entities.dtos.BookUpdateRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface BookService {
 
     BookDto saveBook(BookCreateRequest book);
 
-    Optional<BookDto> getBook(Long id);
+    BookDto getBook(Long id);
 
     List<BookDto> getAllBooks();
 

@@ -9,14 +9,13 @@ import com.neoxenus.webnovelreader.user.entities.dtos.UserUpdateRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface UserService {
     UserDto saveUser(UserCreateRequest user) throws UsernameExistsException;
 
 
-    Optional<UserDto> getUser(Long id);
+    UserDto getUser(Long id) throws NoSuchEntityException;
     List<UserDto> getUsers();
 
     UserDto updateUser(Long id, UserUpdateRequest user) throws NoSuchEntityException, UsernameExistsException;

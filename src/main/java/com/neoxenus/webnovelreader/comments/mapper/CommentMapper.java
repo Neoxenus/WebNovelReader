@@ -6,12 +6,11 @@ import com.neoxenus.webnovelreader.comments.entities.dtos.CommentDto;
 import com.neoxenus.webnovelreader.comments.entities.dtos.CommentUpdateRequest;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CommentMapper {
 
     CommentDto toDto(Comment comment);
-    Optional<CommentDto> toDto(Optional<Comment> comment);
+
     List<CommentDto> toDto(List<Comment> comment);
 
     Comment toComment(CommentCreateRequest createRequest);

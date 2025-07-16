@@ -47,9 +47,12 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<ChapterDto> getChapter(Long bookId, Long chapterId) {
+    public ChapterDto getChapter(Long bookId, Long chapterId) {
         //different checks (for example for belonging to book)?
-        return chapterMapper.toDto(chapterRepository.findById(chapterId));
+        Chapter chapter = chapterRepository.findById(chapterId).orElseThrow(
+                () -> new NoSuchEntityException("No chapter for and id: " + chapterId)
+        );
+        return chapterMapper.toDto(chapter);
     }
 
     @Override

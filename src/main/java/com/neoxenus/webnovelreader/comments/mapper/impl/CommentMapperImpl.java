@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 
 @Component
@@ -38,11 +37,6 @@ public class CommentMapperImpl implements CommentMapper {
 
     private  <T, R> R getNullable(T obj, Function<T, R> getter) {
         return obj != null ? getter.apply(obj) : null;
-    }
-
-    @Override
-    public Optional<CommentDto> toDto(Optional<Comment> comment) {
-        return Optional.ofNullable(toDto(comment.orElse(null)));
     }
 
     @Override

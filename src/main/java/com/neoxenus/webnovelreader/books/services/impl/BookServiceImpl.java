@@ -36,9 +36,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public Optional<BookDto> getBook(Long id) {
-        Optional<Book> bookOptional = bookRepository.findById(id);
-        return bookMapper.toDto(bookOptional);
+    public BookDto getBook(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(
+                () -> new NoSuchEntityException("No book for an id: " + id)
+        );
+        return bookMapper.toDto(book);
     }
 
     @Override

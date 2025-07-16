@@ -62,9 +62,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Optional<UserDto> getUser(Long id) {
+    public UserDto getUser(Long id) {
         log.info("Getting user with id {} from database", id);
-        return userRepository.findById(id).map(userMapper::toDto);
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new NoSuchEntityException("No user for an id: " + id)
+        );
+        return userMapper.toDto(user);
     }
 
     @Override

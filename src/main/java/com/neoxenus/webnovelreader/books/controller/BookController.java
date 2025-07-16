@@ -27,9 +27,7 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getBook(@PathVariable Long id){
-        return bookService.getBook(id)
-                .map(ResponseEntity.ok()::body)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok().body(bookService.getBook(id));
     }
     @GetMapping
     public ResponseEntity<?> getAllBooks(){
