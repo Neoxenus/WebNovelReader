@@ -1,8 +1,8 @@
 package com.neoxenus.webnovelreader.books.services;
 
-import com.neoxenus.webnovelreader.books.entities.BookCreateRequest;
-import com.neoxenus.webnovelreader.books.entities.BookDto;
-import com.neoxenus.webnovelreader.books.entities.BookUpdateRequest;
+import com.neoxenus.webnovelreader.books.entities.dtos.BookCreateRequest;
+import com.neoxenus.webnovelreader.books.entities.dtos.BookDto;
+import com.neoxenus.webnovelreader.books.entities.dtos.BookUpdateRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,11 +1,9 @@
-package com.neoxenus.webnovelreader.books.entities;
+package com.neoxenus.webnovelreader.books.entities.dtos;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-public class BookUpdateRequest {
+public class BookCreateRequest {
 
     private String title;
 

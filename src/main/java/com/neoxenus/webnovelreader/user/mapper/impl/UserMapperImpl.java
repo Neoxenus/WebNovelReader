@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Component
 public class UserMapperImpl implements UserMapper {
-    public UserDto mapUserToDto(User user){
+    public UserDto toDto(User user){
         if(user == null)
             return null;
         return UserDto.builder()
@@ -25,13 +25,13 @@ public class UserMapperImpl implements UserMapper {
                 .build();
     }
 
-    public List<UserDto> mapUserToDto(List<User> users){
+    public List<UserDto> toDto(List<User> users){
         if(users == null)
             return null;
-        return users.stream().map(this::mapUserToDto).toList();
+        return users.stream().map(this::toDto).toList();
     }
 
-    public User mapCreateRequestToUser(UserCreateRequest user){
+    public User toUser(UserCreateRequest user){
         if(user == null)
             return null;
         return User.builder()
@@ -42,7 +42,7 @@ public class UserMapperImpl implements UserMapper {
                 .build();
     }
 
-    public User mapUpdateRequestToUser(User user, UserUpdateRequest userUpdateRequest){
+    public User toUser(User user, UserUpdateRequest userUpdateRequest){
         if(user == null || userUpdateRequest == null)
             return null;
         user.setUsername(userUpdateRequest.getUsername());

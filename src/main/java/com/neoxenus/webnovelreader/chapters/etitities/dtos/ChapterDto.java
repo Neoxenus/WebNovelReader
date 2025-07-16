@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class ChapterDto {
+    private Long id;
 
     private String title;
 

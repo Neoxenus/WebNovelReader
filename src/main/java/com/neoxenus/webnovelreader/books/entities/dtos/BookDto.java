@@ -1,4 +1,4 @@
-package com.neoxenus.webnovelreader.books.entities;
+package com.neoxenus.webnovelreader.books.entities.dtos;
 
 import com.neoxenus.webnovelreader.chapters.etitities.dtos.ChapterSummary;
 import lombok.Builder;

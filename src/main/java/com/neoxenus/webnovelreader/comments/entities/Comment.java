@@ -9,6 +9,8 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,12 +20,7 @@ public class Comment {
 
     /*
         comment{
-            id (PK)
-            user_id (FK)
-            book_id (FK, nullable)
-            chapter_id (FK, nullable)
-            content
-            created_at
+            ...
             ----------------------
             todo: votes
             @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -38,18 +35,25 @@ public class Comment {
     @ManyToOne
     private User user;
 
-    @Column(nullable = true)
+    @Column()
     @ManyToOne
     private Book book;
 
-    @Column(nullable = true)
+    @Column()
     @ManyToOne
     private Chapter chapter;
 
     private String content;
 
+    @ManyToOne
+    private Comment parent;
+
+    @OneToMany
+    private List<Comment> replies = new ArrayList<>();
+
     @CreationTimestamp
     private LocalDateTime createdAt;
+
 
 //    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<CommentVote> votes = new ArrayList<>();

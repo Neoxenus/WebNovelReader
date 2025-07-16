@@ -10,11 +10,11 @@ import java.util.List;
 
 @Component
 public interface UserMapper {
-    UserDto mapUserToDto(User user);
+    UserDto toDto(User user);
 
-    List<UserDto> mapUserToDto(List<User> users);
+    List<UserDto> toDto(List<User> users);
 
-    User mapCreateRequestToUser(UserCreateRequest user);
+    User toUser(UserCreateRequest user);
 
-    User mapUpdateRequestToUser(User user, UserUpdateRequest userUpdateRequest);
+    User toUser(User user, UserUpdateRequest userUpdateRequest);
 }

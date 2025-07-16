@@ -7,19 +7,18 @@ import com.neoxenus.webnovelreader.chapters.etitities.dtos.ChapterDto;
 import com.neoxenus.webnovelreader.chapters.etitities.dtos.ChapterSummary;
 import com.neoxenus.webnovelreader.chapters.etitities.dtos.ChapterUpdateRequest;
 import com.neoxenus.webnovelreader.chapters.mapper.ChapterMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
 public class ChapterMapperImpl implements ChapterMapper {
     @Override
     public ChapterDto toDto(Chapter chapter) {
         if (chapter != null) {
             return ChapterDto.builder()
+                    .id(chapter.getId())
                     .title(chapter.getTitle())
                     .chapterNumber(chapter.getChapterNumber())
                     .datePublished(chapter.getDatePublished())

@@ -55,22 +55,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         log.info("Saving new user {} to the database", user.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        User userEntity = userMapper.mapCreateRequestToUser(user);
+        User userEntity = userMapper.toUser(user);
         userEntity = userRepository.save(userEntity);
         userRepository.flush();
-        return userMapper.mapUserToDto(userEntity);
+        return userMapper.toDto(userEntity);
     }
 
     @Override
     public Optional<UserDto> getUser(Long id) {
         log.info("Getting user with id {} from database", id);
-        return userRepository.findById(id).map(userMapper::mapUserToDto);
+        return userRepository.findById(id).map(userMapper::toDto);
     }
 
     @Override
     public List<UserDto> getUsers() {
         log.info("Getting all users from database");
-        return userMapper.mapUserToDto(userRepository.findAll());
+        return userMapper.toDto(userRepository.findAll());
     }
 
     @Override
@@ -83,8 +83,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 throw new UsernameExistsException("Username " + userUpdateRequest.getUsername() + " already exists");
 
             userUpdateRequest.setPassword(bCryptPasswordEncoder.encode(userUpdateRequest.getPassword()));
-            User user = userMapper.mapUpdateRequestToUser(optionalUser.get(), userUpdateRequest);
-            return userMapper.mapUserToDto(userRepository.save(user));
+            User user = userMapper.toUser(optionalUser.get(), userUpdateRequest);
+            return userMapper.toDto(userRepository.save(user));
         } else {
             throw new NoSuchEntityException("No user for such and id");
         }

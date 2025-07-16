@@ -1,9 +1,9 @@
 package com.neoxenus.webnovelreader.books.mapper.impl;
 
 import com.neoxenus.webnovelreader.books.entities.Book;
-import com.neoxenus.webnovelreader.books.entities.BookCreateRequest;
-import com.neoxenus.webnovelreader.books.entities.BookDto;
-import com.neoxenus.webnovelreader.books.entities.BookUpdateRequest;
+import com.neoxenus.webnovelreader.books.entities.dtos.BookCreateRequest;
+import com.neoxenus.webnovelreader.books.entities.dtos.BookDto;
+import com.neoxenus.webnovelreader.books.entities.dtos.BookUpdateRequest;
 import com.neoxenus.webnovelreader.books.mapper.BookMapper;
 import com.neoxenus.webnovelreader.chapters.mapper.ChapterMapper;
 import lombok.RequiredArgsConstructor;
