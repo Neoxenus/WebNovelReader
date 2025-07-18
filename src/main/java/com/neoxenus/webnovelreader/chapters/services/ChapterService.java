@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface ChapterService {
 
-    ChapterDto addChapter(Long bookId, ChapterCreateRequest chapterCreateRequest) throws NoSuchEntityException;
+    ChapterDto addChapter(Long bookId, ChapterCreateRequest request) throws NoSuchEntityException;
     List<ChapterDto> getBookChapters(Long bookId);
     ChapterDto getChapter(Long bookId, Long chapterId) throws NoSuchEntityException;
-    ChapterDto updateChapter(Long bookId, Long chapterId, ChapterUpdateRequest chapterUpdateRequest);
-    void deleteChapter(Long bookId, Long chapterId);
+    ChapterDto updateChapter(Long bookId, Long chapterId, ChapterUpdateRequest request) throws NoSuchEntityException;
+    void deleteChapter(Long bookId, Long chapterId) throws NoSuchEntityException;
 
 
 

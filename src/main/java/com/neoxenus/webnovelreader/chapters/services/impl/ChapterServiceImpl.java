@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -64,8 +63,7 @@ public class ChapterServiceImpl implements ChapterService {
             Chapter updatedChapter = chapterMapper.toChapter(chapterById, chapterUpdateRequest);
             return chapterMapper.toDto(chapterRepository.save(updatedChapter));
         } else {
-            //todo: introduce custom exception
-            throw new NoSuchElementException("No chapter for this id: " + chapterId);
+            throw new NoSuchEntityException("No chapter for this id: " + chapterId);
         }
     }
 
@@ -78,8 +76,7 @@ public class ChapterServiceImpl implements ChapterService {
         }
         else{
             log.error("No chapter for this id: {}", chapterId);
-            //todo: introduce custom exception
-            throw new NoSuchElementException("No chapter for this id: " + chapterId);
+            throw new NoSuchEntityException("No chapter for this id: " + chapterId);
         }
     }
 }

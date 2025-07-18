@@ -1,8 +1,8 @@
 package com.neoxenus.webnovelreader.security.config;
 
-import com.neoxenus.webnovelreader.util.JwtService;
 import com.neoxenus.webnovelreader.security.filters.JwtAuthenticationFilter;
 import com.neoxenus.webnovelreader.security.filters.JwtAuthorizationFilter;
+import com.neoxenus.webnovelreader.util.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -49,8 +48,9 @@ public class SecurityConfig  {
                         .requestMatchers(POST, "api/users").permitAll()
                         .requestMatchers(             "/api/login", "/api/token/refresh").permitAll()
                         .requestMatchers(GET, "api/users", "/api/users/**").hasAnyAuthority("ADMIN")
-                        .requestMatchers("/api/comments/**").authenticated()
-                        .requestMatchers("/api/*/*/comments").authenticated()
+                        .requestMatchers(PATCH,  "/api/comments/**").authenticated()
+                        .requestMatchers(DELETE,  "/api/comments/**").authenticated()
+                        .requestMatchers(POST,"/api/*/*/comments").authenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilter(jwtAuthenticationFilter(authManager))

@@ -35,7 +35,8 @@ public class BookCommentService implements CommentTargetService {
 
     @Override
     public List<CommentDto> getComments(Long targetId) {
-        return null;
+        List<Comment> comments = commentRepository.findAllByBookIdAndParentIsNull(targetId);
+        return commentMapper.toDto(comments);
     }
 
     @Override
