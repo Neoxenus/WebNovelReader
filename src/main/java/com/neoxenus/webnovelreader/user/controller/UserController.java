@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,12 +24,12 @@ public class UserController {
 
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getUsers(){
+    public ResponseEntity<?> getUsers(){
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> saveUser(@Validated @RequestBody UserCreateRequest user)
+    public ResponseEntity<?> saveUser(@Validated @RequestBody UserCreateRequest user)
                                             throws UsernameExistsException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
@@ -38,13 +37,13 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long id){
+    public ResponseEntity<?> getUser(@PathVariable Long id){
         UserDto user = userService.getUser(id);
         return ResponseEntity.ok().body(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id,
+    public ResponseEntity<?> updateUser(@PathVariable Long id,
                                               @RequestBody UserUpdateRequest userUpdateRequest)
                                               throws NoSuchEntityException, UsernameExistsException {
         UserDto user = userService.updateUser(id, userUpdateRequest);
@@ -52,7 +51,8 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id){
+    public ResponseEntity<?> deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

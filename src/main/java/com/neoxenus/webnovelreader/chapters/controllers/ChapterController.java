@@ -46,8 +46,9 @@ public class ChapterController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteChapter(@PathVariable Long bookId,
+    public ResponseEntity<?> deleteChapter(@PathVariable Long bookId,
                               @PathVariable Long id) {
         chapterService.deleteChapter(bookId, id);
+        return ResponseEntity.noContent().build();
     }
 }
