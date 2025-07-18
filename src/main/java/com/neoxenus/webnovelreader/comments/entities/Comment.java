@@ -31,15 +31,13 @@ public class Comment {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @ManyToOne
     private User user;
 
-    @Column()
     @ManyToOne
     private Book book;
 
-    @Column()
     @ManyToOne
     private Chapter chapter;
 

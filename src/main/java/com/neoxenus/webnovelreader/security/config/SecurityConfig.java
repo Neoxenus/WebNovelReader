@@ -49,6 +49,8 @@ public class SecurityConfig  {
                         .requestMatchers(POST, "api/users").permitAll()
                         .requestMatchers(             "/api/login", "/api/token/refresh").permitAll()
                         .requestMatchers(GET, "api/users", "/api/users/**").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/api/comments/**").authenticated()
+                        .requestMatchers("/api/*/*/comments").authenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilter(jwtAuthenticationFilter(authManager))
