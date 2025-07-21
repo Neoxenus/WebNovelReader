@@ -1,11 +1,11 @@
 package com.neoxenus.webnovelreader.bookmark.entity;
 
 import com.neoxenus.webnovelreader.user.entity.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -25,4 +25,6 @@ public class BookmarkCollection {
 
     private String description; //null for default
 
+    @ManyToMany(mappedBy = "collection")
+    private List<Bookmark> bookmarks = new ArrayList<>();
 }

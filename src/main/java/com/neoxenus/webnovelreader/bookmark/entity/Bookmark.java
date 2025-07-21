@@ -26,6 +26,11 @@ public class Bookmark {
     private Chapter chapter; // Optional (only for chapter type bookmarks)
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "bookmark_collection_link",
+            joinColumns = @JoinColumn(name = "bookmark_id"),
+            inverseJoinColumns = @JoinColumn(name = "collection_id")
+    )
     private List<BookmarkCollection> collection = new ArrayList<>();
 
     private String note; // only for book's bookmarks
