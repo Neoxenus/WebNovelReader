@@ -2,7 +2,7 @@ package com.neoxenus.webnovelreader.security.config;
 
 import com.neoxenus.webnovelreader.security.filters.JwtAuthenticationFilter;
 import com.neoxenus.webnovelreader.security.filters.JwtAuthorizationFilter;
-import com.neoxenus.webnovelreader.util.JwtService;
+import com.neoxenus.webnovelreader.security.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

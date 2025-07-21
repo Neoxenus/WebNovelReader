@@ -1,8 +1,8 @@
 package com.neoxenus.webnovelreader;
 
-import com.neoxenus.webnovelreader.users.entities.User;
-import com.neoxenus.webnovelreader.users.entities.UserRole;
-import com.neoxenus.webnovelreader.users.repo.UserRepository;
+import com.neoxenus.webnovelreader.user.entity.User;
+import com.neoxenus.webnovelreader.user.enums.UserRole;
+import com.neoxenus.webnovelreader.user.repo.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

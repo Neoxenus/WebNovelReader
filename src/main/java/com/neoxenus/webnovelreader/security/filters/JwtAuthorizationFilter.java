@@ -1,7 +1,7 @@
 package com.neoxenus.webnovelreader.security.filters;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.neoxenus.webnovelreader.util.JwtService;
+import com.neoxenus.webnovelreader.security.utils.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
