@@ -1,14 +1,14 @@
-package com.neoxenus.webnovelreader.user.service.impl;
+package com.neoxenus.webnovelreader.users.service.impl;
 
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
-import com.neoxenus.webnovelreader.user.entities.User;
-import com.neoxenus.webnovelreader.user.entities.dtos.UserCreateRequest;
-import com.neoxenus.webnovelreader.user.entities.dtos.UserDto;
-import com.neoxenus.webnovelreader.user.entities.dtos.UserUpdateRequest;
-import com.neoxenus.webnovelreader.user.mapper.UserMapper;
-import com.neoxenus.webnovelreader.user.repo.UserRepository;
-import com.neoxenus.webnovelreader.user.service.UserService;
+import com.neoxenus.webnovelreader.users.entities.User;
+import com.neoxenus.webnovelreader.users.entities.dtos.UserCreateRequest;
+import com.neoxenus.webnovelreader.users.entities.dtos.UserDto;
+import com.neoxenus.webnovelreader.users.entities.dtos.UserUpdateRequest;
+import com.neoxenus.webnovelreader.users.mapper.UserMapper;
+import com.neoxenus.webnovelreader.users.repo.UserRepository;
+import com.neoxenus.webnovelreader.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

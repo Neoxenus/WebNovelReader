@@ -1,11 +1,11 @@
-package com.neoxenus.webnovelreader.user.controller;
+package com.neoxenus.webnovelreader.users.controller;
 
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
-import com.neoxenus.webnovelreader.user.entities.dtos.UserCreateRequest;
-import com.neoxenus.webnovelreader.user.entities.dtos.UserDto;
-import com.neoxenus.webnovelreader.user.entities.dtos.UserUpdateRequest;
-import com.neoxenus.webnovelreader.user.service.UserService;
+import com.neoxenus.webnovelreader.users.entities.dtos.UserCreateRequest;
+import com.neoxenus.webnovelreader.users.entities.dtos.UserDto;
+import com.neoxenus.webnovelreader.users.entities.dtos.UserUpdateRequest;
+import com.neoxenus.webnovelreader.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

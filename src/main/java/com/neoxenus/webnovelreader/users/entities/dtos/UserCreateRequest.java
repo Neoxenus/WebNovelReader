@@ -1,4 +1,4 @@
-package com.neoxenus.webnovelreader.user.entities.dtos;
+package com.neoxenus.webnovelreader.users.entities.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

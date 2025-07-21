@@ -11,7 +11,7 @@ import com.neoxenus.webnovelreader.comments.repo.CommentRepository;
 import com.neoxenus.webnovelreader.comments.services.target.CommentTargetService;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UnexpectedUnauthenticatedUserException;
-import com.neoxenus.webnovelreader.user.service.UserService;
+import com.neoxenus.webnovelreader.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

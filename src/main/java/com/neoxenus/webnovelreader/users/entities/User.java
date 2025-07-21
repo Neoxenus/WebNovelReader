@@ -1,4 +1,4 @@
-package com.neoxenus.webnovelreader.user.entities;
+package com.neoxenus.webnovelreader.users.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

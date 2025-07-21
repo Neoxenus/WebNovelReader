@@ -3,7 +3,7 @@ package com.neoxenus.webnovelreader.comments.entities;
 
 import com.neoxenus.webnovelreader.books.entities.Book;
 import com.neoxenus.webnovelreader.chapters.etitities.Chapter;
-import com.neoxenus.webnovelreader.user.entities.User;
+import com.neoxenus.webnovelreader.users.entities.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;

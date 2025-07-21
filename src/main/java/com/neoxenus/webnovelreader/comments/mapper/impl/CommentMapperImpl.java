@@ -7,7 +7,7 @@ import com.neoxenus.webnovelreader.comments.entities.dtos.CommentCreateRequest;
 import com.neoxenus.webnovelreader.comments.entities.dtos.CommentDto;
 import com.neoxenus.webnovelreader.comments.entities.dtos.CommentUpdateRequest;
 import com.neoxenus.webnovelreader.comments.mapper.CommentMapper;
-import com.neoxenus.webnovelreader.user.mapper.UserMapper;
+import com.neoxenus.webnovelreader.users.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

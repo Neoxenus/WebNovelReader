@@ -1,6 +1,6 @@
 package com.neoxenus.webnovelreader.comments.entities.dtos;
 
-import com.neoxenus.webnovelreader.user.entities.dtos.UserDto;
+import com.neoxenus.webnovelreader.users.entities.dtos.UserDto;
 import lombok.Builder;
 import lombok.Data;
 

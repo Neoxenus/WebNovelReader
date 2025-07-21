@@ -1,6 +1,6 @@
-package com.neoxenus.webnovelreader.user.entities.dtos;
+package com.neoxenus.webnovelreader.users.entities.dtos;
 
-import com.neoxenus.webnovelreader.user.entities.UserRole;
+import com.neoxenus.webnovelreader.users.entities.UserRole;
 import lombok.Data;
 
 import java.util.Set;

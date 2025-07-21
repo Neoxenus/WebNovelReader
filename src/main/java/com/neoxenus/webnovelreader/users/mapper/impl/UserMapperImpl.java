@@ -1,11 +1,11 @@
-package com.neoxenus.webnovelreader.user.mapper.impl;
+package com.neoxenus.webnovelreader.users.mapper.impl;
 
-import com.neoxenus.webnovelreader.user.entities.User;
-import com.neoxenus.webnovelreader.user.entities.UserRole;
-import com.neoxenus.webnovelreader.user.entities.dtos.UserCreateRequest;
-import com.neoxenus.webnovelreader.user.entities.dtos.UserDto;
-import com.neoxenus.webnovelreader.user.entities.dtos.UserUpdateRequest;
-import com.neoxenus.webnovelreader.user.mapper.UserMapper;
+import com.neoxenus.webnovelreader.users.entities.User;
+import com.neoxenus.webnovelreader.users.entities.UserRole;
+import com.neoxenus.webnovelreader.users.entities.dtos.UserCreateRequest;
+import com.neoxenus.webnovelreader.users.entities.dtos.UserDto;
+import com.neoxenus.webnovelreader.users.entities.dtos.UserUpdateRequest;
+import com.neoxenus.webnovelreader.users.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
