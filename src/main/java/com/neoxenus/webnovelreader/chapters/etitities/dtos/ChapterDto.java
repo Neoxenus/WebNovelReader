@@ -16,6 +16,8 @@ public class ChapterDto {
 
     private String content;
 
+    private Integer views;
+
     private LocalDateTime datePublished;
 
     private Long bookId;

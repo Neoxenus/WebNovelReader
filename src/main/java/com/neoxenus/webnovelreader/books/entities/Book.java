@@ -30,6 +30,8 @@ public class Book {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    private Integer totalViews = 0;
+
     @OneToMany(mappedBy = "book")
     @OrderBy("chapterNumber DESC")
     //@JsonManagedReference

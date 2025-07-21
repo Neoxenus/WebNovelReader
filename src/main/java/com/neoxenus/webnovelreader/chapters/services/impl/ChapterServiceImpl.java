@@ -10,18 +10,24 @@ import com.neoxenus.webnovelreader.chapters.mapper.ChapterMapper;
 import com.neoxenus.webnovelreader.chapters.repo.ChapterRepository;
 import com.neoxenus.webnovelreader.chapters.services.ChapterService;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ChapterServiceImpl implements ChapterService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final ChapterRepository chapterRepository;
     private final BookRepository bookRepository;
@@ -44,13 +50,25 @@ public class ChapterServiceImpl implements ChapterService {
         return chapterMapper.toDto(chapterRepository.findByBookId(bookId));
     }
 
+
+    private void incrementViews(Long bookId, Long chapterId) {
+        chapterRepository.incrementViewCount(chapterId);
+        bookRepository.incrementViewCount(bookId);
+    }
+
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public ChapterDto getChapter(Long bookId, Long chapterId) {
-        //different checks (for example for belonging to book)?
-        Chapter chapter = chapterRepository.findById(chapterId).orElseThrow(
-                () -> new NoSuchEntityException("No chapter for and id: " + chapterId)
-        );
+        Chapter chapter = chapterRepository.findById(chapterId)
+                .orElseThrow(() -> new NoSuchEntityException("No chapter for and id: " + chapterId));
+
+        if (!Objects.equals(chapter.getBook().getId(), bookId)) {
+            throw new NoSuchEntityException("Chapter does not belong to book with id: " + bookId);
+        }
+
+        incrementViews(bookId, chapterId);
+        entityManager.refresh(chapter);
+
         return chapterMapper.toDto(chapter);
     }
 

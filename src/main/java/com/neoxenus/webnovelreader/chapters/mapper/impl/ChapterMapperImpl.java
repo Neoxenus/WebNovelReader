@@ -20,6 +20,7 @@ public class ChapterMapperImpl implements ChapterMapper {
                     .id(chapter.getId())
                     .title(chapter.getTitle())
                     .chapterNumber(chapter.getChapterNumber())
+                    .views(chapter.getViews())
                     .datePublished(chapter.getDatePublished())
                     .bookId(chapter.getBook() != null ? chapter.getBook().getId() : null)
                     .content(chapter.getContent() != null ? chapter.getContent().getContent() : null)
@@ -40,7 +41,6 @@ public class ChapterMapperImpl implements ChapterMapper {
             Chapter chapter = new Chapter();
             chapter.setTitle(chapterCreateRequest.getTitle());
             chapter.setChapterNumber(chapterCreateRequest.getChapterNumber());
-
             ChapterContent content = new ChapterContent();
             content.setContent(chapterCreateRequest.getContent());
             content.setChapter(chapter);
@@ -72,6 +72,7 @@ public class ChapterMapperImpl implements ChapterMapper {
                     .id(chapter.getId())
                     .title(chapter.getTitle())
                     .chapterNumber(chapter.getChapterNumber())
+                    .views(chapter.getViews())
                     .datePublished(chapter.getDatePublished())
                     .build();
         } else {

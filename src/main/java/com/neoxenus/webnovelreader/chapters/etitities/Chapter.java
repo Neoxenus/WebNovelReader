@@ -15,7 +15,6 @@ public class Chapter {
     private Long id;
 
     @ManyToOne
-    //@JsonBackReference
     private Book book;
 
     private String title;
@@ -25,13 +24,12 @@ public class Chapter {
     @OneToOne(mappedBy = "chapter", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private ChapterContent content;
 
-//    private LocalDateTime createdAt;
+    private Integer views = 0;
+
     @CreationTimestamp
     private LocalDateTime datePublished;
 
     //private List<Comment> commentList;
-
-    //private T views;
 
 
 }

@@ -14,5 +14,7 @@ public class ChapterSummary {
 
     private Integer chapterNumber;
 
+    private Integer views;
+
     private LocalDateTime datePublished;
 }

@@ -21,5 +21,7 @@ public class BookDto {
 
     private final LocalDateTime updatedAt;
 
+    private final Integer totalViews;
+
     private final List<ChapterSummary> chapterList;
 }

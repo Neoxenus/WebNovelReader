@@ -30,6 +30,7 @@ public class BookMapperImpl implements BookMapper {
                 .languageOfOriginal(book.getLanguageOfOriginal())
                 .chapterList(chapterMapper.toSummary(book.getChapterList()))
                 .updatedAt(book.getUpdatedAt())
+                .totalViews(book.getTotalViews())
                 .build();
     }
 
@@ -42,6 +43,7 @@ public class BookMapperImpl implements BookMapper {
                 .yearOfPublishing(book.getYearOfPublishing())
                 .languageOfOriginal(book.getLanguageOfOriginal())
                 .updatedAt(book.getUpdatedAt())
+                .totalViews(book.getTotalViews())
                 .build();
     }
 
