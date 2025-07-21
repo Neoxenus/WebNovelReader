@@ -1,6 +1,7 @@
 package com.neoxenus.webnovelreader.bookmark.entity;
 
 import com.neoxenus.webnovelreader.book.entity.Book;
+import com.neoxenus.webnovelreader.bookmark.enums.BookmarkType;
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -18,12 +19,15 @@ public class Bookmark {
     @ManyToOne(optional = false)
     private Book book;
 
+    @Enumerated(EnumType.STRING)
+    private BookmarkType type;
+
     @ManyToOne
-    private Chapter chapter; // Optional
+    private Chapter chapter; // Optional (only for chapter type bookmarks)
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<BookmarkCollection> collection = new ArrayList<>();
 
-    private String note; // only for book bookmarks
+    private String note; // only for book's bookmarks
 
 }

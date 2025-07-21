@@ -16,7 +16,7 @@ public class BookmarkCollection {
 
     private Boolean isDefault;
 
-    private Boolean isPublic;
+    private Boolean isPublic; //default collections is false by default
 
     @ManyToOne(optional = false)
     private User user;
