@@ -63,14 +63,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public UserDto saveUser(UserCreateRequest user) throws UsernameExistsException {
-        if(userRepository.existsByUsername(user.getUsername())){
-            log.info("Username {} already exists", user.getUsername());
-            throw new UsernameExistsException("Username " + user.getUsername() + " already exists");
+        if(userRepository.existsByUsername(user.username())){
+            log.info("Username {} already exists", user.username());
+            throw new UsernameExistsException("Username " + user.username() + " already exists");
         }
 
-        log.info("Saving new user {} to the database", user.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        log.info("Saving new user {} to the database", user.username());
+
         User userEntity = userMapper.toUser(user);
+        userEntity.setPassword(bCryptPasswordEncoder.encode(user.password()));
         userEntity = userRepository.save(userEntity);
         userRepository.flush();
         return userMapper.toDto(userEntity);
@@ -96,12 +97,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDto updateUser(Long id, UserUpdateRequest userUpdateRequest) throws NoSuchEntityException, UsernameExistsException {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
-            User userByUsername = userRepository.findByUsername(userUpdateRequest.getUsername());
+            User userByUsername = userRepository.findByUsername(userUpdateRequest.username());
             if(userByUsername != null && !userByUsername.getId().equals(id))
-                throw new UsernameExistsException("Username " + userUpdateRequest.getUsername() + " already exists");
+                throw new UsernameExistsException("Username " + userUpdateRequest.username() + " already exists");
 
-            userUpdateRequest.setPassword(bCryptPasswordEncoder.encode(userUpdateRequest.getPassword()));
             User user = userMapper.toUser(optionalUser.get(), userUpdateRequest);
+            user.setPassword(bCryptPasswordEncoder.encode(userUpdateRequest.password()));
             return userMapper.toDto(userRepository.save(user));
         } else {
             throw new NoSuchEntityException("No user for such and id");

@@ -35,9 +35,9 @@ public class UserMapperImpl implements UserMapper {
         if(user == null)
             return null;
         return User.builder()
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .password(user.getPassword())
+                .username(user.username())
+                .email(user.email())
+                .password(user.password())
                 .roles(Set.of(UserRole.USER))
                 .build();
     }
@@ -45,10 +45,10 @@ public class UserMapperImpl implements UserMapper {
     public User toUser(User user, UserUpdateRequest userUpdateRequest){
         if(user == null || userUpdateRequest == null)
             return null;
-        user.setUsername(userUpdateRequest.getUsername());
-        user.setEmail(userUpdateRequest.getEmail());
-        user.setPassword(userUpdateRequest.getPassword());
-        user.setRoles(userUpdateRequest.getRoles());
+        user.setUsername(userUpdateRequest.username());
+        user.setEmail(userUpdateRequest.email());
+        user.setPassword(userUpdateRequest.password());
+        user.setRoles(userUpdateRequest.roles());
         return user;
     }
 }

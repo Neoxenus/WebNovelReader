@@ -39,10 +39,10 @@ public class ChapterMapperImpl implements ChapterMapper {
     public Chapter toChapter(ChapterCreateRequest chapterCreateRequest) {
         if (chapterCreateRequest != null) {
             Chapter chapter = new Chapter();
-            chapter.setTitle(chapterCreateRequest.getTitle());
-            chapter.setChapterNumber(chapterCreateRequest.getChapterNumber());
+            chapter.setTitle(chapterCreateRequest.title());
+            chapter.setChapterNumber(chapterCreateRequest.chapterNumber());
             ChapterContent content = new ChapterContent();
-            content.setContent(chapterCreateRequest.getContent());
+            content.setContent(chapterCreateRequest.content());
             content.setChapter(chapter);
             chapter.setContent(content);
 
@@ -56,9 +56,9 @@ public class ChapterMapperImpl implements ChapterMapper {
     @Override
     public Chapter toChapter(Chapter toUpdate, ChapterUpdateRequest chapterUpdateRequest) {
         if (toUpdate != null && chapterUpdateRequest != null) {
-            toUpdate.setTitle(chapterUpdateRequest.getTitle());
-            toUpdate.setChapterNumber(chapterUpdateRequest.getChapterNumber());
-            toUpdate.getContent().setContent(chapterUpdateRequest.getContent());
+            toUpdate.setTitle(chapterUpdateRequest.title());
+            toUpdate.setChapterNumber(chapterUpdateRequest.chapterNumber());
+            toUpdate.getContent().setContent(chapterUpdateRequest.content());
             return toUpdate;
         } else {
             return null;

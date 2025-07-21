@@ -46,7 +46,7 @@ public class ChapterCommentService implements CommentTargetService {
                 .findById(targetId)
                 .orElseThrow(() -> new NoSuchEntityException("No such chapter for id: " + targetId));
 
-        Comment parent = Optional.ofNullable(request.getParentId())
+        Comment parent = Optional.ofNullable(request.parentId())
                 .map(id -> commentRepository.findById(id)
                         .orElseThrow(() -> new NoSuchEntityException("No such parent comment for id: " + id)))
                 .orElse(null);

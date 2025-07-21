@@ -1,11 +1,7 @@
 package com.neoxenus.webnovelreader.comment.dto.request;
 
-import lombok.Data;
+public record CommentCreateRequest(
+        String content,
+        Long parentId) {
 
-@Data
-public class CommentCreateRequest {
-
-        private String content;
-
-        private Long parentId;
 }

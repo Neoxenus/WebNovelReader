@@ -68,7 +68,7 @@ public class CommentMapperImpl implements CommentMapper {
     public Comment toComment(CommentCreateRequest createRequest) {
         if(createRequest != null){
             Comment comment = new Comment();
-            comment.setContent(createRequest.getContent());
+            comment.setContent(createRequest.content());
             return comment;
         } else {
             return null;
@@ -78,7 +78,7 @@ public class CommentMapperImpl implements CommentMapper {
     @Override
     public Comment toComment(Comment toUpdate, CommentUpdateRequest updateRequest) {
         if(toUpdate != null && updateRequest != null) {
-            toUpdate.setContent(updateRequest.getContent());
+            toUpdate.setContent(updateRequest.content());
             return toUpdate;
         } else {
             return null;

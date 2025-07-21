@@ -1,23 +1,14 @@
 package com.neoxenus.webnovelreader.user.dto.request;
 
 import com.neoxenus.webnovelreader.user.enums.UserRole;
-import lombok.Data;
 
 import java.util.Set;
 
-@Data
-public class UserUpdateRequest {
 
+public record UserUpdateRequest(
+        String username,
+        String email,
+        String password, Set<UserRole> roles) {
 
-    private String username;
-
-
-    private String email;
-
-
-    private String password;
-
-
-    private Set<UserRole> roles;
 
 }

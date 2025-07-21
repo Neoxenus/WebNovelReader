@@ -2,11 +2,11 @@ package com.neoxenus.webnovelreader.bookmark.entity;
 
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,9 +21,9 @@ public class Bookmark {
     @ManyToOne
     private Chapter chapter; // Optional
 
-    @ManyToOne(optional = false)
-    private BookmarkCollection collection;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<BookmarkCollection> collection = new ArrayList<>();
 
-    private String note;
+    private String note; // only for book bookmarks
 
 }

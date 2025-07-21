@@ -57,9 +57,9 @@ public class BookMapperImpl implements BookMapper {
     @Override
     public Book toBook(BookCreateRequest bookCreateRequest) {
         Book book = new Book();
-        book.setTitle(bookCreateRequest.getTitle());
-        book.setYearOfPublishing(bookCreateRequest.getYearOfPublishing());
-        book.setLanguageOfOriginal(bookCreateRequest.getLanguageOfOriginal());
+        book.setTitle(bookCreateRequest.title());
+        book.setYearOfPublishing(bookCreateRequest.yearOfPublishing());
+        book.setLanguageOfOriginal(bookCreateRequest.languageOfOriginal());
         book.setChapterList(new ArrayList<>());
         return book;
     }
@@ -68,9 +68,9 @@ public class BookMapperImpl implements BookMapper {
     public Book toBook(Book toUpdate, BookUpdateRequest bookUpdateRequest) {
         if(toUpdate == null || bookUpdateRequest == null)
             return null;
-        toUpdate.setTitle(bookUpdateRequest.getTitle());
-        toUpdate.setYearOfPublishing(bookUpdateRequest.getYearOfPublishing());
-        toUpdate.setLanguageOfOriginal(bookUpdateRequest.getLanguageOfOriginal());
+        toUpdate.setTitle(bookUpdateRequest.title());
+        toUpdate.setYearOfPublishing(bookUpdateRequest.yearOfPublishing());
+        toUpdate.setLanguageOfOriginal(bookUpdateRequest.languageOfOriginal());
         return toUpdate;
     }
 

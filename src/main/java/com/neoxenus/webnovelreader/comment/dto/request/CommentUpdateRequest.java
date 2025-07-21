@@ -1,10 +1,5 @@
 package com.neoxenus.webnovelreader.comment.dto.request;
 
-import lombok.Data;
+public record CommentUpdateRequest(String content) {
 
-@Data
-public class CommentUpdateRequest {
-
-    private String content;
-    
 }
