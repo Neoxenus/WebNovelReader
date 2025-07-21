@@ -1,15 +1,18 @@
 package com.neoxenus.webnovelreader.chapter.controller;
 
+import com.neoxenus.webnovelreader.chapter.dto.ChapterDto;
 import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
 import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateRequest;
 import com.neoxenus.webnovelreader.chapter.service.ChapterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,34 +24,35 @@ public class ChapterController {
 
 
     @PostMapping
-    public ResponseEntity<?> addChapter (@PathVariable Long bookId,
+    public ResponseEntity<ChapterDto> addChapter (@PathVariable Long bookId,
                                          @RequestBody ChapterCreateRequest chapterCreateRequest) {
+        ChapterDto chapterDto = chapterService.addChapter(bookId, chapterCreateRequest);
         URI uri = URI.create(ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/books/" + bookId + "/chapters").toUriString());
-        return ResponseEntity.created(uri).body(chapterService.addChapter(bookId, chapterCreateRequest));
+                .fromCurrentContextPath().path("/api/books/" + bookId + "/chapters/" + chapterDto.id()).toUriString());
+        return ResponseEntity.created(uri).body(chapterDto);
     }
 
     @GetMapping
-    public ResponseEntity<?> getBookChapters(@PathVariable Long bookId) {
-        return ResponseEntity.ok().body(chapterService.getBookChapters(bookId));
+    public List<ChapterDto> getBookChapters(@PathVariable Long bookId) {
+        return chapterService.getBookChapters(bookId);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<?> getChapter(@PathVariable Long bookId,
+    public ChapterDto getChapter(@PathVariable Long bookId,
                                         @PathVariable Long id) {
-        return ResponseEntity.ok().body(chapterService.getChapter(bookId, id));
+        return chapterService.getChapter(bookId, id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateChapter(@PathVariable Long bookId,
+    public ChapterDto updateChapter(@PathVariable Long bookId,
                                            @PathVariable Long id,
                                            @RequestBody ChapterUpdateRequest chapterUpdateRequest) {
-        return ResponseEntity.ok().body(chapterService.updateChapter(bookId, id, chapterUpdateRequest));
+        return chapterService.updateChapter(bookId, id, chapterUpdateRequest);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteChapter(@PathVariable Long bookId,
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteChapter(@PathVariable Long bookId,
                               @PathVariable Long id) {
         chapterService.deleteChapter(bookId, id);
-        return ResponseEntity.noContent().build();
     }
 }

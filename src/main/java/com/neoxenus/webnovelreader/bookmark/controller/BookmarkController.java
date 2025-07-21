@@ -1,5 +1,6 @@
 package com.neoxenus.webnovelreader.bookmark.controller;
 
+import com.neoxenus.webnovelreader.bookmark.dto.BookmarkDto;
 import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateRequest;
 import com.neoxenus.webnovelreader.bookmark.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +18,16 @@ public class BookmarkController {
     private final BookmarkService bookmarkService;
 
     @PostMapping
-    public ResponseEntity<?> createBookmark(@RequestBody BookmarkCreateRequest request) {
-
+    public ResponseEntity<BookmarkDto> createBookmark(@RequestBody BookmarkCreateRequest request) {
+        BookmarkDto bookmarkDto = bookmarkService.createBookmark(request);
         URI uri = URI.create(ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/bookmarks").toUriString());
-        return ResponseEntity.created(uri).body(bookmarkService.createBookmark(request));
+                .fromCurrentContextPath().path("/api/bookmarks/" + bookmarkDto.id()).toUriString());
+        return ResponseEntity.created(uri).body(bookmarkDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBookmark(@PathVariable Long id) {
-        return ResponseEntity.ok().body(bookmarkService.getBookmark(id));
+    public BookmarkDto getBookmark(@PathVariable Long id) {
+        return bookmarkService.getBookmark(id);
     }
 
 }

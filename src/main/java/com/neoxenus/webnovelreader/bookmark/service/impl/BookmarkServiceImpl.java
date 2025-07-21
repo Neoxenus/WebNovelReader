@@ -2,7 +2,6 @@ package com.neoxenus.webnovelreader.bookmark.service.impl;
 
 import com.neoxenus.webnovelreader.bookmark.dto.BookmarkDto;
 import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateRequest;
-import com.neoxenus.webnovelreader.bookmark.entity.Bookmark;
 import com.neoxenus.webnovelreader.bookmark.repo.BookmarkRepository;
 import com.neoxenus.webnovelreader.bookmark.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
-    public Bookmark getBookmark(Long id) {
+    public BookmarkDto getBookmark(Long id) {
         return null;
     }
 }
