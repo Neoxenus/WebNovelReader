@@ -1,17 +1,17 @@
 package com.neoxenus.webnovelreader.bookmarkcollection.dto;
 
-import com.neoxenus.webnovelreader.user.dto.UserDto;
+import lombok.Builder;
 
-
+@Builder
 public record BookmarkCollectionDto(
         Long id,
         Boolean isDefault,
         Boolean isPublic,
-        UserDto user,
+        Long userId,
         String name,
         String description,
         Integer position,
-        Integer count
+        Long count
 ) {
 
 }

@@ -5,9 +5,7 @@ public record BookmarkCollectionCreateRequest (
 
         String name,
 
-        String description,
-
-        Integer position
+        String description
 
 ){
 }

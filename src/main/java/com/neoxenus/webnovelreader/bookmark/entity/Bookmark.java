@@ -2,6 +2,7 @@ package com.neoxenus.webnovelreader.bookmark.entity;
 
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.bookmark.enums.BookmarkType;
+import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import jakarta.persistence.*;
 import lombok.Data;
