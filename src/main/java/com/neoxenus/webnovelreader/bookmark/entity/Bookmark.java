@@ -5,7 +5,9 @@ import com.neoxenus.webnovelreader.bookmark.enums.BookmarkType;
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,5 +36,8 @@ public class Bookmark {
     private List<BookmarkCollection> collection = new ArrayList<>();
 
     private String note; // only for book's bookmarks
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
 }

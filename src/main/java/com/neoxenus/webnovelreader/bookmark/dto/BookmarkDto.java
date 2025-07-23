@@ -1,6 +1,6 @@
 package com.neoxenus.webnovelreader.bookmark.dto;
 
-import com.neoxenus.webnovelreader.book.entity.Book;
+import com.neoxenus.webnovelreader.book.dto.BookDto;
 import com.neoxenus.webnovelreader.chapter.dto.ChapterDto;
 
 /**
@@ -8,9 +8,10 @@ import com.neoxenus.webnovelreader.chapter.dto.ChapterDto;
  */
 public record BookmarkDto(
         Long id,
-        Book book,
+        BookDto book,
         ChapterDto chapter,
         Long collectionId,
+        Integer position,
         String note) {
 
 }

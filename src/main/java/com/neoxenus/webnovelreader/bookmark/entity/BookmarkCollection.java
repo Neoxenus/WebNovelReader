@@ -25,6 +25,8 @@ public class BookmarkCollection {
 
     private String description; //null for default
 
+    Integer position;
+
     @ManyToMany(mappedBy = "collection")
     private List<Bookmark> bookmarks = new ArrayList<>();
 }
