@@ -1,10 +1,10 @@
-package com.neoxenus.webnovelreader.bookmark.service;
+package com.neoxenus.webnovelreader.bookmarkcollection.service;
 
-import com.neoxenus.webnovelreader.bookmark.dto.BookmarkCollectionDto;
 import com.neoxenus.webnovelreader.bookmark.dto.BookmarkDto;
-import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCollectionCreateRequest;
-import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCollectionUpdateRequest;
-import com.neoxenus.webnovelreader.bookmark.dto.request.CollectionReorderRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.BookmarkCollectionDto;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.CollectionReorderRequest;
 
 import java.util.List;
 

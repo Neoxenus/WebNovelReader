@@ -1,5 +1,6 @@
-package com.neoxenus.webnovelreader.bookmark.entity;
+package com.neoxenus.webnovelreader.bookmarkcollection.entity;
 
+import com.neoxenus.webnovelreader.bookmark.entity.Bookmark;
 import com.neoxenus.webnovelreader.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Data;

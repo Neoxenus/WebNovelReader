@@ -1,4 +1,4 @@
-package com.neoxenus.webnovelreader.bookmark.dto;
+package com.neoxenus.webnovelreader.bookmarkcollection.dto;
 
 import com.neoxenus.webnovelreader.user.dto.UserDto;
 
