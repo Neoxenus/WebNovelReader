@@ -12,7 +12,7 @@ public interface BookmarkCollectionMapper {
     BookmarkCollectionDto toDto(BookmarkCollection collection, Long count);
     List<BookmarkCollectionDto> toDto(List<BookmarkCollection> collections, List<BookmarkCountProjection> countProjections);
 
-    BookmarkCollection toBookmark(BookmarkCollectionCreateRequest request);
+    BookmarkCollection toCollection(BookmarkCollectionCreateRequest request);
 
-    BookmarkCollection toBookmark(BookmarkCollection toUpdate, BookmarkCollectionUpdateRequest request);
+    BookmarkCollection toCollection(BookmarkCollection toUpdate, BookmarkCollectionUpdateRequest request);
 }

@@ -47,7 +47,7 @@ public class BookmarkCollectionMapperImpl implements BookmarkCollectionMapper {
     }
 
     @Override
-    public BookmarkCollection toBookmark(BookmarkCollectionCreateRequest request) {
+    public BookmarkCollection toCollection(BookmarkCollectionCreateRequest request) {
 
         BookmarkCollection collection = new BookmarkCollection();
         collection.setIsDefault(false);
@@ -59,7 +59,7 @@ public class BookmarkCollectionMapperImpl implements BookmarkCollectionMapper {
     }
 
     @Override
-    public BookmarkCollection toBookmark(BookmarkCollection toUpdate, BookmarkCollectionUpdateRequest request) {
+    public BookmarkCollection toCollection(BookmarkCollection toUpdate, BookmarkCollectionUpdateRequest request) {
         return null;
     }
 }
