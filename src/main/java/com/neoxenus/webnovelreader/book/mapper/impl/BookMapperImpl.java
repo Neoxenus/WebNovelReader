@@ -65,12 +65,12 @@ public class BookMapperImpl implements BookMapper {
     }
 
     @Override
-    public Book toBook(Book toUpdate, BookUpdateRequest bookUpdateRequest) {
-        if(toUpdate == null || bookUpdateRequest == null)
+    public Book toBook(Book toUpdate, BookUpdateRequest request) {
+        if(toUpdate == null || request == null)
             return null;
-        toUpdate.setTitle(bookUpdateRequest.title());
-        toUpdate.setYearOfPublishing(bookUpdateRequest.yearOfPublishing());
-        toUpdate.setLanguageOfOriginal(bookUpdateRequest.languageOfOriginal());
+        toUpdate.setTitle(request.title());
+        toUpdate.setYearOfPublishing(request.yearOfPublishing());
+        toUpdate.setLanguageOfOriginal(request.languageOfOriginal());
         return toUpdate;
     }
 

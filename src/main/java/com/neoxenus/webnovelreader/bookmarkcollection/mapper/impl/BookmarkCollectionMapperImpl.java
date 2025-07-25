@@ -60,6 +60,11 @@ public class BookmarkCollectionMapperImpl implements BookmarkCollectionMapper {
 
     @Override
     public BookmarkCollection toCollection(BookmarkCollection toUpdate, BookmarkCollectionUpdateRequest request) {
-        return null;
+        if(toUpdate == null || request == null)
+            return null;
+        toUpdate.setIsPublic(request.isPublic());
+        toUpdate.setName(request.name());
+        toUpdate.setDescription(request.description());
+        return toUpdate;
     }
 }
