@@ -3,13 +3,17 @@ package com.neoxenus.webnovelreader.bookmarkcollection.entity;
 import com.neoxenus.webnovelreader.bookmark.entity.Bookmark;
 import com.neoxenus.webnovelreader.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookmarkCollection {
     @Id
     @GeneratedValue

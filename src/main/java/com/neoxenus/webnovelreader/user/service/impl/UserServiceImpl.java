@@ -2,15 +2,18 @@ package com.neoxenus.webnovelreader.user.service.impl;
 
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
-import com.neoxenus.webnovelreader.user.entity.User;
-import com.neoxenus.webnovelreader.user.dto.request.UserCreateRequest;
 import com.neoxenus.webnovelreader.user.dto.UserDto;
+import com.neoxenus.webnovelreader.user.dto.request.UserCreateRequest;
 import com.neoxenus.webnovelreader.user.dto.request.UserUpdateRequest;
+import com.neoxenus.webnovelreader.user.entity.User;
+import com.neoxenus.webnovelreader.user.enums.UserRole;
+import com.neoxenus.webnovelreader.user.event.UserCreatedEvent;
 import com.neoxenus.webnovelreader.user.mapper.UserMapper;
 import com.neoxenus.webnovelreader.user.repo.UserRepository;
 import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service @RequiredArgsConstructor @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -32,6 +36,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final UserMapper userMapper;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public User getCurrentUser() {
@@ -74,7 +80,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userEntity.setPassword(bCryptPasswordEncoder.encode(user.password()));
         userEntity = userRepository.save(userEntity);
         userRepository.flush();
+
+        eventPublisher.publishEvent(new UserCreatedEvent(this, userEntity));
+
         return userMapper.toDto(userEntity);
+    }
+
+    @Override
+    public void initAdmin() {
+        boolean adminExists = userRepository.existsByUsername("admin");
+        if(!adminExists) {
+            User admin = userRepository.save(User.builder()
+                    .username("admin")
+                    .password(bCryptPasswordEncoder.encode("admin"))
+                    .email("admin@admin")
+                    .roles(Set.of(UserRole.ADMIN, UserRole.USER))
+                    .build());
+            eventPublisher.publishEvent(new UserCreatedEvent(this, admin));
+        }
     }
 
     @Override

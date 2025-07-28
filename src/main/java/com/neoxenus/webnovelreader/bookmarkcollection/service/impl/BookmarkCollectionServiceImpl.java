@@ -5,12 +5,12 @@ import com.neoxenus.webnovelreader.bookmark.entity.Bookmark;
 import com.neoxenus.webnovelreader.bookmark.mapper.BookmarkMapper;
 import com.neoxenus.webnovelreader.bookmark.repo.BookmarkRepository;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.BookmarkCollectionDto;
-import com.neoxenus.webnovelreader.bookmarkcollection.projection.BookmarkCountProjection;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.CollectionReorderRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
 import com.neoxenus.webnovelreader.bookmarkcollection.mapper.BookmarkCollectionMapper;
+import com.neoxenus.webnovelreader.bookmarkcollection.projection.BookmarkCountProjection;
 import com.neoxenus.webnovelreader.bookmarkcollection.repo.BookmarkCollectionRepository;
 import com.neoxenus.webnovelreader.bookmarkcollection.service.BookmarkCollectionService;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
@@ -21,8 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +70,8 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
         User currentUser = userService.getCurrentUser();
         List<BookmarkCollection> collections = repository.findByUserId(currentUser.getId());
         List<BookmarkCountProjection> count = repository.findBookmarkCountsByUserId(currentUser.getId());
-        return mapper.toDto(collections, count);
+        return mapper.toDto(collections, count).stream()
+                .sorted(Comparator.comparingInt(BookmarkCollectionDto::position)).collect(Collectors.toList());
     }
 
     @Override
@@ -103,5 +107,19 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
     @Override
     public void deleteCollection(Long id) {
         repository.deleteById(id); //todo: more tests (with cascade deleting)
+    }
+
+    @Override
+    public void initDefaultCollectionsForUser(User user) {
+        log.info("Creating default collections for user {}", user.getUsername());
+        List<BookmarkCollection> collections = List.of(
+                new BookmarkCollection(null, true, false, user, "Viewed", null, 1, new ArrayList<>()),
+                new BookmarkCollection(null, true, false, user, "Reading now", null, 2, new ArrayList<>()),
+                new BookmarkCollection(null, true, false, user, "Will read", null, 3, new ArrayList<>()),
+                new BookmarkCollection(null, true, false, user, "Awaiting", null, 4, new ArrayList<>()),
+                new BookmarkCollection(null, true, false, user, "Delayed", null, 5, new ArrayList<>()),
+                new BookmarkCollection(null, true, false, user, "Dropped", null, 6, new ArrayList<>())
+                );
+        repository.saveAll(collections);
     }
 }

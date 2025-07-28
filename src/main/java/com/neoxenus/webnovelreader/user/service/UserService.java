@@ -15,6 +15,7 @@ import java.util.List;
 public interface UserService {
     UserDto saveUser(UserCreateRequest user) throws UsernameExistsException;
 
+    void initAdmin();
     User getCurrentUser();
 
     UserDto getUser(Long id) throws NoSuchEntityException;

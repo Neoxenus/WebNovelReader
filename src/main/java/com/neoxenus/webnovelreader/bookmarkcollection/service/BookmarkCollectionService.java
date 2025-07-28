@@ -6,6 +6,7 @@ import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollec
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.CollectionReorderRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
+import com.neoxenus.webnovelreader.user.entity.User;
 
 import java.util.List;
 
@@ -23,5 +24,6 @@ public interface BookmarkCollectionService {
 
     void deleteCollection(Long id);
 
+    void initDefaultCollectionsForUser(User user);
     //void deleteBookmarks(List<Long> ids);
 }
