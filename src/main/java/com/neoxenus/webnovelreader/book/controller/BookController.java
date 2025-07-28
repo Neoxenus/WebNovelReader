@@ -31,7 +31,7 @@ public class BookController {
 
     @GetMapping("/{id}")
     public BookDto getBook(@PathVariable Long id){
-        return bookService.getBook(id);
+        return bookService.getBookDtoById(id);
     }
     @GetMapping
     public List<BookDto> getAllBooks(){

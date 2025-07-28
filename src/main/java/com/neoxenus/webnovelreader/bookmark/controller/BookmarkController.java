@@ -2,6 +2,7 @@ package com.neoxenus.webnovelreader.bookmark.controller;
 
 import com.neoxenus.webnovelreader.bookmark.dto.BookmarkDto;
 import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateRequest;
+import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkUpdateRequest;
 import com.neoxenus.webnovelreader.bookmark.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,4 +31,8 @@ public class BookmarkController {
         return bookmarkService.getBookmark(id);
     }
 
+    @PatchMapping("/{id}")
+    public BookmarkDto updateBookmark(@PathVariable Long id, @RequestBody BookmarkUpdateRequest request) {
+        return bookmarkService.updateBookmark(id, request);
+    }
 }

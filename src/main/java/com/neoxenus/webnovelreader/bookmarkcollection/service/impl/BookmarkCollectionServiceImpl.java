@@ -5,7 +5,7 @@ import com.neoxenus.webnovelreader.bookmark.entity.Bookmark;
 import com.neoxenus.webnovelreader.bookmark.mapper.BookmarkMapper;
 import com.neoxenus.webnovelreader.bookmark.repo.BookmarkRepository;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.BookmarkCollectionDto;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.projection.BookmarkCountProjection;
+import com.neoxenus.webnovelreader.bookmarkcollection.projection.BookmarkCountProjection;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.CollectionReorderRequest;
@@ -49,6 +49,17 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
                         collection
                 ), 0L
         );
+    }
+
+    @Override
+    public BookmarkCollection getCollectionById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NoSuchEntityException("No bookmark collection with id: " + id));
+    }
+
+    @Override
+    public List<BookmarkCollection> getCollectionById(List<Long> ids) {
+        return ids.stream().map(this::getCollectionById).toList();
     }
 
     @Override

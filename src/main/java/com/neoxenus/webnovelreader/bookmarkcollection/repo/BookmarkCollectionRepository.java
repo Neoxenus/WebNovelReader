@@ -1,6 +1,6 @@
 package com.neoxenus.webnovelreader.bookmarkcollection.repo;
 
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.projection.BookmarkCountProjection;
+import com.neoxenus.webnovelreader.bookmarkcollection.projection.BookmarkCountProjection;
 import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

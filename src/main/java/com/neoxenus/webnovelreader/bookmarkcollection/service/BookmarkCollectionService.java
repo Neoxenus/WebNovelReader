@@ -5,11 +5,14 @@ import com.neoxenus.webnovelreader.bookmarkcollection.dto.BookmarkCollectionDto;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.CollectionReorderRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
 
 import java.util.List;
 
 public interface BookmarkCollectionService {
     BookmarkCollectionDto createCollection(BookmarkCollectionCreateRequest request);
+    BookmarkCollection getCollectionById(Long id);
+    List<BookmarkCollection> getCollectionById(List<Long> ids);
 
     List<BookmarkCollectionDto> getCollections();
     List<BookmarkDto> loadCollectionContent(Long id);
@@ -19,4 +22,6 @@ public interface BookmarkCollectionService {
     void emptyCollection(Long id);
 
     void deleteCollection(Long id);
+
+    //void deleteBookmarks(List<Long> ids);
 }

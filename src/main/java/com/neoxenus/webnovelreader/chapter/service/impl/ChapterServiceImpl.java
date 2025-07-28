@@ -58,7 +58,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     @Transactional
-    public ChapterDto getChapter(Long bookId, Long chapterId) {
+    public ChapterDto getChapterDto(Long bookId, Long chapterId) {
         Chapter chapter = chapterRepository.findById(chapterId)
                 .orElseThrow(() -> new NoSuchEntityException("No chapter for and id: " + chapterId));
 
@@ -70,6 +70,18 @@ public class ChapterServiceImpl implements ChapterService {
         entityManager.refresh(chapter);
 
         return chapterMapper.toDto(chapter);
+    }
+
+    @Override
+    public Chapter getChapter(Long bookId, Long chapterId) throws NoSuchEntityException {
+        Chapter chapter = chapterRepository.findById(chapterId)
+                .orElseThrow(() -> new NoSuchEntityException("No chapter for and id: " + chapterId));
+
+        if (!Objects.equals(chapter.getBook().getId(), bookId)) {
+            throw new NoSuchEntityException("Chapter does not belong to book with id: " + bookId);
+        }
+
+        return chapter;
     }
 
     @Override

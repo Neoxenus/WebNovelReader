@@ -1,4 +1,4 @@
-package com.neoxenus.webnovelreader.bookmarkcollection.dto.projection;
+package com.neoxenus.webnovelreader.bookmarkcollection.projection;
 
 public interface BookmarkCountProjection {
     Long getId();

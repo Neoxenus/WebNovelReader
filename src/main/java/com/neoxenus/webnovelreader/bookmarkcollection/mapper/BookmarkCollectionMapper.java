@@ -1,7 +1,7 @@
 package com.neoxenus.webnovelreader.bookmarkcollection.mapper;
 
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.BookmarkCollectionDto;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.projection.BookmarkCountProjection;
+import com.neoxenus.webnovelreader.bookmarkcollection.projection.BookmarkCountProjection;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;

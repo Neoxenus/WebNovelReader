@@ -1,9 +1,9 @@
 package com.neoxenus.webnovelreader.book.service.impl;
 
-import com.neoxenus.webnovelreader.book.entity.Book;
-import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
 import com.neoxenus.webnovelreader.book.dto.BookDto;
+import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
 import com.neoxenus.webnovelreader.book.dto.request.BookUpdateRequest;
+import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.book.mapper.BookMapper;
 import com.neoxenus.webnovelreader.book.repo.BookRepository;
 import com.neoxenus.webnovelreader.book.service.BookService;
@@ -36,11 +36,18 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public BookDto getBook(Long id) {
+    public BookDto getBookDtoById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(
                 () -> new NoSuchEntityException("No book for an id: " + id)
         );
         return bookMapper.toDto(book);
+    }
+
+    @Override
+    public Book getBookById(Long id) {
+        return  bookRepository.findById(id).orElseThrow(
+                () -> new NoSuchEntityException("No book for an id: " + id)
+        );
     }
 
     @Override
