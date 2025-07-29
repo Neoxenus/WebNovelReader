@@ -10,7 +10,6 @@ import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollec
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.CollectionReorderRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
 import com.neoxenus.webnovelreader.bookmarkcollection.mapper.BookmarkCollectionMapper;
-import com.neoxenus.webnovelreader.bookmarkcollection.projection.BookmarkCountProjection;
 import com.neoxenus.webnovelreader.bookmarkcollection.repo.BookmarkCollectionRepository;
 import com.neoxenus.webnovelreader.bookmarkcollection.service.BookmarkCollectionService;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
@@ -50,7 +49,7 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
         return mapper.toDto(
                 repository.save(
                         collection
-                ), 0L
+                )
         );
     }
 
@@ -69,8 +68,7 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
     public List<BookmarkCollectionDto> getCollections() {
         User currentUser = userService.getCurrentUser();
         List<BookmarkCollection> collections = repository.findByUserId(currentUser.getId());
-        List<BookmarkCountProjection> count = repository.findBookmarkCountsByUserId(currentUser.getId());
-        return mapper.toDto(collections, count).stream()
+        return mapper.toDto(collections).stream()
                 .sorted(Comparator.comparingInt(BookmarkCollectionDto::position)).collect(Collectors.toList());
     }
 
@@ -87,7 +85,7 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
         if(optionalBookmarkCollection.isPresent()){
             BookmarkCollection collection = optionalBookmarkCollection.get();
             BookmarkCollection updatedCollection = mapper.toCollection(collection, request);
-            return mapper.toDto(repository.save(updatedCollection), Long.valueOf(updatedCollection.getBookmarks().size()));
+            return mapper.toDto(repository.save(updatedCollection));
         } else {
             //todo: logs
             throw new NoSuchEntityException("No bookmark collection for id: " + id);
@@ -113,12 +111,12 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
     public void initDefaultCollectionsForUser(User user) {
         log.info("Creating default collections for user {}", user.getUsername());
         List<BookmarkCollection> collections = List.of(
-                new BookmarkCollection(null, true, false, user, "Viewed", null, 1, new ArrayList<>()),
-                new BookmarkCollection(null, true, false, user, "Reading now", null, 2, new ArrayList<>()),
-                new BookmarkCollection(null, true, false, user, "Will read", null, 3, new ArrayList<>()),
-                new BookmarkCollection(null, true, false, user, "Awaiting", null, 4, new ArrayList<>()),
-                new BookmarkCollection(null, true, false, user, "Delayed", null, 5, new ArrayList<>()),
-                new BookmarkCollection(null, true, false, user, "Dropped", null, 6, new ArrayList<>())
+                new BookmarkCollection(null, true, false, user, "Viewed", null, 1, new ArrayList<>(), 0),
+                new BookmarkCollection(null, true, false, user, "Reading now", null, 2, new ArrayList<>(), 0),
+                new BookmarkCollection(null, true, false, user, "Will read", null, 3, new ArrayList<>(), 0),
+                new BookmarkCollection(null, true, false, user, "Awaiting", null, 4, new ArrayList<>(), 0),
+                new BookmarkCollection(null, true, false, user, "Delayed", null, 5, new ArrayList<>(), 0),
+                new BookmarkCollection(null, true, false, user, "Dropped", null, 6, new ArrayList<>(), 0)
                 );
         repository.saveAll(collections);
     }

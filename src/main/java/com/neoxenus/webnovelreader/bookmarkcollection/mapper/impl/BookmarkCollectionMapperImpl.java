@@ -1,7 +1,6 @@
 package com.neoxenus.webnovelreader.bookmarkcollection.mapper.impl;
 
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.BookmarkCollectionDto;
-import com.neoxenus.webnovelreader.bookmarkcollection.projection.BookmarkCountProjection;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
@@ -17,7 +16,7 @@ import java.util.List;
 public class BookmarkCollectionMapperImpl implements BookmarkCollectionMapper {
 
     @Override
-    public BookmarkCollectionDto toDto(BookmarkCollection collection, Long count) {
+    public BookmarkCollectionDto toDto(BookmarkCollection collection) {
 
         return BookmarkCollectionDto.builder()
                 .id(collection.getId())
@@ -27,23 +26,13 @@ public class BookmarkCollectionMapperImpl implements BookmarkCollectionMapper {
                 .name(collection.getName())
                 .description(collection.getDescription())
                 .position(collection.getPosition())
-                .count(count)
+                .count(collection.getCount())
                 .build();
     }
 
     @Override
-    public List<BookmarkCollectionDto> toDto(List<BookmarkCollection> collections, List<BookmarkCountProjection> countProjections) {
-        return collections.stream()
-                .map( collection -> {
-                            Long count = countProjections.stream()
-                                    .filter(p -> p.getId().equals(collection.getId()))
-                                    .findFirst()
-                                    .map(p -> p.getCount() != null ? p.getCount() : 0L)
-                                    .orElse(0L);
-
-                            return toDto(collection, count);
-                        })
-                        .toList();
+    public List<BookmarkCollectionDto> toDto(List<BookmarkCollection> collections) {
+        return collections.stream().map( this::toDto).toList();
     }
 
     @Override
@@ -55,6 +44,7 @@ public class BookmarkCollectionMapperImpl implements BookmarkCollectionMapper {
         collection.setName(request.name());
         collection.setDescription(request.description());
         collection.setBookmarks(new ArrayList<>());
+        collection.setCount(0);
         return collection;
     }
 

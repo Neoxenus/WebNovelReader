@@ -47,7 +47,12 @@ public class BookmarkServiceImpl implements BookmarkService {
         Bookmark bookmark = mapper.toBookmark(request);
         bookmark.setBook(book);
         bookmark.setChapter(chapter);
-        bookmark.setCollection(List.of(collectionService.getCollectionById(request.chapterId())));
+        bookmark.setCollections(List.of(collectionService.getCollectionById(request.collectionId())));
+        //use method increment
+        /* todo:
+         * List<BookmarkCollection> increment(ids);
+         * retrives collections by id,  increment count, save, return updated collections
+         */
         bookmark = bookmarkRepository.save(bookmark);
         return mapper.toDto(bookmark);
     }
@@ -59,7 +64,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                 .orElseThrow(() -> new NoSuchEntityException("No bookmark with an id" + id));
         Bookmark updatedBookmark = mapper.toBookmark(toUpdate, request);
         List<BookmarkCollection> collectionList = collectionService.getCollectionById(request.collectionsId());
-        updatedBookmark.setCollection(collectionList);
+        updatedBookmark.setCollections(collectionList);
         return mapper.toDto(updatedBookmark);
     }
 

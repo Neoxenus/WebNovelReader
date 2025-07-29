@@ -6,7 +6,7 @@ import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateRequest;
 import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkUpdateRequest;
 import com.neoxenus.webnovelreader.bookmark.entity.Bookmark;
 import com.neoxenus.webnovelreader.bookmark.mapper.BookmarkMapper;
-import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
+import com.neoxenus.webnovelreader.bookmarkcollection.mapper.BookmarkCollectionMapper;
 import com.neoxenus.webnovelreader.chapter.mapper.ChapterMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,6 +19,7 @@ public class BookmarkMapperImpl implements BookmarkMapper {
 
     private final BookMapper bookMapper;
     private final ChapterMapper chapterMapper;
+    private final BookmarkCollectionMapper collectionMapper;
 
 //    Long id,
 //    BookDto book,
@@ -62,7 +63,7 @@ public class BookmarkMapperImpl implements BookmarkMapper {
                 .book(bookMapper.toDto(bookmark.getBook()))
                 .chapter(chapterMapper.toDto(bookmark.getChapter()))
                 .type(bookmark.getType())
-                .collectionId(bookmark.getCollection().stream().map(BookmarkCollection::getId).toList())
+                .collections(collectionMapper.toDto(bookmark.getCollections()))
                 .note(bookmark.getNote())
                 .createdAt(bookmark.getCreatedAt())
                 .build();

@@ -32,6 +32,8 @@ public class BookmarkCollection {
 
     Integer position;
 
-    @ManyToMany(mappedBy = "collection")
+    @ManyToMany(mappedBy = "collections")
     private List<Bookmark> bookmarks = new ArrayList<>();
+
+    private Integer count = 0;
 }

@@ -34,7 +34,7 @@ public class Bookmark {
             joinColumns = @JoinColumn(name = "bookmark_id"),
             inverseJoinColumns = @JoinColumn(name = "collection_id")
     )
-    private List<BookmarkCollection> collection = new ArrayList<>();
+    private List<BookmarkCollection> collections = new ArrayList<>();
 
     private String note; // only for book's bookmarks
 

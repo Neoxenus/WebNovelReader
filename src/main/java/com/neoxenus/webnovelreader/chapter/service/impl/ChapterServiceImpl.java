@@ -2,13 +2,14 @@ package com.neoxenus.webnovelreader.chapter.service.impl;
 
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.book.repo.BookRepository;
-import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
-import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
 import com.neoxenus.webnovelreader.chapter.dto.ChapterDto;
+import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
 import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateRequest;
+import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import com.neoxenus.webnovelreader.chapter.mapper.ChapterMapper;
 import com.neoxenus.webnovelreader.chapter.repo.ChapterRepository;
 import com.neoxenus.webnovelreader.chapter.service.ChapterService;
+import com.neoxenus.webnovelreader.exceptions.ChapterWithNumberExistsException;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -36,9 +37,17 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     @Transactional
-    public ChapterDto addChapter(Long bookId, ChapterCreateRequest chapterCreateRequest) throws NoSuchEntityException {
-        Chapter chapter = chapterMapper.toChapter(chapterCreateRequest);
+    public ChapterDto addChapter(Long bookId, ChapterCreateRequest request) throws NoSuchEntityException {
+        Chapter chapter = chapterMapper.toChapter(request);
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NoSuchEntityException("No such book for id: " + bookId));
+        boolean numberAlreadyExists = chapterRepository.existsByBookIdAndChapterNumber(bookId, request.chapterNumber());
+        if(numberAlreadyExists) {
+            throw new ChapterWithNumberExistsException(
+                    "Chapter with number "
+                    + request.chapterNumber()
+                    + " already exists for a book with id: "
+                    + bookId);
+        }
         chapter.setBook(book);
         return chapterMapper.toDto(
                 chapterRepository.save(chapter)

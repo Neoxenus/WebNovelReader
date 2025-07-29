@@ -11,7 +11,7 @@ public record BookmarkCollectionDto(
         String name,
         String description,
         Integer position,
-        Long count
+        Integer count
 ) {
 
 }

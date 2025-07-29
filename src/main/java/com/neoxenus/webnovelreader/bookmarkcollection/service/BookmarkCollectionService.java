@@ -20,6 +20,7 @@ public interface BookmarkCollectionService {
 
     BookmarkCollectionDto updateCollection(Long id, BookmarkCollectionUpdateRequest request);
     List<BookmarkCollectionDto> reorder(List<CollectionReorderRequest> request);
+
     void emptyCollection(Long id);
 
     void deleteCollection(Long id);

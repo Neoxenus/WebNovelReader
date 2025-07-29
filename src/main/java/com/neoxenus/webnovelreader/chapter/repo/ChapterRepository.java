@@ -16,5 +16,7 @@ public interface ChapterRepository extends JpaRepository<Chapter, Long> {
     @Query("UPDATE Chapter c SET c.views = c.views + 1 WHERE c.id = :id")
     void incrementViewCount(@Param("id") Long id);
 
+    boolean existsByBookIdAndChapterNumber(Long id, Integer number);
+
 
 }

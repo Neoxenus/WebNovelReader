@@ -1,5 +1,6 @@
 package com.neoxenus.webnovelreader.exceptions.handler;
 
+import com.neoxenus.webnovelreader.exceptions.ChapterWithNumberExistsException;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UnexpectedUnauthenticatedUserException;
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
@@ -11,8 +12,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({UsernameExistsException.class, NoSuchEntityException.class})
-    public ProblemDetail handleBadRequstsExceptions(Exception ex) {
+    @ExceptionHandler({
+            UsernameExistsException.class,
+            NoSuchEntityException.class,
+            ChapterWithNumberExistsException.class
+    })
+    public ProblemDetail handleBadRequestsExceptions(Exception ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
@@ -20,4 +25,5 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleUnexpectedUnauthenticatedUserException(Exception ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
     }
+
 }
