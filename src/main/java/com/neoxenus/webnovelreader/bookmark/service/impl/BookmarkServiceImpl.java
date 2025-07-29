@@ -7,6 +7,7 @@ import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateRequest;
 import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkUpdateRequest;
 import com.neoxenus.webnovelreader.bookmark.entity.Bookmark;
 import com.neoxenus.webnovelreader.bookmark.enums.BookmarkType;
+import com.neoxenus.webnovelreader.bookmark.enums.UpdateType;
 import com.neoxenus.webnovelreader.bookmark.mapper.BookmarkMapper;
 import com.neoxenus.webnovelreader.bookmark.repo.BookmarkRepository;
 import com.neoxenus.webnovelreader.bookmark.service.BookmarkService;
@@ -47,12 +48,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         Bookmark bookmark = mapper.toBookmark(request);
         bookmark.setBook(book);
         bookmark.setChapter(chapter);
-        bookmark.setCollections(List.of(collectionService.getCollectionById(request.collectionId())));
-        //use method increment
-        /* todo:
-         * List<BookmarkCollection> increment(ids);
-         * retrives collections by id,  increment count, save, return updated collections
-         */
+        bookmark.setCollections(List.of(collectionService.updateCount(request.collectionId(), 1)));
         bookmark = bookmarkRepository.save(bookmark);
         return mapper.toDto(bookmark);
     }
@@ -60,17 +56,39 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     @Transactional
     public BookmarkDto updateBookmark(Long id, BookmarkUpdateRequest request) {
-        Bookmark toUpdate = bookmarkRepository.findById(id)
-                .orElseThrow(() -> new NoSuchEntityException("No bookmark with an id" + id));
+        Bookmark toUpdate = findById(id);
         Bookmark updatedBookmark = mapper.toBookmark(toUpdate, request);
-        List<BookmarkCollection> collectionList = collectionService.getCollectionById(request.collectionsId());
-        updatedBookmark.setCollections(collectionList);
+        if(request.type() != UpdateType.NOTE) {
+
+
+            List<BookmarkCollection> collectionList = updatedBookmark.getCollections();
+
+            if(request.type().equals(UpdateType.ADD)){
+                BookmarkCollection collection = collectionService.updateCount(request.collectionId(), 1);
+                collectionList.add(collection);
+            } else if(request.type().equals(UpdateType.REMOVE)){
+                BookmarkCollection collection = collectionService.getCollectionById(request.collectionId());
+                if(collectionList.remove(collection)) {
+                     collectionService.updateCount(request.collectionId(),-1);
+                } else {
+                    log.warn("Bookmark {} does not belong to collection {}", id, request.collectionId());
+                }
+            }
+
+            updatedBookmark.setCollections(collectionList);
+        }
+
         return mapper.toDto(updatedBookmark);
     }
 
     @Override
     public BookmarkDto getBookmark(Long id) {
-        return mapper.toDto(bookmarkRepository.findById(id)
-                .orElseThrow(() -> new NoSuchEntityException("No bookmark with an id: " + id)));
+        return mapper.toDto(findById(id));
+    }
+
+    @Override
+    public Bookmark findById(Long id) {
+        return bookmarkRepository.findById(id)
+                .orElseThrow(() -> new NoSuchEntityException("No bookmark with an id: " + id));
     }
 }

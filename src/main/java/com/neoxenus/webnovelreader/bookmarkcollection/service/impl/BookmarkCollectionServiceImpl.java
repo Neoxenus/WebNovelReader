@@ -74,7 +74,7 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
 
     @Override
     public List<BookmarkDto> loadCollectionContent(Long id) {
-        List<Bookmark> bookmarks = bookmarkRepository.findBookmarksByCollectionId(id);
+        List<Bookmark> bookmarks = bookmarkRepository.findBookmarksByCollectionsId(id);
         return bookmarkMapper.toDto(bookmarks);
     }
 
@@ -98,11 +98,21 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
     }
 
     @Override
-    public void emptyCollection(Long id) {
-        bookmarkRepository.deleteAllByCollectionId(id);//todo: more tests probably need changes
+    @Transactional
+    public BookmarkCollection updateCount(Long id, int delta) {
+        BookmarkCollection collection = this.getCollectionById(id);
+        collection.setCount(collection.getCount() + delta);
+        return repository.save(collection);
     }
 
     @Override
+    @Transactional
+    public void emptyCollection(Long id) {
+        bookmarkRepository.deleteAllByCollectionsId(id);//todo: more tests probably need changes
+    }
+
+    @Override
+    @Transactional
     public void deleteCollection(Long id) {
         repository.deleteById(id); //todo: more tests (with cascade deleting)
     }

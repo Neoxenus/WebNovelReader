@@ -21,41 +21,6 @@ public class BookmarkMapperImpl implements BookmarkMapper {
     private final ChapterMapper chapterMapper;
     private final BookmarkCollectionMapper collectionMapper;
 
-//    Long id,
-//    BookDto book,
-//    ChapterDto chapter,
-    //type
-//    List<long> collectionId,
-
-//    String note) {
-
-
-    //------------------------
-//    @Id
-//    @GeneratedValue
-//    private Long id;
-//
-//    @ManyToOne(optional = false)
-//    private Book book;
-//
-//    @Enumerated(EnumType.STRING)
-//    private BookmarkType type;
-//
-//    @ManyToOne
-//    private Chapter chapter; // Optional (only for chapter type bookmarks)
-//
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "bookmark_collection_link",
-//            joinColumns = @JoinColumn(name = "bookmark_id"),
-//            inverseJoinColumns = @JoinColumn(name = "collection_id")
-//    )
-//    private List<BookmarkCollection> collection = new ArrayList<>();
-//
-//    private String note; // only for book's bookmarks
-//
-//    @CreationTimestamp
-//    private LocalDateTime createdAt;
     @Override
     public BookmarkDto toDto(Bookmark bookmark) {
         return BookmarkDto.builder()

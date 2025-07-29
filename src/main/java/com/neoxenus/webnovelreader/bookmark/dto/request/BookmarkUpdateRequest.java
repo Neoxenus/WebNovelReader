@@ -1,9 +1,10 @@
 package com.neoxenus.webnovelreader.bookmark.dto.request;
 
-import java.util.List;
+import com.neoxenus.webnovelreader.bookmark.enums.UpdateType;
 
 public record BookmarkUpdateRequest(
-        List<Long> collectionsId,
+        UpdateType type,
+        Long collectionId,
         String note
 ) {
 }
