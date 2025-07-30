@@ -16,6 +16,7 @@ import com.neoxenus.webnovelreader.bookmarkcollection.service.BookmarkCollection
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import com.neoxenus.webnovelreader.chapter.service.ChapterService;
 import com.neoxenus.webnovelreader.exceptions.BookmarkDeletedException;
+import com.neoxenus.webnovelreader.exceptions.EntityAlreadyExistsException;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.service.UserService;
@@ -44,7 +45,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Transactional
     public BookmarkDto createBookmark(BookmarkCreateRequest request) {
         collectionService.verifyUserAccessToBookmarkCollection(request.collectionId());
-
+        verifyBookmarkDoesNotExists(request, userService.getCurrentUser().getId());
         log.info("Saving bookmark {}", request);
 
         Book book = bookService.getBookById(request.bookId());
@@ -60,6 +61,38 @@ public class BookmarkServiceImpl implements BookmarkService {
         return mapper.toDto(bookmark);
     }
 
+    @Transactional(readOnly = true)
+    public void verifyBookmarkDoesNotExists(BookmarkCreateRequest request, Long userId){
+        boolean isExist = switch(request.type()){
+            case BOOK ->
+                    bookmarkRepository
+                            .existsByBookIdAndChapterNullAndCollectionsUserId(
+                                    request.bookId(),
+                                    userId);
+            case CHAPTER ->
+                    bookmarkRepository
+                            .existsByBookIdAndChapterIdAndCollectionsUserId(
+                                    request.bookId(),
+                                    request.chapterId(),
+                                    userId);
+        };
+        if(isExist){
+            log.error(
+                    "Bookmark for book {} and chapter {} and user {} already exists",
+                    request.bookId(),
+                    request.chapterId(),
+                    userId
+            );
+            throw new EntityAlreadyExistsException(
+                    "Bookmark for book "
+                            + request.bookId()
+                            + " and chapter "
+                            + request.chapterId()
+                            + " and user "
+                            + userId
+                            + " already exists");
+        }
+    }
     @Override
     @Transactional(noRollbackFor = BookmarkDeletedException.class)
     public BookmarkDto updateBookmark(Long id, BookmarkUpdateRequest request) {

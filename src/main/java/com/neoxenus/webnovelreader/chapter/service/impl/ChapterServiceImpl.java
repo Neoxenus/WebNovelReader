@@ -9,7 +9,7 @@ import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import com.neoxenus.webnovelreader.chapter.mapper.ChapterMapper;
 import com.neoxenus.webnovelreader.chapter.repo.ChapterRepository;
 import com.neoxenus.webnovelreader.chapter.service.ChapterService;
-import com.neoxenus.webnovelreader.exceptions.ChapterWithNumberExistsException;
+import com.neoxenus.webnovelreader.exceptions.EntityAlreadyExistsException;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -42,7 +42,7 @@ public class ChapterServiceImpl implements ChapterService {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NoSuchEntityException("No such book for id: " + bookId));
         boolean numberAlreadyExists = chapterRepository.existsByBookIdAndChapterNumber(bookId, request.chapterNumber());
         if(numberAlreadyExists) {
-            throw new ChapterWithNumberExistsException(
+            throw new EntityAlreadyExistsException(
                     "Chapter with number "
                     + request.chapterNumber()
                     + " already exists for a book with id: "

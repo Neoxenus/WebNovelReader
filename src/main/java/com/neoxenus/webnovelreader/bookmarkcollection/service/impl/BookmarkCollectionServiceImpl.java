@@ -75,6 +75,7 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
 
     @Override
     public List<BookmarkDto> loadCollectionContent(Long id) {
+        verifyUserAccessToBookmarkCollection(id);
         List<Bookmark> bookmarks = bookmarkRepository.findBookmarksByCollectionsId(id);
         return bookmarkMapper.toDto(bookmarks);
     }
@@ -122,7 +123,24 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
     @Override
     @Transactional
     public void emptyCollection(Long id) {
-        bookmarkRepository.deleteAllByCollectionsId(id);//todo: more tests probably need changes
+        BookmarkCollection collection = verifyUserAccessToBookmarkCollection(id);
+
+        List<Bookmark> bookmarks = bookmarkRepository.findBookmarksByCollectionsId(id);
+
+        bookmarks.forEach(
+                e -> {
+                    e.getCollections().remove(collection);
+                    if(e.getCollections().isEmpty()) {
+                        bookmarkRepository.delete(e);
+                    } else {
+                        bookmarkRepository.save(e);
+                    }
+
+                }
+        );
+
+        collection.setCount(0);
+        //todo: more tests probably need changes
     }
 
     @Override

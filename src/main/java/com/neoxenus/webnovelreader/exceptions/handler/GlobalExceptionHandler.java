@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             UsernameExistsException.class,
             NoSuchEntityException.class,
-            ChapterWithNumberExistsException.class
+            EntityAlreadyExistsException.class
     })
     public ProblemDetail handleBadRequestsExceptions(Exception ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
