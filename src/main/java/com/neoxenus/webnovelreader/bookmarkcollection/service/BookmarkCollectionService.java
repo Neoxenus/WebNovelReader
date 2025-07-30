@@ -22,6 +22,8 @@ public interface BookmarkCollectionService {
     List<BookmarkCollectionDto> reorder(List<CollectionReorderRequest> request);
 
     BookmarkCollection updateCount(Long id, int delta);
+
+    BookmarkCollection verifyUserAccessToBookmarkCollection(Long collectionId);
     void emptyCollection(Long id);
 
     void deleteCollection(Long id);

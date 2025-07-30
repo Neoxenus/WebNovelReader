@@ -15,6 +15,8 @@ public interface BookmarkService {
 
     Bookmark findById(Long id);
 
+    Bookmark verifyUserAccessToBookmark(Long bookmarkId);
+
 //    void moveBookmarks(List<Long> bookmarkIds, Long sourceCollection, Long targetCollection);
 //    void addBookmarks(List<Long> bookmarkIds, Long targetCollection);
 

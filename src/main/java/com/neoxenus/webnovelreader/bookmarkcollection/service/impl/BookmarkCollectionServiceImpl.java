@@ -17,6 +17,7 @@ import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,6 +104,19 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
         BookmarkCollection collection = this.getCollectionById(id);
         collection.setCount(collection.getCount() + delta);
         return repository.save(collection);
+    }
+
+    @Override
+    public BookmarkCollection verifyUserAccessToBookmarkCollection(Long collectionId) {
+        BookmarkCollection collection = getCollectionById(collectionId);
+        User currentUser = userService.getCurrentUser();
+
+        if (collection.getUser().getId().equals(currentUser.getId())) {
+            log.error("User dont have access to bookmark collection {}", collectionId);
+            throw new AccessDeniedException("User dont have access to bookmark collection " + collectionId);
+        }
+        log.debug("Access granted: User {} have access to bookmark collection {}",currentUser.getId(), collectionId);
+        return collection;
     }
 
     @Override

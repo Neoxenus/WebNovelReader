@@ -6,6 +6,7 @@ import com.neoxenus.webnovelreader.exceptions.UnexpectedUnauthenticatedUserExcep
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -21,7 +22,10 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler({UnexpectedUnauthenticatedUserException.class})
+    @ExceptionHandler({
+            UnexpectedUnauthenticatedUserException.class,
+            AccessDeniedException.class
+    })
     public ProblemDetail handleUnexpectedUnauthenticatedUserException(Exception ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
     }

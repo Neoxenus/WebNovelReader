@@ -16,8 +16,11 @@ import com.neoxenus.webnovelreader.bookmarkcollection.service.BookmarkCollection
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import com.neoxenus.webnovelreader.chapter.service.ChapterService;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
+import com.neoxenus.webnovelreader.user.entity.User;
+import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +34,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     private final BookmarkMapper mapper;
 
     private final BookService bookService;
+    private final UserService userService;
     private final ChapterService chapterService;
     private final BookmarkCollectionService collectionService;
 
@@ -38,6 +42,8 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     @Transactional
     public BookmarkDto createBookmark(BookmarkCreateRequest request) {
+        collectionService.verifyUserAccessToBookmarkCollection(request.collectionId());
+
         log.info("Saving bookmark {}", request);
 
         Book book = bookService.getBookById(request.bookId());
@@ -56,10 +62,11 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     @Transactional
     public BookmarkDto updateBookmark(Long id, BookmarkUpdateRequest request) {
-        Bookmark toUpdate = findById(id);
+        Bookmark toUpdate = verifyUserAccessToBookmark(id);
+
         Bookmark updatedBookmark = mapper.toBookmark(toUpdate, request);
         if(request.type() != UpdateType.NOTE) {
-
+            collectionService.verifyUserAccessToBookmarkCollection(request.collectionId());
 
             List<BookmarkCollection> collectionList = updatedBookmark.getCollections();
 
@@ -83,12 +90,27 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     @Override
     public BookmarkDto getBookmark(Long id) {
-        return mapper.toDto(findById(id));
+        verifyUserAccessToBookmark(id);
+        return mapper.toDto(verifyUserAccessToBookmark(id));
     }
 
     @Override
     public Bookmark findById(Long id) {
         return bookmarkRepository.findById(id)
                 .orElseThrow(() -> new NoSuchEntityException("No bookmark with an id: " + id));
+    }
+
+    @Override
+    public Bookmark verifyUserAccessToBookmark(Long bookmarkId) {
+        Bookmark bookmark = findById(bookmarkId);
+        User currentUser = userService.getCurrentUser();
+
+        List<BookmarkCollection> collections = bookmark.getCollections();
+        if (collections.isEmpty() || collections.stream().noneMatch(e -> e.getUser().getId().equals(currentUser.getId()))) {
+            log.error("User dont have access to bookmark {}", bookmarkId);
+            throw new AccessDeniedException("User dont have access to bookmark " + bookmarkId);
+        }
+        log.debug("Access granted: User {} have access to bookmark {}",currentUser.getId(), bookmarkId);
+        return bookmark;
     }
 }
