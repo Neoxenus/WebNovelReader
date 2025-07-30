@@ -146,7 +146,15 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
     @Override
     @Transactional
     public void deleteCollection(Long id) {
-        repository.deleteById(id); //todo: more tests (with cascade deleting)
+        BookmarkCollection collection = verifyUserAccessToBookmarkCollection(id);
+        if(collection.getIsDefault()){
+            log.error("Attempting to delete default collection");
+            throw new AccessDeniedException("User can't delete default collection");
+        } else {
+            log.info("Deleting collection {}", id);
+            emptyCollection(id);
+            repository.deleteById(id);
+        }
     }
 
     @Override
