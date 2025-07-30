@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (auth instanceof UsernamePasswordAuthenticationToken) {
             log.info("Current user is logged in. Getting user info...");
             String username = (String) auth.getPrincipal();
+            log.info("Current user is {}", username);
             return userRepository.findByUsername(username);
         }
         log.info("Current user is not logged in");

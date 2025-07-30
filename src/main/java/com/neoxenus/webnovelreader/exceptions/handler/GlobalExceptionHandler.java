@@ -1,9 +1,6 @@
 package com.neoxenus.webnovelreader.exceptions.handler;
 
-import com.neoxenus.webnovelreader.exceptions.ChapterWithNumberExistsException;
-import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
-import com.neoxenus.webnovelreader.exceptions.UnexpectedUnauthenticatedUserException;
-import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
+import com.neoxenus.webnovelreader.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.access.AccessDeniedException;
@@ -30,4 +27,10 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
     }
 
+    @ExceptionHandler({
+            BookmarkDeletedException.class
+    })
+    public ProblemDetail handleBookmarkDeletedException() {
+        return ProblemDetail.forStatus(HttpStatus.NO_CONTENT);
+    }
 }

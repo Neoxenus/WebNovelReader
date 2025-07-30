@@ -111,7 +111,7 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
         BookmarkCollection collection = getCollectionById(collectionId);
         User currentUser = userService.getCurrentUser();
 
-        if (collection.getUser().getId().equals(currentUser.getId())) {
+        if (!collection.getUser().getId().equals(currentUser.getId())) {
             log.error("User dont have access to bookmark collection {}", collectionId);
             throw new AccessDeniedException("User dont have access to bookmark collection " + collectionId);
         }

@@ -15,6 +15,7 @@ import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
 import com.neoxenus.webnovelreader.bookmarkcollection.service.BookmarkCollectionService;
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import com.neoxenus.webnovelreader.chapter.service.ChapterService;
+import com.neoxenus.webnovelreader.exceptions.BookmarkDeletedException;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.service.UserService;
@@ -60,32 +61,41 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
-    @Transactional
+    @Transactional(noRollbackFor = BookmarkDeletedException.class)
     public BookmarkDto updateBookmark(Long id, BookmarkUpdateRequest request) {
         Bookmark toUpdate = verifyUserAccessToBookmark(id);
 
         Bookmark updatedBookmark = mapper.toBookmark(toUpdate, request);
         if(request.type() != UpdateType.NOTE) {
-            collectionService.verifyUserAccessToBookmarkCollection(request.collectionId());
-
-            List<BookmarkCollection> collectionList = updatedBookmark.getCollections();
-
-            if(request.type().equals(UpdateType.ADD)){
-                BookmarkCollection collection = collectionService.updateCount(request.collectionId(), 1);
-                collectionList.add(collection);
-            } else if(request.type().equals(UpdateType.REMOVE)){
-                BookmarkCollection collection = collectionService.getCollectionById(request.collectionId());
-                if(collectionList.remove(collection)) {
-                     collectionService.updateCount(request.collectionId(),-1);
-                } else {
-                    log.warn("Bookmark {} does not belong to collection {}", id, request.collectionId());
-                }
-            }
-
-            updatedBookmark.setCollections(collectionList);
+            handleCollectionUpdate(request, updatedBookmark, id);
         }
 
-        return mapper.toDto(updatedBookmark);
+        return mapper.toDto(bookmarkRepository.save(updatedBookmark));
+    }
+
+    private void handleCollectionUpdate(BookmarkUpdateRequest request, Bookmark updated, Long bookmarkId) {
+        collectionService.verifyUserAccessToBookmarkCollection(request.collectionId());
+
+        List<BookmarkCollection> collectionList = updated.getCollections();
+
+        if(request.type().equals(UpdateType.ADD)){
+            BookmarkCollection collection = collectionService.updateCount(request.collectionId(), 1);
+            collectionList.add(collection);
+        } else if(request.type().equals(UpdateType.REMOVE)){
+            BookmarkCollection collection = collectionService.getCollectionById(request.collectionId());
+            if(collectionList.remove(collection)) {
+                collectionService.updateCount(request.collectionId(),-1);
+            } else {
+                log.warn("Bookmark {} does not belong to collection {}", bookmarkId, request.collectionId());
+            }
+            if(collectionList.isEmpty()) {
+                bookmarkRepository.deleteById(bookmarkId);
+                bookmarkRepository.flush();
+                throw new BookmarkDeletedException();
+            }
+        }
+
+        updated.setCollections(collectionList);
     }
 
     @Override
