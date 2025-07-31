@@ -32,6 +32,8 @@ public class CommentMapperImpl implements CommentMapper {
                 .parentId(getNullable(comment.getParent(), Comment::getId))
                 .replies(toDto(comment.getReplies()))
                 .createdAt(comment.getCreatedAt())
+                .likesCount(comment.getLikesCount())
+                .dislikesCount(comment.getDislikesCount())
                 .build();
     }
 
@@ -47,6 +49,8 @@ public class CommentMapperImpl implements CommentMapper {
                 .content(comment.getContent())
                 .parentId(getNullable(comment.getParent(), Comment::getId))
                 .createdAt(comment.getCreatedAt())
+                .likesCount(comment.getLikesCount())
+                .dislikesCount(comment.getDislikesCount())
                 .build();
     }
 
@@ -69,6 +73,8 @@ public class CommentMapperImpl implements CommentMapper {
         if(createRequest != null){
             Comment comment = new Comment();
             comment.setContent(createRequest.content());
+            comment.setLikesCount(0L);
+            comment.setDislikesCount(0L);
             return comment;
         } else {
             return null;

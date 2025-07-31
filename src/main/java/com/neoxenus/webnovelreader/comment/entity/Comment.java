@@ -52,7 +52,8 @@ public class Comment {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    private Long likesCount;
 
-//    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<CommentVote> votes = new ArrayList<>();
+    private Long dislikesCount;
+
 }

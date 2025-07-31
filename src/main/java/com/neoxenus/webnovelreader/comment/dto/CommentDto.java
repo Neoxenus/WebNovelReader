@@ -15,5 +15,8 @@ public record CommentDto(
         String content,
         Long parentId,
         List<CommentDto> replies,
-        LocalDateTime createdAt) {
+        LocalDateTime createdAt,
+        Long likesCount,
+        Long dislikesCount
+) {
 }

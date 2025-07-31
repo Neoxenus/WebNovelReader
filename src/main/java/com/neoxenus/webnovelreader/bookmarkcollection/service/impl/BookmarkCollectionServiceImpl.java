@@ -140,7 +140,6 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
         );
 
         collection.setCount(0);
-        //todo: more tests probably need changes
     }
 
     @Override
