@@ -11,26 +11,45 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({
-            UsernameExistsException.class,
-            NoSuchEntityException.class,
-            EntityAlreadyExistsException.class
+            NoSuchEntityException.class
+
     })
     public ProblemDetail handleBadRequestsExceptions(Exception ex) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler({
-            UnexpectedUnauthenticatedUserException.class,
-            AccessDeniedException.class
+            UsernameExistsException.class,
+            EntityAlreadyExistsException.class
+    })
+    public ProblemDetail handleUsernameExistsException(Exception ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    }
+    @ExceptionHandler({
+            UnexpectedUnauthenticatedUserException.class
     })
     public ProblemDetail handleUnexpectedUnauthenticatedUserException(Exception ex) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
+    @ExceptionHandler({
+            AccessDeniedException.class
+    })
+    public ProblemDetail handleAccessDeniedException(Exception ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
+    }
     @ExceptionHandler({
             BookmarkDeletedException.class
     })
     public ProblemDetail handleBookmarkDeletedException() {
         return ProblemDetail.forStatus(HttpStatus.NO_CONTENT);
+    }
+
+
+    @ExceptionHandler({
+            AlreadyVotedException.class
+    })
+    public ProblemDetail handleAlreadyVotedException(Exception ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
 }

@@ -9,6 +9,7 @@ import com.neoxenus.webnovelreader.comment.mapper.CommentMapper;
 import com.neoxenus.webnovelreader.comment.repo.CommentRepository;
 import com.neoxenus.webnovelreader.comment.repo.CommentVoteRepository;
 import com.neoxenus.webnovelreader.comment.service.CommentVoteService;
+import com.neoxenus.webnovelreader.exceptions.AlreadyVotedException;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.service.UserService;
@@ -43,6 +44,8 @@ public class CommentVoteServiceImpl implements CommentVoteService {
             if(!request.vote().equals(voteEntity.getVote())){
                 voteEntity.setVote(request.vote());
                 voteRepo.save(voteEntity);
+            } else {
+                throw new AlreadyVotedException("User already rated this comment like this");
             }
 
         } else {
