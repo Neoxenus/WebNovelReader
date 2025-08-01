@@ -14,5 +14,15 @@ public record BookDto(
         String languageOfOriginal,
         LocalDateTime updatedAt,
         Integer totalViews,
-        List<ChapterSummary> chapterList) {
+
+        Integer storyDevelopment,
+        Integer writingQuality,
+        Integer worldBackground,
+        Integer characterDesign,
+
+        Integer averageRating,
+        Integer ratingCount,
+
+        List<ChapterSummary> chapterList
+) {
 }

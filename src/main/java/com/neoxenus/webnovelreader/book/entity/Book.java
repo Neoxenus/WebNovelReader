@@ -32,6 +32,8 @@ public class Book {
 
     private Integer totalViews = 0;
 
+    @OneToMany
+    private List<BookRating> bookRatings;
     @OneToMany(mappedBy = "book")
     @OrderBy("chapterNumber DESC")
     //@JsonManagedReference
