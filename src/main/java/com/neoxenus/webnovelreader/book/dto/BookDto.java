@@ -15,14 +15,7 @@ public record BookDto(
         LocalDateTime updatedAt,
         Integer totalViews,
 
-        Integer storyDevelopment,
-        Integer writingQuality,
-        Integer worldBackground,
-        Integer characterDesign,
-
-        Integer averageRating,
-        Integer ratingCount,
-
+        BookRatingDto rating,
         List<ChapterSummary> chapterList
 ) {
 }

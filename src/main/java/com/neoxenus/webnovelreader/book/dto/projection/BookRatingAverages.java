@@ -1,7 +1,7 @@
 package com.neoxenus.webnovelreader.book.dto.projection;
 
 public interface BookRatingAverages {
-    Integer getRatingCount();
+    Long getRatingCount();
     Double getAvgStoryDevelopment();
     Double getAvgWritingQuality();
     Double getAvgWorldBackground();

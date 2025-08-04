@@ -1,7 +1,9 @@
 package com.neoxenus.webnovelreader.book.controller;
 
 import com.neoxenus.webnovelreader.book.dto.BookDto;
+import com.neoxenus.webnovelreader.book.dto.BookRatingDto;
 import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
+import com.neoxenus.webnovelreader.book.dto.request.BookRatingRequest;
 import com.neoxenus.webnovelreader.book.dto.request.BookUpdateRequest;
 import com.neoxenus.webnovelreader.book.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +49,10 @@ public class BookController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
+    }
+
+    @PostMapping("/{id}/rate")
+    public BookRatingDto rateBook(@PathVariable Long id, @RequestBody BookRatingRequest request){
+        return bookService.rateBook(id, request);
     }
 }

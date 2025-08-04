@@ -1,15 +1,23 @@
 package com.neoxenus.webnovelreader.book.service.impl;
 
 import com.neoxenus.webnovelreader.book.dto.BookDto;
+import com.neoxenus.webnovelreader.book.dto.BookRatingDto;
 import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
+import com.neoxenus.webnovelreader.book.dto.request.BookRatingRequest;
 import com.neoxenus.webnovelreader.book.dto.request.BookUpdateRequest;
 import com.neoxenus.webnovelreader.book.entity.Book;
+import com.neoxenus.webnovelreader.book.entity.BookRating;
 import com.neoxenus.webnovelreader.book.mapper.BookMapper;
+import com.neoxenus.webnovelreader.book.mapper.BookRatingMapper;
+import com.neoxenus.webnovelreader.book.repo.BookRatingRepository;
 import com.neoxenus.webnovelreader.book.repo.BookRepository;
 import com.neoxenus.webnovelreader.book.service.BookService;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
+import com.neoxenus.webnovelreader.user.entity.User;
+import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +30,10 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final BookRatingRepository ratingRepository;
+    private final UserService userService;
     private final BookMapper bookMapper;
+    private final BookRatingMapper ratingMapper;
 
     @Override
     @Transactional
@@ -30,17 +41,14 @@ public class BookServiceImpl implements BookService {
         return bookMapper.toDto(
                 bookRepository.save(
                         bookMapper.toBook(book)
-                )
+                ), null
         );
     }
 
     @Override
     @Transactional
     public BookDto getBookDtoById(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(
-                () -> new NoSuchEntityException("No book for an id: " + id)
-        );
-        return bookMapper.toDto(book);
+        return bookMapper.toDto(getBookById(id), getRatingForBook(id));
     }
 
     @Override
@@ -52,7 +60,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getAllBooks() {
-        return bookMapper.toDto(bookRepository.findAll());
+        return bookMapper.toDto(
+
+                bookRepository.findAll(), ratingRepository.getAllAverageRatings()
+
+        );
     }
 
     @Override
@@ -64,10 +76,37 @@ public class BookServiceImpl implements BookService {
             //todo: check unique fields
             Book bookById = optionalBook.get();
             Book updatedBook = bookMapper.toBook(bookById, bookRequest);
-            return bookMapper.toDto(bookRepository.save(updatedBook));
+            BookRatingDto rating = ratingMapper.toDto(ratingRepository.getAveragesByBookId(id));
+            return bookMapper.toDto(bookRepository.save(updatedBook), rating);
         } else {
             throw new NoSuchEntityException("No book for this id: " + id);
         }
+    }
+
+    @Override
+    public BookRatingDto getRatingForBook(Long id) {
+        return ratingMapper.toDto(ratingRepository.getAveragesByBookId(id));
+    }
+
+    @Override
+    @Transactional
+    public BookRatingDto rateBook(Long id, BookRatingRequest request) {
+        User user = userService.getCurrentUser();
+        if(user == null) {
+            log.error("User must be logged in to rate books");
+            throw new AccessDeniedException("User must be logged in to rate books");
+        }
+        BookRating rating = ratingRepository.findByBookIdAndUserId(id, user.getId());
+        if(rating == null) {
+            rating = ratingMapper.toRating(request);
+            Book book = bookRepository.findById(id).orElseThrow(() -> new NoSuchEntityException("No book for this id: " + id));
+            rating.setBook(book);
+            rating.setUser(user);
+        } else {
+            rating = ratingMapper.toRating(rating, request);
+        }
+        ratingRepository.save(rating);
+        return getRatingForBook(id);
     }
 
     @Override
