@@ -26,6 +26,7 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
     @ExceptionHandler({
+            InvalidTokenException.class,
             UnexpectedUnauthenticatedUserException.class
     })
     public ProblemDetail handleUnexpectedUnauthenticatedUserException(Exception ex) {

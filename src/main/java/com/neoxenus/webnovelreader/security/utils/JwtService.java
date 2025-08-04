@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.neoxenus.webnovelreader.token.enums.TokenType;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,7 @@ public class JwtService {
                 .withExpiresAt(new Date(System.currentTimeMillis() + accessExpirationMillis))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", roles.stream().toList())
+                .withClaim("type", TokenType.ACCESS.toString())
                 .sign(getAlgorithm());
     }
     public String generateRefreshToken(String username, HttpServletRequest request){
@@ -35,6 +37,7 @@ public class JwtService {
                 .withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + refreshExpirationMillis))
                 .withIssuer(request.getRequestURL().toString())
+                .withClaim("type", TokenType.REFRESH.toString())
                 .sign(getAlgorithm());
     }
 

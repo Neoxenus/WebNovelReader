@@ -5,10 +5,12 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.neoxenus.webnovelreader.exceptions.InvalidTokenException;
+import com.neoxenus.webnovelreader.security.utils.JwtService;
+import com.neoxenus.webnovelreader.token.enums.TokenType;
 import com.neoxenus.webnovelreader.token.service.TokenService;
 import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.repo.UserRepository;
-import com.neoxenus.webnovelreader.security.utils.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -42,6 +44,12 @@ public class TokenServiceImpl implements TokenService {
                 Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refreshToken);
+
+                String type = decodedJWT.getClaim("type").asString();
+                if(!type.equals(TokenType.REFRESH.toString())){
+                    throw new InvalidTokenException("Expected token of type REFRESH");
+                }
+
                 String username = decodedJWT.getSubject();
                 User user = userRepository.findByUsername(username);
 
@@ -55,16 +63,17 @@ public class TokenServiceImpl implements TokenService {
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
             } catch (Exception e){
                 log.error("Error refreshing token in: {}", e.getMessage());
-                response.setHeader("error", e.getMessage());
+
+                //response.setHeader("Error", e.getMessage());
                 response.setStatus(HttpStatus.FORBIDDEN.value());
-                Map<String, String> errors = new HashMap<>();
-                errors.put("error", e.getMessage());
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), errors);
+                new ObjectMapper().writeValue(
+                        response.getOutputStream(),
+                        ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, e.getMessage()));
             }
 
         } else {
-            throw new RuntimeException("Refresh token is missing");
+            throw new InvalidTokenException("Refresh token is missing");
         }
     }
 }
