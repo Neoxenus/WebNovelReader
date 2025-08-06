@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "chapter_contents")
 public class ChapterContent {
     @Id
     private Long id;

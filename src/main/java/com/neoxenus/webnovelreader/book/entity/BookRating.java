@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "book_ratings")
 public class BookRating {
     @Id
     @GeneratedValue

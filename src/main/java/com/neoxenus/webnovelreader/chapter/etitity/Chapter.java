@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Table(name = "chapters")
+
 public class Chapter {
     @Id
     @GeneratedValue

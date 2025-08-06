@@ -11,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name = "books")
 public class Book {
 
     public Book() {
@@ -32,12 +33,14 @@ public class Book {
 
     private Integer totalViews = 0;
 
-    @OneToMany
+    @OneToMany(mappedBy = "book")
     private List<BookRating> bookRatings;
     @OneToMany(mappedBy = "book")
     @OrderBy("chapterNumber DESC")
-    //@JsonManagedReference
     private List<Chapter> chapterList;
+
+    @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER)
+    private List<Tag> tags;
 
 //    @Transient
 //    public Integer getNumberOfChapters() {

@@ -12,6 +12,8 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name = "bookmark_collections")
+
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookmarkCollection {
