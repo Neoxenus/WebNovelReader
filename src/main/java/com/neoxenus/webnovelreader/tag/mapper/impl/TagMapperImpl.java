@@ -1,8 +1,8 @@
-package com.neoxenus.webnovelreader.book.mapper.impl;
+package com.neoxenus.webnovelreader.tag.mapper.impl;
 
-import com.neoxenus.webnovelreader.book.dto.TagDto;
-import com.neoxenus.webnovelreader.book.entity.Tag;
-import com.neoxenus.webnovelreader.book.mapper.TagMapper;
+import com.neoxenus.webnovelreader.tag.dto.TagDto;
+import com.neoxenus.webnovelreader.tag.entity.Tag;
+import com.neoxenus.webnovelreader.tag.mapper.TagMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

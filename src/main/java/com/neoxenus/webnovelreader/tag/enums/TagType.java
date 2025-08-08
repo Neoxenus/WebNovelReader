@@ -1,9 +1,9 @@
-package com.neoxenus.webnovelreader.book.enums;
+package com.neoxenus.webnovelreader.tag.enums;
 
 public enum TagType {
     GENRE,
     EVENT,
-    AUTHORS,
+    AUTHOR,
     LANGUAGE,
     SYSTEM
 }

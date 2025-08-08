@@ -1,6 +1,6 @@
-package com.neoxenus.webnovelreader.book.dto;
+package com.neoxenus.webnovelreader.tag.dto;
 
-import com.neoxenus.webnovelreader.book.enums.TagType;
+import com.neoxenus.webnovelreader.tag.enums.TagType;
 import lombok.Builder;
 
 @Builder

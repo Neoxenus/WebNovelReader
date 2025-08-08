@@ -1,6 +1,7 @@
 package com.neoxenus.webnovelreader.book.entity;
 
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
+import com.neoxenus.webnovelreader.tag.entity.Tag;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;

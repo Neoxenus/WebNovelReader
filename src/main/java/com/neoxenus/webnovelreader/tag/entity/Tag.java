@@ -1,6 +1,7 @@
-package com.neoxenus.webnovelreader.book.entity;
+package com.neoxenus.webnovelreader.tag.entity;
 
-import com.neoxenus.webnovelreader.book.enums.TagType;
+import com.neoxenus.webnovelreader.book.entity.Book;
+import com.neoxenus.webnovelreader.tag.enums.TagType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

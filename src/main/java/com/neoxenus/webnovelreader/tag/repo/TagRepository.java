@@ -1,6 +1,6 @@
-package com.neoxenus.webnovelreader.book.repo;
+package com.neoxenus.webnovelreader.tag.repo;
 
-import com.neoxenus.webnovelreader.book.entity.Tag;
+import com.neoxenus.webnovelreader.tag.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TagRepository extends JpaRepository<Tag, Long> {

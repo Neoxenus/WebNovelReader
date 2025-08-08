@@ -1,6 +1,7 @@
 package com.neoxenus.webnovelreader.book.dto;
 
 import com.neoxenus.webnovelreader.chapter.dto.ChapterSummary;
+import com.neoxenus.webnovelreader.tag.dto.TagDto;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
