@@ -16,6 +16,8 @@ public record BookDto(
         Integer totalViews,
 
         BookRatingDto rating,
-        List<ChapterSummary> chapterList
+        List<ChapterSummary> chapterList,
+
+        List<TagDto> tagList
 ) {
 }

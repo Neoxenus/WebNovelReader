@@ -38,6 +38,8 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public BookDto saveBook(BookCreateRequest book) {
+
+        //todo: validation (especially tags validation)
         return bookMapper.toDto(
                 bookRepository.save(
                         bookMapper.toBook(book)

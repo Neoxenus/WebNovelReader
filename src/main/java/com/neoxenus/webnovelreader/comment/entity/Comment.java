@@ -14,20 +14,9 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "cooments")
+@Table(name = "comments")
 public class Comment {
 
-
-
-    /*
-        comment{
-            ...
-            ----------------------
-            todo: votes
-            @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
-            private List<CommentVote> votes = new ArrayList<>();
-        }
-     */
     @Id
     @GeneratedValue
     private Long id;
