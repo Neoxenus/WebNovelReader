@@ -47,7 +47,7 @@ public class BookMapperImpl implements BookMapper {
                 .updatedAt(book.getUpdatedAt())
                 .totalViews(book.getTotalViews())
                 .rating(rating)
-                .tagList(tagMapper.toDto(book.getTags()))
+                .tagList(tagMapper.toSummaryDto(book.getTags()))
                 .build();
     }
 
@@ -65,7 +65,7 @@ public class BookMapperImpl implements BookMapper {
                 .updatedAt(book.getUpdatedAt())
                 .totalViews(book.getTotalViews())
                 .rating(rating)
-                .tagList(tagMapper.toDto(book.getTags()))
+                .tagList(tagMapper.toSummaryDto(book.getTags()))
                 .build();
     }
 

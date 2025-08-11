@@ -1,7 +1,7 @@
 package com.neoxenus.webnovelreader.book.dto;
 
 import com.neoxenus.webnovelreader.chapter.dto.ChapterSummary;
-import com.neoxenus.webnovelreader.tag.dto.TagDto;
+import com.neoxenus.webnovelreader.tag.dto.TagSummaryDto;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -19,6 +19,6 @@ public record BookDto(
         BookRatingDto rating,
         List<ChapterSummary> chapterList,
 
-        List<TagDto> tagList
+        List<TagSummaryDto> tagList
 ) {
 }

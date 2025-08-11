@@ -22,6 +22,7 @@ import java.util.List;
 @Slf4j
 public class BookController {
 
+    //todo: fetch books by tags
     private final BookService bookService;
 
     @PostMapping

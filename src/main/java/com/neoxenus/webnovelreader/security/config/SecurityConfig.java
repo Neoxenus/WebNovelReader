@@ -45,9 +45,9 @@ public class SecurityConfig  {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(POST, "api/users").permitAll()
+                        .requestMatchers(POST, "/api/users").permitAll()
                         .requestMatchers("/api/login", "/api/token/refresh").permitAll()
-                        .requestMatchers(GET, "api/users", "/api/users/**").hasAnyAuthority("ADMIN")
+                        .requestMatchers(GET, "/api/users", "/api/users/**").hasAnyAuthority("ADMIN")
                         .requestMatchers(PATCH,  "/api/comments/**").authenticated()
                         .requestMatchers(DELETE,  "/api/comments/**").authenticated()
                         .requestMatchers(POST,"/api/*/*/comments").authenticated()

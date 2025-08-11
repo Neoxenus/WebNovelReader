@@ -53,4 +53,11 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleAlreadyVotedException(Exception ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
+
+    @ExceptionHandler({
+            IllegalArgumentException.class
+    })
+    public ProblemDetail handleIllegalArgumentException(Exception ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
 }

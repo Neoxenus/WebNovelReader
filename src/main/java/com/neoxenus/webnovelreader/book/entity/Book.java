@@ -40,7 +40,12 @@ public class Book {
     @OrderBy("chapterNumber DESC")
     private List<Chapter> chapterList;
 
-    @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "book_tag_link",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
     private List<Tag> tags;
 
 //    @Transient
