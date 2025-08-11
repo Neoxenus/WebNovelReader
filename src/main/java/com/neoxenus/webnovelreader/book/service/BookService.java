@@ -6,11 +6,10 @@ import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
 import com.neoxenus.webnovelreader.book.dto.request.BookRatingRequest;
 import com.neoxenus.webnovelreader.book.dto.request.BookUpdateRequest;
 import com.neoxenus.webnovelreader.book.entity.Book;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface BookService {
 
     BookDto saveBook(BookCreateRequest book);
