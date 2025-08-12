@@ -14,8 +14,8 @@ public record BookDto(
         String yearOfPublishing,
         String languageOfOriginal,
         LocalDateTime updatedAt,
-        Integer totalViews,
-
+        Long totalViews,
+        Long uniqueViews,
         BookRatingDto rating,
         List<ChapterSummary> chapterList,
 

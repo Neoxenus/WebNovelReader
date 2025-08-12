@@ -13,8 +13,8 @@ import java.util.List;
 public interface ChapterRepository extends JpaRepository<Chapter, Long> {
     List<Chapter> findByBookId(Long bookId);
     @Modifying
-    @Query("UPDATE Chapter c SET c.views = c.views + 1 WHERE c.id = :id")
-    void incrementViewCount(@Param("id") Long id);
+    @Query("UPDATE Chapter c SET c.views = c.views + :count WHERE c.id = :id")
+    void incrementViewCount(@Param("id") Long id, @Param("count") Long count);
 
     boolean existsByBookIdAndChapterNumber(Long id, Integer number);
 

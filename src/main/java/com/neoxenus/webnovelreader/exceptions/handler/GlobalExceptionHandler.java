@@ -34,7 +34,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            AccessDeniedException.class
+            AccessDeniedException.class,
+            UnsupportedOperationException.class
     })
     public ProblemDetail handleAccessDeniedException(Exception ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
@@ -59,5 +60,14 @@ public class GlobalExceptionHandler {
     })
     public ProblemDetail handleIllegalArgumentException(Exception ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+
+
+    @ExceptionHandler({
+            InvalidFormatException.class
+    })
+    public ProblemDetail handleInvalidFormatException(Exception ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 }

@@ -2,6 +2,7 @@ package com.neoxenus.webnovelreader.chapter.service.impl;
 
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.book.repo.BookRepository;
+import com.neoxenus.webnovelreader.book.service.ViewCountService;
 import com.neoxenus.webnovelreader.chapter.dto.ChapterDto;
 import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
 import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateRequest;
@@ -11,8 +12,6 @@ import com.neoxenus.webnovelreader.chapter.repo.ChapterRepository;
 import com.neoxenus.webnovelreader.chapter.service.ChapterService;
 import com.neoxenus.webnovelreader.exceptions.EntityAlreadyExistsException;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,13 +26,12 @@ import java.util.Optional;
 @Slf4j
 public class ChapterServiceImpl implements ChapterService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     private final ChapterRepository chapterRepository;
     private final BookRepository bookRepository;
 
     private final ChapterMapper chapterMapper;
+
+    private final ViewCountService viewService;
 
     @Override
     @Transactional
@@ -60,14 +58,11 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
 
-    private void incrementViews(Long bookId, Long chapterId) {
-        chapterRepository.incrementViewCount(chapterId);
-        bookRepository.incrementViewCount(bookId);
-    }
+
 
     @Override
     @Transactional
-    public ChapterDto getChapterDto(Long bookId, Long chapterId) {
+    public ChapterDto getChapterDtoForView(Long bookId, Long chapterId) {
         Chapter chapter = chapterRepository.findById(chapterId)
                 .orElseThrow(() -> new NoSuchEntityException("No chapter for and id: " + chapterId));
 
@@ -75,8 +70,8 @@ public class ChapterServiceImpl implements ChapterService {
             throw new NoSuchEntityException("Chapter does not belong to book with id: " + bookId);
         }
 
-        incrementViews(bookId, chapterId);
-        entityManager.refresh(chapter);
+        viewService.incrementViewCount(bookId, chapterId);
+        viewService.incrementUniqueViewCount(bookId);
 
         return chapterMapper.toDto(chapter);
     }

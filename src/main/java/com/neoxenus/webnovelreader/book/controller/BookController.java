@@ -6,7 +6,6 @@ import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
 import com.neoxenus.webnovelreader.book.dto.request.BookRatingRequest;
 import com.neoxenus.webnovelreader.book.dto.request.BookUpdateRequest;
 import com.neoxenus.webnovelreader.book.service.BookService;
-import com.neoxenus.webnovelreader.book.service.ViewCountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,6 @@ public class BookController {
     //todo: fetch books by tags
     private final BookService bookService;
 
-    private final ViewCountService viewService;
 
     @PostMapping
     public ResponseEntity<BookDto> createBook(@RequestBody BookCreateRequest book){
@@ -37,13 +35,10 @@ public class BookController {
 
     @GetMapping("/{id}")
     public BookDto getBook(@PathVariable Long id){
-//        viewService.incrementViewCount(id);
         return bookService.getBookDtoById(id);
     }
     @GetMapping
     public List<BookDto> getAllBooks(){
-        List<BookDto> bookDtos = bookService.getAllBooks();
-//        bookDtos.forEach(e -> System.out.println(viewService.getViewCount(e.id())));
         return bookService.getAllBooks();
     }
 

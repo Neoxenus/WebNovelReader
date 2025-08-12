@@ -55,9 +55,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getBookById(Long id) {
-        return  bookRepository.findById(id).orElseThrow(
-                () -> new NoSuchEntityException("No book for an id: " + id)
-        );
+        return bookRepository.findById(id).orElseThrow(
+                () -> new NoSuchEntityException("No book for an id: " + id));
     }
 
     @Override

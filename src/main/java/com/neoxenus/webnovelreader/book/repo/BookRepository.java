@@ -10,6 +10,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     @Modifying
-    @Query("UPDATE Book b SET b.totalViews = b.totalViews + 1 WHERE b.id = :id")
-    void incrementViewCount(@Param("id") Long id);
+    @Query("UPDATE Book b SET b.totalViews = b.totalViews + :count WHERE b.id = :id")
+    void incrementViewCount(@Param("id") Long id, @Param("count") Long count);
+
+    @Modifying
+    @Query("UPDATE Book b SET b.uniqueViews = b.uniqueViews + :count WHERE b.id = :id")
+    void incrementUniqueViewCount(@Param("id") Long id, @Param("count") Long count);
 }

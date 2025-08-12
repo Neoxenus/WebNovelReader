@@ -32,7 +32,9 @@ public class Book {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    private Integer totalViews = 0;
+    private Long totalViews = 0L;
+    private Long uniqueViews = 0L;
+
 
     @OneToMany(mappedBy = "book")
     private List<BookRating> bookRatings;

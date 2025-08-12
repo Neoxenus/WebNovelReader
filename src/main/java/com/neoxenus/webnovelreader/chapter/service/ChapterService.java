@@ -13,7 +13,7 @@ public interface ChapterService {
 
     ChapterDto addChapter(Long bookId, ChapterCreateRequest request) throws NoSuchEntityException;
     List<ChapterDto> getBookChapters(Long bookId);
-    ChapterDto getChapterDto(Long bookId, Long chapterId) throws NoSuchEntityException;
+    ChapterDto getChapterDtoForView(Long bookId, Long chapterId) throws NoSuchEntityException;
     Chapter getChapter(Long bookId, Long chapterId) throws NoSuchEntityException;
 
     ChapterDto updateChapter(Long bookId, Long chapterId, ChapterUpdateRequest request) throws NoSuchEntityException;

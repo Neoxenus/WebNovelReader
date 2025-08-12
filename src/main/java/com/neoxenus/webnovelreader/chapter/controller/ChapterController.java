@@ -39,7 +39,7 @@ public class ChapterController {
     @GetMapping("/{id}")
     public ChapterDto getChapter(@PathVariable Long bookId,
                                         @PathVariable Long id) {
-        return chapterService.getChapterDto(bookId, id);
+        return chapterService.getChapterDtoForView(bookId, id);
     }
 
     @PutMapping("/{id}")
