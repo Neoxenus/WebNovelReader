@@ -1,24 +1,21 @@
 package com.neoxenus.webnovelreader.book.mapper.impl;
 
 import com.neoxenus.webnovelreader.book.dto.BookDto;
-import com.neoxenus.webnovelreader.book.dto.BookIdBookRatingDto;
 import com.neoxenus.webnovelreader.book.dto.BookRatingDto;
 import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
 import com.neoxenus.webnovelreader.book.dto.request.BookUpdateRequest;
 import com.neoxenus.webnovelreader.book.entity.Book;
-import com.neoxenus.webnovelreader.tag.entity.Tag;
 import com.neoxenus.webnovelreader.book.mapper.BookMapper;
-import com.neoxenus.webnovelreader.book.mapper.BookRatingMapper;
+import com.neoxenus.webnovelreader.chapter.mapper.ChapterMapper;
+import com.neoxenus.webnovelreader.tag.entity.Tag;
 import com.neoxenus.webnovelreader.tag.mapper.TagMapper;
 import com.neoxenus.webnovelreader.tag.repo.TagRepository;
-import com.neoxenus.webnovelreader.chapter.mapper.ChapterMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -26,18 +23,14 @@ public class BookMapperImpl implements BookMapper {
 
     private final ChapterMapper chapterMapper;
 
-    private final BookRatingMapper ratingMapper;
-
     private final TagRepository tagRepository;
 
     private final TagMapper tagMapper;
+
     @Override
-    public BookDto toDto(Book book, BookRatingDto rating) {
+    public BookDto toDto(Book book) {
         if(book == null)
             return null;
-        if(rating == null) {
-            rating = new BookRatingDto();
-        }
         return BookDto.builder()
                 .id(book.getId())
                 .title(book.getTitle())
@@ -47,17 +40,23 @@ public class BookMapperImpl implements BookMapper {
                 .updatedAt(book.getUpdatedAt())
                 .totalViews(book.getTotalViews())
                 .uniqueViews(book.getUniqueViews())
-                .rating(rating)
+                .rating(
+                        BookRatingDto.builder()
+                                .ratingCount(book.getRatingCount())
+                                .storyDevelopment(book.getAvgStoryDevelopment())
+                                .writingQuality(book.getAvgWritingQuality())
+                                .worldBackground(book.getAvgWorldBackground())
+                                .characterDesign(book.getAvgCharacterDesign())
+                                .average(book.getAvgRating())
+                                .build()
+                )
                 .tagList(tagMapper.toSummaryDto(book.getTags()))
                 .build();
     }
 
-    private BookDto toDtoWithoutChapters(Book book, BookRatingDto rating) {
+    private BookDto toDtoWithoutChapters(Book book) {
         if(book == null)
             return null;
-        if(rating == null) {
-            rating = new BookRatingDto();
-        }
         return BookDto.builder()
                 .id(book.getId())
                 .title(book.getTitle())
@@ -66,20 +65,26 @@ public class BookMapperImpl implements BookMapper {
                 .updatedAt(book.getUpdatedAt())
                 .totalViews(book.getTotalViews())
                 .uniqueViews(book.getUniqueViews())
-                .rating(rating)
+                .rating(
+                        BookRatingDto.builder()
+                                .ratingCount(book.getRatingCount())
+                                .storyDevelopment(book.getAvgStoryDevelopment())
+                                .writingQuality(book.getAvgWritingQuality())
+                                .worldBackground(book.getAvgWorldBackground())
+                                .characterDesign(book.getAvgCharacterDesign())
+                                .average(book.getAvgRating())
+                                .build()
+                )
                 .tagList(tagMapper.toSummaryDto(book.getTags()))
                 .build();
     }
 
     @Override
-    public List<BookDto> toDto(List<Book> bookList, List<BookIdBookRatingDto> ratings) {
-        if(bookList == null)
+    public Page<BookDto> toDto(Page<Book> bookList) {
+        if (bookList == null)
             return null;
-        Map<Long, BookRatingDto> ratingsMap = ratings.stream()
-                .collect(Collectors.toMap(BookIdBookRatingDto::bookId, ratingMapper::toDto));
-        return bookList.stream().map(book -> toDtoWithoutChapters(book, ratingsMap.get(book.getId()))).toList();
+        return bookList.map(this::toDtoWithoutChapters);
     }
-
     @Override
     public Book toBook(BookCreateRequest request) {
         List<Tag> tags = tagRepository.findAllById(request.tagIds());

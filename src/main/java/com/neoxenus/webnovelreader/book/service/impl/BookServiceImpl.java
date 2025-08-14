@@ -17,11 +17,12 @@ import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,19 +39,16 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public BookDto saveBook(BookCreateRequest book) {
-
+        Book savedBook = bookRepository.save(bookMapper.toBook(book));
+        bookRepository.flush();
         //todo: validation (especially tags validation)
-        return bookMapper.toDto(
-                bookRepository.save(
-                        bookMapper.toBook(book)
-                ), null
-        );
+        return bookMapper.toDto(savedBook);
     }
 
     @Override
     @Transactional
     public BookDto getBookDtoById(Long id) {
-        return bookMapper.toDto(getBookById(id), getRatingForBook(id));
+        return bookMapper.toDto(getBookById(id));
     }
 
     @Override
@@ -60,11 +58,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getAllBooks() {
+    public Page<BookDto> getBooks(Pageable pageable) {
         return bookMapper.toDto(
-
-                bookRepository.findAll(), ratingRepository.getAllAverageRatings()
-
+                bookRepository.findAll(pageable)
         );
     }
 
@@ -77,8 +73,7 @@ public class BookServiceImpl implements BookService {
             //todo: check unique fields
             Book bookById = optionalBook.get();
             Book updatedBook = bookMapper.toBook(bookById, bookRequest);
-            BookRatingDto rating = ratingMapper.toDto(ratingRepository.getAveragesByBookId(id));
-            return bookMapper.toDto(bookRepository.save(updatedBook), rating);
+            return bookMapper.toDto(bookRepository.save(updatedBook));
         } else {
             throw new NoSuchEntityException("No book for this id: " + id);
         }
@@ -98,15 +93,18 @@ public class BookServiceImpl implements BookService {
             throw new AccessDeniedException("User must be logged in to rate books");
         }
         BookRating rating = ratingRepository.findByBookIdAndUserId(id, user.getId());
-        if(rating == null) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new NoSuchEntityException("No book for this id: " + id));
+
+        if (rating == null) {
             rating = ratingMapper.toRating(request);
-            Book book = bookRepository.findById(id).orElseThrow(() -> new NoSuchEntityException("No book for this id: " + id));
             rating.setBook(book);
             rating.setUser(user);
         } else {
             rating = ratingMapper.toRating(rating, request);
         }
         ratingRepository.save(rating);
+        book.updateAverage(request.getArray(), rating);
+        bookRepository.save(book);
         return getRatingForBook(id);
     }
 
@@ -115,6 +113,7 @@ public class BookServiceImpl implements BookService {
     public void deleteBook(Long id) {
         if(bookRepository.existsById(id)){
             log.info("Deleting book with id: {}", id);
+
             bookRepository.deleteById(id);
         }
         else{

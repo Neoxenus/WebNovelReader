@@ -1,8 +1,6 @@
 package com.neoxenus.webnovelreader.bookmark.mapper.impl;
 
-import com.neoxenus.webnovelreader.book.dto.BookRatingDto;
 import com.neoxenus.webnovelreader.book.mapper.BookMapper;
-import com.neoxenus.webnovelreader.book.service.BookService;
 import com.neoxenus.webnovelreader.bookmark.dto.BookmarkDto;
 import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateRequest;
 import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkUpdateRequest;
@@ -23,14 +21,11 @@ public class BookmarkMapperImpl implements BookmarkMapper {
     private final ChapterMapper chapterMapper;
     private final BookmarkCollectionMapper collectionMapper;
 
-    private final BookService bookService;
-
     @Override
     public BookmarkDto toDto(Bookmark bookmark) {
-        BookRatingDto rating = bookService.getRatingForBook(bookmark.getBook().getId());
         return BookmarkDto.builder()
                 .id(bookmark.getId())
-                .book(bookMapper.toDto(bookmark.getBook(), rating))
+                .book(bookMapper.toDto(bookmark.getBook()))
                 .chapter(chapterMapper.toDto(bookmark.getChapter()))
                 .type(bookmark.getType())
                 .collections(collectionMapper.toDto(bookmark.getCollections()))

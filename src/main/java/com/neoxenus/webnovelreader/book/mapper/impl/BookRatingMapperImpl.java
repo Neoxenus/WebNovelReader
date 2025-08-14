@@ -10,21 +10,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BookRatingMapperImpl implements BookRatingMapper {
-//    @Override
-//    public BookRatingDto toDto(BookRating rating) {
-//        return BookRatingDto.builder()
-//                .ratingCount(0)
-//                .characterDesign(rating.getCharacterDesign().doubleValue())
-//                .worldBackground(rating.getWorldBackground().doubleValue())
-//                .storyDevelopment(rating.getStoryDevelopment().doubleValue())
-//                .writingQuality(rating.getWritingQuality().doubleValue())
-//                .average((
-//                        rating.getCharacterDesign()
-//                        + rating.getWorldBackground()
-//                        + rating.getStoryDevelopment()
-//                        + rating.getWritingQuality() )/4d)
-//                .build();
-//    }
 
     @Override
     public BookRatingDto toDto(BookRatingAverages rating) {
@@ -80,6 +65,9 @@ public class BookRatingMapperImpl implements BookRatingMapper {
 
     @Override
     public BookRating toRating(BookRating rating, BookRatingRequest request) {
+        if(rating == null) {
+            return toRating(request);
+        }
         rating.setCharacterDesign(request.characterDesign());
         rating.setWorldBackground(request.worldBackground());
         rating.setStoryDevelopment(request.storyDevelopment());

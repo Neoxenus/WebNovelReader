@@ -1,6 +1,7 @@
 package com.neoxenus.webnovelreader.book.entity;
 
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
+import com.neoxenus.webnovelreader.comment.entity.Comment;
 import com.neoxenus.webnovelreader.tag.entity.Tag;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.DoubleStream;
 
 @Entity
 @Data
@@ -35,20 +37,70 @@ public class Book {
     private Long totalViews = 0L;
     private Long uniqueViews = 0L;
 
+    private Long ratingCount = 0L;
+    private Double avgStoryDevelopment = 0d;
+    private Double avgWritingQuality = 0d;
+    private Double avgWorldBackground = 0d;
+    private Double avgCharacterDesign = 0d;
+    private Double avgRating = 0d;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private List<BookRating> bookRatings;
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     @OrderBy("chapterNumber DESC")
     private List<Chapter> chapterList;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<View> viewList;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(
             name = "book_tag_link",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private List<Tag> tags;
+
+
+    public void updateAverage(int[] newRatings, BookRating oldRating) {
+        double[] averages = {
+                avgStoryDevelopment,
+                avgWritingQuality,
+                avgWorldBackground,
+                avgCharacterDesign
+        };
+
+        int[] oldValues =  oldRating == null ? null :
+                new int[]{
+                oldRating.getStoryDevelopment(),
+                oldRating.getWritingQuality(),
+                oldRating.getWorldBackground(),
+                oldRating.getCharacterDesign()
+        };
+
+        for (int i = 0; i < averages.length; i++) {
+            if(oldRating == null)
+                averages[i] = computeNewAvg(averages[i], newRatings[i], this.ratingCount);
+            else
+                averages[i] += (newRatings[i] - oldValues[i]) / (double) ratingCount;
+        }
+        if(oldRating == null) {
+            this.ratingCount++;
+        }
+        avgRating = DoubleStream.of(averages).average().orElse(0d);
+
+        avgStoryDevelopment = averages[0];
+        avgWritingQuality = averages[1];
+        avgWorldBackground = averages[2];
+        avgCharacterDesign = averages[3];
+    }
+
+    private double computeNewAvg(Double currentAvg, int newValue, long currentCount) {
+        return (currentAvg * currentCount + newValue) / (currentCount + 1);
+    }
 
 //    @Transient
 //    public Integer getNumberOfChapters() {

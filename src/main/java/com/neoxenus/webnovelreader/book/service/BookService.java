@@ -6,8 +6,8 @@ import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
 import com.neoxenus.webnovelreader.book.dto.request.BookRatingRequest;
 import com.neoxenus.webnovelreader.book.dto.request.BookUpdateRequest;
 import com.neoxenus.webnovelreader.book.entity.Book;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface BookService {
@@ -17,7 +17,7 @@ public interface BookService {
     BookDto getBookDtoById(Long id);
     Book getBookById(Long id);
 
-    List<BookDto> getAllBooks();
+    Page<BookDto> getBooks(Pageable pageable);
 
 
     BookDto updateBook(Long id, BookUpdateRequest book);

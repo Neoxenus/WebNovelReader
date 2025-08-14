@@ -8,18 +8,16 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public final class BookRatingDto {
-    private final Long ratingCount;
-    private final Double storyDevelopment;
-    private final Double writingQuality;
-    private final Double worldBackground;
-    private final Double characterDesign;
-    private final Double average;
-
+    private Long ratingCount;
+    private Double storyDevelopment;
+    private Double writingQuality;
+    private Double worldBackground;
+    private Double characterDesign;
+    private Double average;
 
     public BookRatingDto() {
         ratingCount = 0L;
         storyDevelopment = 0d;
-        writingQuality = 0d;
         worldBackground = 0d;
         characterDesign = 0d;
         average = 0d;

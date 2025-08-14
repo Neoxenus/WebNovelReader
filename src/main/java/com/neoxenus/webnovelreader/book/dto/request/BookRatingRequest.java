@@ -6,4 +6,12 @@ public record BookRatingRequest(
         Integer worldBackground,
         Integer characterDesign
 ) {
+    public int[] getArray(){
+        return new int[]{
+                this.storyDevelopment(),
+                this.writingQuality(),
+                this.worldBackground(),
+                this.characterDesign()
+        };
+    }
 }
