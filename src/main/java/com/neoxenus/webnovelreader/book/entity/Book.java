@@ -46,7 +46,7 @@ public class Book {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private List<BookRating> bookRatings;
-    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @OrderBy("chapterNumber DESC")
     private List<Chapter> chapterList;
 

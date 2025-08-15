@@ -1,18 +1,19 @@
 package com.neoxenus.webnovelreader.chapter.service;
 
-import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
 import com.neoxenus.webnovelreader.chapter.dto.ChapterDto;
+import com.neoxenus.webnovelreader.chapter.dto.ChapterSummary;
+import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
 import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateRequest;
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface ChapterService {
 
     ChapterDto addChapter(Long bookId, ChapterCreateRequest request) throws NoSuchEntityException;
-    List<ChapterDto> getBookChapters(Long bookId);
+    Page<ChapterSummary> getBookChapters(Long bookId, Pageable pageable);
     ChapterDto getChapterDtoForView(Long bookId, Long chapterId) throws NoSuchEntityException;
     Chapter getChapter(Long bookId, Long chapterId) throws NoSuchEntityException;
 

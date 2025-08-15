@@ -6,12 +6,17 @@ import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
 import com.neoxenus.webnovelreader.book.dto.request.BookUpdateRequest;
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.book.mapper.BookMapper;
+import com.neoxenus.webnovelreader.chapter.dto.ChapterSummary;
 import com.neoxenus.webnovelreader.chapter.mapper.ChapterMapper;
+import com.neoxenus.webnovelreader.chapter.repo.ChapterRepository;
 import com.neoxenus.webnovelreader.tag.entity.Tag;
 import com.neoxenus.webnovelreader.tag.mapper.TagMapper;
 import com.neoxenus.webnovelreader.tag.repo.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,7 +26,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookMapperImpl implements BookMapper {
 
+    private final ChapterRepository chapterRepository;
     private final ChapterMapper chapterMapper;
+
 
     private final TagRepository tagRepository;
 
@@ -31,12 +38,18 @@ public class BookMapperImpl implements BookMapper {
     public BookDto toDto(Book book) {
         if(book == null)
             return null;
+        Pageable pageable = PageRequest.of(1, 25, Sort.by("chapterNumber").descending());
+        List<ChapterSummary> chapterPage =
+                chapterMapper.toSummary(
+                        chapterRepository
+                                .findAllByBookId(book.getId(), pageable))
+                .getContent();
         return BookDto.builder()
                 .id(book.getId())
                 .title(book.getTitle())
                 .yearOfPublishing(book.getYearOfPublishing())
                 .languageOfOriginal(book.getLanguageOfOriginal())
-                .chapterList(chapterMapper.toSummary(book.getChapterList()))
+                .chapterList(chapterPage)
                 .updatedAt(book.getUpdatedAt())
                 .totalViews(book.getTotalViews())
                 .uniqueViews(book.getUniqueViews())

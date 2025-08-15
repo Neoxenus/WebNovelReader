@@ -4,6 +4,7 @@ import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.book.repo.BookRepository;
 import com.neoxenus.webnovelreader.book.service.ViewCountService;
 import com.neoxenus.webnovelreader.chapter.dto.ChapterDto;
+import com.neoxenus.webnovelreader.chapter.dto.ChapterSummary;
 import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
 import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateRequest;
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
@@ -14,10 +15,11 @@ import com.neoxenus.webnovelreader.exceptions.EntityAlreadyExistsException;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -53,8 +55,8 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public List<ChapterDto> getBookChapters(Long bookId) {
-        return chapterMapper.toDto(chapterRepository.findByBookId(bookId));
+    public Page<ChapterSummary> getBookChapters(Long bookId, Pageable pageable) {
+        return chapterMapper.toSummary(chapterRepository.findAllByBookId(bookId, pageable));
     }
 
 

@@ -1,15 +1,14 @@
 package com.neoxenus.webnovelreader.chapter.mapper.impl;
 
-import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
-import com.neoxenus.webnovelreader.chapter.etitity.ChapterContent;
-import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
 import com.neoxenus.webnovelreader.chapter.dto.ChapterDto;
 import com.neoxenus.webnovelreader.chapter.dto.ChapterSummary;
+import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
 import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateRequest;
+import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
+import com.neoxenus.webnovelreader.chapter.etitity.ChapterContent;
 import com.neoxenus.webnovelreader.chapter.mapper.ChapterMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class ChapterMapperImpl implements ChapterMapper {
@@ -31,8 +30,8 @@ public class ChapterMapperImpl implements ChapterMapper {
     }
 
     @Override
-    public List<ChapterDto> toDto(List<Chapter> chapterList) {
-        return chapterList.stream().map(this::toDto).toList();
+    public Page<ChapterDto> toDto(Page<Chapter> chapterList) {
+        return chapterList.map(this::toDto);
     }
 
     @Override
@@ -82,9 +81,9 @@ public class ChapterMapperImpl implements ChapterMapper {
     }
 
     @Override
-    public List<ChapterSummary> toSummary(List<Chapter> chapterList) {
+    public Page<ChapterSummary> toSummary(Page<Chapter> chapterList) {
         if(chapterList != null){
-            return chapterList.stream().map(this::toSummary).toList();
+            return chapterList.map(this::toSummary);
         } else {
             return null;
         }
