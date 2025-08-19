@@ -47,10 +47,26 @@ public class SecurityConfig  {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(POST, "/api/users").permitAll()
                         .requestMatchers("/api/login", "/api/token/refresh").permitAll()
-                        .requestMatchers(GET, "/api/users", "/api/users/**").hasAnyAuthority("ADMIN")
+
+                        .requestMatchers(GET, "/api/users").hasAnyAuthority("ADMIN")
+                        .requestMatchers(GET, "/api/users/**").hasAnyAuthority("USER")
+                        .requestMatchers(PUT, "/api/users/**").hasAnyAuthority("USER")
+                        .requestMatchers(DELETE, "/api/users/**").hasAnyAuthority("ADMIN")
+
+                        .requestMatchers(POST,"/api/books").hasAnyAuthority("ADMIN")
+                        .requestMatchers(POST, "/api/books/*/rate").hasAnyAuthority("USER")
+                        .requestMatchers(GET, "/api/books", "api/books/**").permitAll()
+                        .requestMatchers(PATCH, "/api/books/**").hasAuthority("ADMIN")
+                        .requestMatchers(PUT, "/api/books/**").hasAuthority("ADMIN")
+                        .requestMatchers(DELETE, "/api/books/**").hasAuthority("ADMIN")
+
                         .requestMatchers(PATCH,  "/api/comments/**").authenticated()
                         .requestMatchers(DELETE,  "/api/comments/**").authenticated()
                         .requestMatchers(POST,"/api/*/*/comments").authenticated()
+
+                        .requestMatchers("/api/bookmarks", "/api/bookmarks/**").authenticated()
+                        .requestMatchers("api/bookmark-collection", "/api/bookmark-collection/**").authenticated()
+
                         .anyRequest().permitAll()
                 )
                 .addFilter(jwtAuthenticationFilter(authManager))

@@ -13,6 +13,7 @@ import com.neoxenus.webnovelreader.book.repo.BookRatingRepository;
 import com.neoxenus.webnovelreader.book.repo.BookRepository;
 import com.neoxenus.webnovelreader.book.service.BookService;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
+import com.neoxenus.webnovelreader.tag.entity.Tag;
 import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -95,7 +96,10 @@ public class BookServiceImpl implements BookService {
         BookRating rating = ratingRepository.findByBookIdAndUserId(id, user.getId());
         Book book = bookRepository.findById(id).orElseThrow(() -> new NoSuchEntityException("No book for this id: " + id));
 
-        if (rating == null) {
+        boolean isNew = (rating == null);
+
+
+        if (isNew) {
             rating = ratingMapper.toRating(request);
             rating.setBook(book);
             rating.setUser(user);
@@ -103,7 +107,9 @@ public class BookServiceImpl implements BookService {
             rating = ratingMapper.toRating(rating, request);
         }
         ratingRepository.save(rating);
-        book.updateAverage(request.getArray(), rating);
+
+        book.updateAverage(request.getArray(), (isNew ? null : rating));
+
         bookRepository.save(book);
         return getRatingForBook(id);
     }
@@ -111,10 +117,15 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void deleteBook(Long id) {
-        if(bookRepository.existsById(id)){
+        Optional<Book> book = bookRepository.findById(id);
+        if(book.isPresent()){
             log.info("Deleting book with id: {}", id);
+            Book toDelete = book.get();
+            for(Tag tag: toDelete.getTags()) {
+                tag.getBooks().remove(toDelete);
+            }
+            bookRepository.delete(toDelete);
 
-            bookRepository.deleteById(id);
         }
         else{
             log.error("No book for this id: {}", id);

@@ -55,7 +55,7 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<View> viewList;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "book_tag_link",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -72,7 +72,12 @@ public class Book {
                 avgCharacterDesign
         };
 
-        int[] oldValues =  oldRating == null ? null :
+        if(oldRating == null) {
+            updateAverage(newRatings);
+            return;
+        }
+
+        int[] oldValues =
                 new int[]{
                 oldRating.getStoryDevelopment(),
                 oldRating.getWritingQuality(),
@@ -81,14 +86,29 @@ public class Book {
         };
 
         for (int i = 0; i < averages.length; i++) {
-            if(oldRating == null)
-                averages[i] = computeNewAvg(averages[i], newRatings[i], this.ratingCount);
-            else
-                averages[i] += (newRatings[i] - oldValues[i]) / (double) ratingCount;
+            averages[i] += (newRatings[i] - oldValues[i]) / (double) ratingCount;
         }
-        if(oldRating == null) {
-            this.ratingCount++;
+        avgRating = DoubleStream.of(averages).average().orElse(0d);
+
+        avgStoryDevelopment = averages[0];
+        avgWritingQuality = averages[1];
+        avgWorldBackground = averages[2];
+        avgCharacterDesign = averages[3];
+    }
+
+    public void updateAverage(int[] newRatings) {
+        double[] averages = {
+                avgStoryDevelopment,
+                avgWritingQuality,
+                avgWorldBackground,
+                avgCharacterDesign
+        };
+
+        for (int i = 0; i < averages.length; i++) {
+            averages[i] = computeNewAvg(averages[i], newRatings[i], this.ratingCount);
         }
+        this.ratingCount++;
+
         avgRating = DoubleStream.of(averages).average().orElse(0d);
 
         avgStoryDevelopment = averages[0];
