@@ -46,8 +46,7 @@ public class Book {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private List<BookRating> bookRatings;
-    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    @OrderBy("chapterNumber DESC")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Chapter> chapterList;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
@@ -56,7 +55,7 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<View> viewList;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "book_tag_link",
             joinColumns = @JoinColumn(name = "book_id"),

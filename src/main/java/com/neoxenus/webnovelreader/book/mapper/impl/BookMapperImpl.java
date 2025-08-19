@@ -38,7 +38,7 @@ public class BookMapperImpl implements BookMapper {
     public BookDto toDto(Book book) {
         if(book == null)
             return null;
-        Pageable pageable = PageRequest.of(1, 25, Sort.by("chapterNumber").descending());
+        Pageable pageable = PageRequest.of(0, 25, Sort.by("chapterNumber").descending());
         List<ChapterSummary> chapterPage =
                 chapterMapper.toSummary(
                         chapterRepository
