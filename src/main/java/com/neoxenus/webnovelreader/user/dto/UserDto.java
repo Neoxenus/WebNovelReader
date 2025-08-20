@@ -12,5 +12,9 @@ public record UserDto(
         String username,
         String email,
         Set<UserRole> roles,
-        LocalDateTime createdAt) {
+        LocalDateTime createdAt,
+
+        boolean hasAvatar
+
+        ) {
 }

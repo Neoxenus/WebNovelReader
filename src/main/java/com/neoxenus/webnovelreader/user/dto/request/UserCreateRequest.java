@@ -14,6 +14,9 @@ public record UserCreateRequest(
         String email,
         @NotEmpty(message = "Password mustn't be empty")
         @Size(min = 8, max = 128, message = "Size of password must be between 4 and 128 characters")
-        String password) {
+        String password,
+
+        Boolean isAdmin
+) {
 
 }

@@ -2,9 +2,9 @@ package com.neoxenus.webnovelreader.user.service.impl;
 
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
+import com.neoxenus.webnovelreader.user.dto.ImageDto;
 import com.neoxenus.webnovelreader.user.dto.UserDto;
 import com.neoxenus.webnovelreader.user.dto.request.UserCreateRequest;
-import com.neoxenus.webnovelreader.user.dto.request.UserUpdateRequest;
 import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.enums.UserRole;
 import com.neoxenus.webnovelreader.user.event.UserCreatedEvent;
@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service @RequiredArgsConstructor @Slf4j
@@ -69,16 +68,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public UserDto saveUser(UserCreateRequest user) throws UsernameExistsException {
-        if(userRepository.existsByUsername(user.username())){
-            log.info("Username {} already exists", user.username());
-            throw new UsernameExistsException("Username " + user.username() + " already exists");
+    public UserDto saveUser(UserCreateRequest request) throws UsernameExistsException {
+        if(userRepository.existsByUsername(request.username())){
+            log.info("Username {} already exists", request.username());
+            throw new UsernameExistsException("Username " + request.username() + " already exists");
         }
 
-        log.info("Saving new user {} to the database", user.username());
+        log.info("Saving new user {} to the database", request.username());
 
-        User userEntity = userMapper.toUser(user);
-        userEntity.setPassword(bCryptPasswordEncoder.encode(user.password()));
+        User userEntity = userMapper.toUser(request);
+        userEntity.setPassword(bCryptPasswordEncoder.encode(request.password()));
+
+        User currentUser = getCurrentUser();
+        if(currentUser != null
+                && currentUser.getRoles().contains(UserRole.ADMIN)
+                && Boolean.TRUE.equals(request.isAdmin())) {
+            userEntity.getRoles().add(UserRole.ADMIN);
+        }
+
         userEntity = userRepository.save(userEntity);
         userRepository.flush();
 
@@ -103,11 +110,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDto getUser(Long id) {
+        return userMapper.toDto(findById(id));
+    }
+
+    @Override
+    public User findById(Long id) {
         log.info("Getting user with id {} from database", id);
-        User user = userRepository.findById(id).orElseThrow(
+        return userRepository.findById(id).orElseThrow(
                 () -> new NoSuchEntityException("No user for an id: " + id)
         );
-        return userMapper.toDto(user);
     }
 
     @Override
@@ -116,28 +127,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userMapper.toDto(userRepository.findAll());
     }
 
-    @Override
-    @Transactional
-    public UserDto updateUser(Long id, UserUpdateRequest userUpdateRequest) throws NoSuchEntityException, UsernameExistsException {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            User userByUsername = userRepository.findByUsername(userUpdateRequest.username());
-            if(userByUsername != null && !userByUsername.getId().equals(id))
-                throw new UsernameExistsException("Username " + userUpdateRequest.username() + " already exists");
 
-            User user = userMapper.toUser(optionalUser.get(), userUpdateRequest);
-            user.setPassword(bCryptPasswordEncoder.encode(userUpdateRequest.password()));
-            return userMapper.toDto(userRepository.save(user));
-        } else {
-            throw new NoSuchEntityException("No user for such and id");
-        }
-    }
 
 
 
     @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public ImageDto getAvatar(Long id) {
+        User user = findById(id);
+        return new ImageDto(user.getAvatarMimeType(), user.getAvatar());
     }
 
 

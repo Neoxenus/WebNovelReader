@@ -10,7 +10,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -48,4 +50,16 @@ public class User {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    private UserSettings settings;
+
+
+
+    @Lob
+    @Column(name = "avatar")
+    @JdbcTypeCode(Types.BINARY)
+    private byte[] avatar;
+
+    private String avatarMimeType;
 }

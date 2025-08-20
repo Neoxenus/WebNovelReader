@@ -1,10 +1,10 @@
 package com.neoxenus.webnovelreader.user.mapper.impl;
 
+import com.neoxenus.webnovelreader.user.dto.UserDto;
+import com.neoxenus.webnovelreader.user.dto.request.UserCreateRequest;
+import com.neoxenus.webnovelreader.user.dto.request.UserUpdateRequest;
 import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.enums.UserRole;
-import com.neoxenus.webnovelreader.user.dto.request.UserCreateRequest;
-import com.neoxenus.webnovelreader.user.dto.UserDto;
-import com.neoxenus.webnovelreader.user.dto.request.UserUpdateRequest;
 import com.neoxenus.webnovelreader.user.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +22,7 @@ public class UserMapperImpl implements UserMapper {
                 .email(user.getEmail())
                 .roles(user.getRoles())
                 .createdAt(user.getCreatedAt())
+                .hasAvatar(user.getAvatar() != null)
                 .build();
     }
 
@@ -42,13 +43,11 @@ public class UserMapperImpl implements UserMapper {
                 .build();
     }
 
-    public User toUser(User user, UserUpdateRequest userUpdateRequest){
-        if(user == null || userUpdateRequest == null)
+    public User toUser(User user, UserUpdateRequest request){
+        if(user == null || request == null)
             return null;
-        user.setUsername(userUpdateRequest.username());
-        user.setEmail(userUpdateRequest.email());
-        user.setPassword(userUpdateRequest.password());
-        user.setRoles(userUpdateRequest.roles());
+        user.setAvatar(request.avatar());
+        user.setAvatarMimeType(request.mimeType());
         return user;
     }
 }

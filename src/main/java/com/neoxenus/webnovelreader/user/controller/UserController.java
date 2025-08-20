@@ -1,13 +1,14 @@
 package com.neoxenus.webnovelreader.user.controller;
 
-import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
+import com.neoxenus.webnovelreader.user.dto.ImageDto;
 import com.neoxenus.webnovelreader.user.dto.UserDto;
 import com.neoxenus.webnovelreader.user.dto.request.UserCreateRequest;
-import com.neoxenus.webnovelreader.user.dto.request.UserUpdateRequest;
 import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -43,14 +44,21 @@ public class UserController {
     public UserDto getUser(@PathVariable Long id){
         return userService.getUser(id);
     }
+    @GetMapping("/{id}/avatar")
+    public ResponseEntity<byte[]> getUserAvatar(@PathVariable Long id){
+        ImageDto image = userService.getAvatar(id);
+        if (image == null) return ResponseEntity.notFound().build();
 
-    @PutMapping("/{id}")
-    public UserDto updateUser(@PathVariable Long id,
-                                              @RequestBody UserUpdateRequest userUpdateRequest)
-                                              throws NoSuchEntityException, UsernameExistsException {
-
-        return userService.updateUser(id, userUpdateRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", image.getMimeType());
+        headers.setContentLength(image.getBytes().length);
+        headers.setContentDisposition(
+                ContentDisposition.builder("inline").filename("avatar").build()
+        );
+        return new ResponseEntity<>(image.getBytes(), headers, HttpStatus.OK);
     }
+
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long id){
