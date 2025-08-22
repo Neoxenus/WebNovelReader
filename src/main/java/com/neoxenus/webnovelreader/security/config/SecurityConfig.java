@@ -49,6 +49,7 @@ public class SecurityConfig  {
                         .requestMatchers("/api/login", "/api/token/refresh").permitAll()
 
                         .requestMatchers(GET, "/api/users").hasAnyAuthority("ADMIN")
+                        .requestMatchers(GET, "/api/users/*/avatar").permitAll()
                         .requestMatchers(GET, "/api/users/**").hasAnyAuthority("USER")
                         .requestMatchers(PUT, "/api/users/**").hasAnyAuthority("USER")
                         .requestMatchers(DELETE, "/api/users/**").hasAnyAuthority("ADMIN")

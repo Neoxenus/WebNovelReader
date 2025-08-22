@@ -17,7 +17,7 @@ import java.io.IOException;
 public class UserSettingsController {
     private final UserSettingsService service;
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public UserDto updateUser(@PathVariable Long id,
                               @RequestParam("avatar") MultipartFile avatar)
             throws IOException {
