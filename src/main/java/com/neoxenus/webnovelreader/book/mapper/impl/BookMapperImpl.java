@@ -9,7 +9,9 @@ import com.neoxenus.webnovelreader.book.mapper.BookMapper;
 import com.neoxenus.webnovelreader.chapter.dto.ChapterSummary;
 import com.neoxenus.webnovelreader.chapter.mapper.ChapterMapper;
 import com.neoxenus.webnovelreader.chapter.repo.ChapterRepository;
+import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.tag.entity.Tag;
+import com.neoxenus.webnovelreader.tag.enums.TagType;
 import com.neoxenus.webnovelreader.tag.mapper.TagMapper;
 import com.neoxenus.webnovelreader.tag.repo.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,22 +36,31 @@ public class BookMapperImpl implements BookMapper {
 
     private final TagMapper tagMapper;
 
-    @Override
-    public BookDto toDto(Book book) {
+    private BookDto toDtoHelper(Book book, boolean withChapters) {
         if(book == null)
             return null;
-        Pageable pageable = PageRequest.of(0, 25, Sort.by("chapterNumber").descending());
-        List<ChapterSummary> chapterPage =
-                chapterMapper.toSummary(
-                        chapterRepository
-                                .findAllByBookId(book.getId(), pageable))
-                .getContent();
-        return BookDto.builder()
+
+        List<ChapterSummary> chapterPage = null;
+        if(withChapters) {
+            Pageable pageable = PageRequest.of(0, 25, Sort.by("chapterNumber").descending());
+            chapterPage = chapterMapper.toSummary(
+                                    chapterRepository
+                                            .findAllByBookId(book.getId(), pageable))
+                            .getContent();
+        }
+
+        BookDto.BookDtoBuilder builder = BookDto.builder()
                 .id(book.getId())
                 .title(book.getTitle())
-                .yearOfPublishing(book.getYearOfPublishing())
-                .languageOfOriginal(book.getLanguageOfOriginal())
-                .chapterList(chapterPage)
+                .yearOfPublishing(book.getYearOfPublishing());
+
+
+        if(withChapters) {
+            builder.chapterList(chapterPage);
+        }
+
+
+        builder
                 .updatedAt(book.getUpdatedAt())
                 .totalViews(book.getTotalViews())
                 .uniqueViews(book.getUniqueViews())
@@ -63,33 +74,27 @@ public class BookMapperImpl implements BookMapper {
                                 .average(book.getAvgRating())
                                 .build()
                 )
-                .tagList(tagMapper.toSummaryDto(book.getTags()))
-                .build();
+                .languageOfOriginal(tagMapper.toSummaryDto(tagFilter(book.getTags(), TagType.LANGUAGE)).get(0))
+                .genreList(tagMapper.toSummaryDto(tagFilter(book.getTags(), TagType.GENRE)))
+                .eventList(tagMapper.toSummaryDto(tagFilter(book.getTags(), TagType.EVENT)))
+                .authorList(tagMapper.toSummaryDto(tagFilter(book.getTags(), TagType.AUTHOR)))
+                .translatorList(tagMapper.toSummaryDto(tagFilter(book.getTags(), TagType.TRANSLATOR)))
+                .publisherList(tagMapper.toSummaryDto(tagFilter(book.getTags(), TagType.PUBLISHER)));
+
+                //.tagList(tagMapper.toSummaryDto(book.getTags()))
+        return builder.build();
+    }
+
+    private List<Tag> tagFilter(List<Tag> tags, TagType type) {
+        return tags.stream().filter(e -> e.getTagType().equals(type)).toList();
+    }
+    @Override
+    public BookDto toDto(Book book) {
+        return toDtoHelper(book, true);
     }
 
     private BookDto toDtoWithoutChapters(Book book) {
-        if(book == null)
-            return null;
-        return BookDto.builder()
-                .id(book.getId())
-                .title(book.getTitle())
-                .yearOfPublishing(book.getYearOfPublishing())
-                .languageOfOriginal(book.getLanguageOfOriginal())
-                .updatedAt(book.getUpdatedAt())
-                .totalViews(book.getTotalViews())
-                .uniqueViews(book.getUniqueViews())
-                .rating(
-                        BookRatingDto.builder()
-                                .ratingCount(book.getRatingCount())
-                                .storyDevelopment(book.getAvgStoryDevelopment())
-                                .writingQuality(book.getAvgWritingQuality())
-                                .worldBackground(book.getAvgWorldBackground())
-                                .characterDesign(book.getAvgCharacterDesign())
-                                .average(book.getAvgRating())
-                                .build()
-                )
-                .tagList(tagMapper.toSummaryDto(book.getTags()))
-                .build();
+        return toDtoHelper(book, false);
     }
 
     @Override
@@ -100,24 +105,40 @@ public class BookMapperImpl implements BookMapper {
     }
     @Override
     public Book toBook(BookCreateRequest request) {
-        List<Tag> tags = tagRepository.findAllById(request.tagIds());
+        List<Tag> tags = aggregateTags(request.languageOfOriginal(), request.authorIds(), request.translatorIds(), request.genreIds(), request.eventIds(), request.publisherIds());
+
+        //todo: validate tags and tagTypes
+
+
         Book book = new Book();
         book.setTitle(request.title());
         book.setYearOfPublishing(request.yearOfPublishing());
-        book.setLanguageOfOriginal(request.languageOfOriginal());
         book.setChapterList(new ArrayList<>());
         book.setTags(tags);
         return book;
+    }
+
+    @SafeVarargs
+    private List<Tag> aggregateTags(Long languageId, List<Long>... ids) {
+        List<Tag> tags = new ArrayList<>();
+        tags.add(tagRepository.findById(languageId).orElseThrow(
+                () -> new NoSuchEntityException("Book must have language field")));
+        for (List<Long> idList : ids) {
+            tags.addAll(tagRepository.findAllById(idList));
+        }
+        return tags;
     }
 
     @Override
     public Book toBook(Book toUpdate, BookUpdateRequest request) {
         if(toUpdate == null || request == null)
             return null;
-        List<Tag> tags = tagRepository.findAllById(request.tagIds());
+        List<Tag> tags = aggregateTags(request.languageOfOriginal(), request.authorIds(), request.translatorIds(), request.genreIds(), request.eventIds(), request.publisherIds());
+
+        //todo: validate tags and tagTypes
+
         toUpdate.setTitle(request.title());
         toUpdate.setYearOfPublishing(request.yearOfPublishing());
-        toUpdate.setLanguageOfOriginal(request.languageOfOriginal());
         toUpdate.setTags(tags);
         return toUpdate;
     }

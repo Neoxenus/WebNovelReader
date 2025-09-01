@@ -12,13 +12,20 @@ public record BookDto(
         Long id,
         String title,
         String yearOfPublishing,
-        String languageOfOriginal,
         LocalDateTime updatedAt,
         Long totalViews,
         Long uniqueViews,
         BookRatingDto rating,
         List<ChapterSummary> chapterList,
 
-        List<TagSummaryDto> tagList
+        TagSummaryDto languageOfOriginal,
+
+        List<TagSummaryDto> genreList,
+        List<TagSummaryDto> eventList,
+        List<TagSummaryDto> authorList,
+        List<TagSummaryDto> translatorList,
+        List<TagSummaryDto> publisherList
+
 ) {
+
 }

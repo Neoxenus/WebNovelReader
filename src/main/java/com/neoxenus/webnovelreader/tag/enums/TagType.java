@@ -4,6 +4,8 @@ public enum TagType {
     GENRE,
     EVENT,
     AUTHOR,
+    TRANSLATOR,
+    PUBLISHER,
     LANGUAGE,
     SYSTEM
 }

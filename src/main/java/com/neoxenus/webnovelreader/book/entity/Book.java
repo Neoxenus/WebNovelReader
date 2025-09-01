@@ -29,8 +29,6 @@ public class Book {
 
     private String yearOfPublishing;
 
-    private String languageOfOriginal;
-
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 

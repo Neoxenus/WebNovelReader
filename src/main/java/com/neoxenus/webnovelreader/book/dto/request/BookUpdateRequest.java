@@ -5,7 +5,12 @@ import java.util.List;
 public record BookUpdateRequest(
         String title,
         String yearOfPublishing,
-        String languageOfOriginal,
-        List<Long> tagIds
+        Long languageOfOriginal,
+
+        List<Long> genreIds,
+        List<Long> eventIds,
+        List<Long> authorIds,
+        List<Long> translatorIds,
+        List<Long> publisherIds
 ) {
 }
