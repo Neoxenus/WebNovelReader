@@ -50,12 +50,12 @@ public class UserController {
         if (image == null) return ResponseEntity.notFound().build();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", image.getMimeType());
-        headers.setContentLength(image.getBytes().length);
+        headers.set("Content-Type", image.mimeType());
+        headers.setContentLength(image.bytes().length);
         headers.setContentDisposition(
                 ContentDisposition.builder("inline").filename("avatar").build()
         );
-        return new ResponseEntity<>(image.getBytes(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(image.bytes(), headers, HttpStatus.OK);
     }
 
 
