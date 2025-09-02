@@ -2,6 +2,7 @@ package com.neoxenus.webnovelreader.tag.mapper;
 
 import com.neoxenus.webnovelreader.tag.dto.TagDto;
 import com.neoxenus.webnovelreader.tag.dto.TagSummaryDto;
+import com.neoxenus.webnovelreader.tag.dto.request.TagRequest;
 import com.neoxenus.webnovelreader.tag.entity.Tag;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface TagMapper {
 
     TagSummaryDto toSummaryDto(Tag tag);
     List<TagSummaryDto> toSummaryDto(List<Tag> tag);
+
+    Tag toTag(TagRequest request, Tag tag);
 }

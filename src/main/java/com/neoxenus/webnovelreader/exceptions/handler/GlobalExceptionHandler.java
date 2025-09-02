@@ -49,7 +49,8 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler({
-            AlreadyVotedException.class
+            AlreadyVotedException.class,
+            EntityAlreadyInUseException.class
     })
     public ProblemDetail handleAlreadyVotedException(Exception ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
