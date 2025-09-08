@@ -41,15 +41,15 @@ public class BookServiceTest {
 
 
     @Test
-    public void getBookByIdPositive() {
-        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
+    void getBookByIdPositive() {
+        when(bookRepository.findById(book.getId())).thenReturn(Optional.of(book));
 
-        assertEquals(book, bookService.getBookById(1L));
+        assertEquals(book, bookService.getBookById(book.getId()));
     }
 
     @Test
-    public void getBookByIdNegative() {
-        when(bookRepository.findById(1L)).thenReturn(Optional.empty());
+    void getBookByIdNegative() {
+        when(bookRepository.findById(book.getId())).thenReturn(Optional.empty());
 
         assertThrows(NoSuchEntityException.class, () -> bookService.getBookById(1L));
     }
