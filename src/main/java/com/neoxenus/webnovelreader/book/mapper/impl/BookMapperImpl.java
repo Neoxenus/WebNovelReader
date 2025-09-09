@@ -105,6 +105,8 @@ public class BookMapperImpl implements BookMapper {
     }
     @Override
     public Book toBook(BookCreateRequest request) {
+        if(request == null)
+            return null;
         List<Tag> tags = aggregateTags(request.languageOfOriginal(), request.authorIds(), request.translatorIds(), request.genreIds(), request.eventIds(), request.publisherIds());
 
         //todo: validate tags and tagTypes
@@ -120,6 +122,11 @@ public class BookMapperImpl implements BookMapper {
 
     @SafeVarargs
     private List<Tag> aggregateTags(Long languageId, List<Long>... ids) {
+        /*
+            repository methods findById and add findAllById throw exceptions "Ids must not be null"
+            it handles properly via exception handler
+         */
+
         List<Tag> tags = new ArrayList<>();
         tags.add(tagRepository.findById(languageId).orElseThrow(
                 () -> new NoSuchEntityException("Book must have language field")));

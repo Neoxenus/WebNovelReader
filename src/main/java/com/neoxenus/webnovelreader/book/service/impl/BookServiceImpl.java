@@ -42,6 +42,7 @@ public class BookServiceImpl implements BookService {
     public BookDto saveBook(BookCreateRequest book) {
         Book savedBook = bookRepository.save(bookMapper.toBook(book));
         bookRepository.flush();
+        //todo: check for uniqueness
         //todo: validation (especially tags validation)
         return bookMapper.toDto(savedBook);
     }
