@@ -1,8 +1,8 @@
 package com.neoxenus.webnovelreader.bookmark.controller;
 
-import com.neoxenus.webnovelreader.bookmark.dto.BookmarkDto;
-import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateRequest;
-import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkUpdateRequest;
+import com.neoxenus.webnovelreader.bookmark.dto.response.BookmarkDtoResponse;
+import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateDtoRequest;
+import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkUpdateDtoRequest;
 import com.neoxenus.webnovelreader.bookmark.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,20 +19,20 @@ public class BookmarkController {
     private final BookmarkService bookmarkService;
 
     @PostMapping
-    public ResponseEntity<BookmarkDto> createBookmark(@RequestBody BookmarkCreateRequest request) {
-        BookmarkDto bookmarkDto = bookmarkService.createBookmark(request);
+    public ResponseEntity<BookmarkDtoResponse> createBookmark(@RequestBody BookmarkCreateDtoRequest request) {
+        BookmarkDtoResponse bookmarkDtoResponse = bookmarkService.createBookmark(request);
         URI uri = URI.create(ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/bookmarks/" + bookmarkDto.id()).toUriString());
-        return ResponseEntity.created(uri).body(bookmarkDto);
+                .fromCurrentContextPath().path("/api/bookmarks/" + bookmarkDtoResponse.id()).toUriString());
+        return ResponseEntity.created(uri).body(bookmarkDtoResponse);
     }
 
     @GetMapping("/{id}")
-    public BookmarkDto getBookmark(@PathVariable Long id) {
+    public BookmarkDtoResponse getBookmark(@PathVariable Long id) {
         return bookmarkService.getBookmark(id);
     }
 
     @PatchMapping("/{id}")
-    public BookmarkDto updateBookmark(@PathVariable Long id, @RequestBody BookmarkUpdateRequest request) {
+    public BookmarkDtoResponse updateBookmark(@PathVariable Long id, @RequestBody BookmarkUpdateDtoRequest request) {
         return bookmarkService.updateBookmark(id, request);
     }
 }

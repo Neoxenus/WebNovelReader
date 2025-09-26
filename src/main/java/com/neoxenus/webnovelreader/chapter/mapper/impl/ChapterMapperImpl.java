@@ -1,9 +1,9 @@
 package com.neoxenus.webnovelreader.chapter.mapper.impl;
 
-import com.neoxenus.webnovelreader.chapter.dto.ChapterDto;
-import com.neoxenus.webnovelreader.chapter.dto.ChapterSummary;
-import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
-import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateRequest;
+import com.neoxenus.webnovelreader.chapter.dto.response.ChapterDtoResponse;
+import com.neoxenus.webnovelreader.chapter.dto.response.ChapterSummaryDtoResponse;
+import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateDtoRequest;
+import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateDtoRequest;
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import com.neoxenus.webnovelreader.chapter.etitity.ChapterContent;
 import com.neoxenus.webnovelreader.chapter.mapper.ChapterMapper;
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ChapterMapperImpl implements ChapterMapper {
     @Override
-    public ChapterDto toDto(Chapter chapter) {
+    public ChapterDtoResponse toDto(Chapter chapter) {
         if (chapter != null) {
-            return ChapterDto.builder()
+            return ChapterDtoResponse.builder()
                     .id(chapter.getId())
                     .title(chapter.getTitle())
                     .chapterNumber(chapter.getChapterNumber())
@@ -30,18 +30,18 @@ public class ChapterMapperImpl implements ChapterMapper {
     }
 
     @Override
-    public Page<ChapterDto> toDto(Page<Chapter> chapterList) {
+    public Page<ChapterDtoResponse> toDto(Page<Chapter> chapterList) {
         return chapterList.map(this::toDto);
     }
 
     @Override
-    public Chapter toChapter(ChapterCreateRequest chapterCreateRequest) {
-        if (chapterCreateRequest != null) {
+    public Chapter toChapter(ChapterCreateDtoRequest chapterCreateDtoRequest) {
+        if (chapterCreateDtoRequest != null) {
             Chapter chapter = new Chapter();
-            chapter.setTitle(chapterCreateRequest.title());
-            chapter.setChapterNumber(chapterCreateRequest.chapterNumber());
+            chapter.setTitle(chapterCreateDtoRequest.title());
+            chapter.setChapterNumber(chapterCreateDtoRequest.chapterNumber());
             ChapterContent content = new ChapterContent();
-            content.setContent(chapterCreateRequest.content());
+            content.setContent(chapterCreateDtoRequest.content());
             content.setChapter(chapter);
             chapter.setContent(content);
 
@@ -53,11 +53,11 @@ public class ChapterMapperImpl implements ChapterMapper {
     }
 
     @Override
-    public Chapter toChapter(Chapter toUpdate, ChapterUpdateRequest chapterUpdateRequest) {
-        if (toUpdate != null && chapterUpdateRequest != null) {
-            toUpdate.setTitle(chapterUpdateRequest.title());
-            toUpdate.setChapterNumber(chapterUpdateRequest.chapterNumber());
-            toUpdate.getContent().setContent(chapterUpdateRequest.content());
+    public Chapter toChapter(Chapter toUpdate, ChapterUpdateDtoRequest chapterUpdateDtoRequest) {
+        if (toUpdate != null && chapterUpdateDtoRequest != null) {
+            toUpdate.setTitle(chapterUpdateDtoRequest.title());
+            toUpdate.setChapterNumber(chapterUpdateDtoRequest.chapterNumber());
+            toUpdate.getContent().setContent(chapterUpdateDtoRequest.content());
             return toUpdate;
         } else {
             return null;
@@ -65,9 +65,9 @@ public class ChapterMapperImpl implements ChapterMapper {
     }
 
     @Override
-    public ChapterSummary toSummary(Chapter chapter) {
+    public ChapterSummaryDtoResponse toSummary(Chapter chapter) {
         if (chapter != null) {
-            return ChapterSummary.builder()
+            return ChapterSummaryDtoResponse.builder()
                     .id(chapter.getId())
                     .title(chapter.getTitle())
                     .chapterNumber(chapter.getChapterNumber())
@@ -81,7 +81,7 @@ public class ChapterMapperImpl implements ChapterMapper {
     }
 
     @Override
-    public Page<ChapterSummary> toSummary(Page<Chapter> chapterList) {
+    public Page<ChapterSummaryDtoResponse> toSummary(Page<Chapter> chapterList) {
         if(chapterList != null){
             return chapterList.map(this::toSummary);
         } else {

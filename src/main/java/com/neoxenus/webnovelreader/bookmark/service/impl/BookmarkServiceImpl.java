@@ -2,12 +2,12 @@ package com.neoxenus.webnovelreader.bookmark.service.impl;
 
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.book.service.BookService;
-import com.neoxenus.webnovelreader.bookmark.dto.BookmarkDto;
-import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateRequest;
-import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkUpdateRequest;
+import com.neoxenus.webnovelreader.bookmark.dto.response.BookmarkDtoResponse;
+import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateDtoRequest;
+import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkUpdateDtoRequest;
 import com.neoxenus.webnovelreader.bookmark.entity.Bookmark;
-import com.neoxenus.webnovelreader.bookmark.enums.BookmarkType;
-import com.neoxenus.webnovelreader.bookmark.enums.UpdateType;
+import com.neoxenus.webnovelreader.bookmark.entity.enums.BookmarkType;
+import com.neoxenus.webnovelreader.bookmark.entity.enums.UpdateType;
 import com.neoxenus.webnovelreader.bookmark.mapper.BookmarkMapper;
 import com.neoxenus.webnovelreader.bookmark.repo.BookmarkRepository;
 import com.neoxenus.webnovelreader.bookmark.service.BookmarkService;
@@ -43,7 +43,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     @Override
     @Transactional
-    public BookmarkDto createBookmark(BookmarkCreateRequest request) {
+    public BookmarkDtoResponse createBookmark(BookmarkCreateDtoRequest request) {
         collectionService.verifyUserAccessToBookmarkCollection(request.collectionId());
         verifyBookmarkDoesNotExists(request, userService.getCurrentUser().getId());
         log.info("Saving bookmark {}", request);
@@ -62,7 +62,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Transactional(readOnly = true)
-    public void verifyBookmarkDoesNotExists(BookmarkCreateRequest request, Long userId){
+    public void verifyBookmarkDoesNotExists(BookmarkCreateDtoRequest request, Long userId){
         boolean isExist = switch(request.type()){
             case BOOK ->
                     bookmarkRepository
@@ -95,7 +95,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
     @Override
     @Transactional(noRollbackFor = BookmarkDeletedException.class)
-    public BookmarkDto updateBookmark(Long id, BookmarkUpdateRequest request) {
+    public BookmarkDtoResponse updateBookmark(Long id, BookmarkUpdateDtoRequest request) {
         Bookmark toUpdate = verifyUserAccessToBookmark(id);
 
         Bookmark updatedBookmark = mapper.toBookmark(toUpdate, request);
@@ -106,7 +106,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         return mapper.toDto(bookmarkRepository.save(updatedBookmark));
     }
 
-    private void handleCollectionUpdate(BookmarkUpdateRequest request, Bookmark updated, Long bookmarkId) {
+    private void handleCollectionUpdate(BookmarkUpdateDtoRequest request, Bookmark updated, Long bookmarkId) {
         collectionService.verifyUserAccessToBookmarkCollection(request.collectionId());
 
         List<BookmarkCollection> collectionList = updated.getCollections();
@@ -132,7 +132,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
-    public BookmarkDto getBookmark(Long id) {
+    public BookmarkDtoResponse getBookmark(Long id) {
         verifyUserAccessToBookmark(id);
         return mapper.toDto(verifyUserAccessToBookmark(id));
     }

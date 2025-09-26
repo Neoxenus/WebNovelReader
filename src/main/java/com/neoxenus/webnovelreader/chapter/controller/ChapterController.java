@@ -1,9 +1,9 @@
 package com.neoxenus.webnovelreader.chapter.controller;
 
-import com.neoxenus.webnovelreader.chapter.dto.ChapterDto;
-import com.neoxenus.webnovelreader.chapter.dto.ChapterSummary;
-import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
-import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateRequest;
+import com.neoxenus.webnovelreader.chapter.dto.response.ChapterDtoResponse;
+import com.neoxenus.webnovelreader.chapter.dto.response.ChapterSummaryDtoResponse;
+import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateDtoRequest;
+import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateDtoRequest;
 import com.neoxenus.webnovelreader.chapter.service.ChapterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,16 +28,16 @@ public class ChapterController {
 
 
     @PostMapping
-    public ResponseEntity<ChapterDto> addChapter (@PathVariable Long bookId,
-                                         @RequestBody ChapterCreateRequest chapterCreateRequest) {
-        ChapterDto chapterDto = chapterService.addChapter(bookId, chapterCreateRequest);
+    public ResponseEntity<ChapterDtoResponse> addChapter (@PathVariable Long bookId,
+                                                          @RequestBody ChapterCreateDtoRequest chapterCreateDtoRequest) {
+        ChapterDtoResponse chapterDtoResponse = chapterService.addChapter(bookId, chapterCreateDtoRequest);
         URI uri = URI.create(ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/books/" + bookId + "/chapters/" + chapterDto.id()).toUriString());
-        return ResponseEntity.created(uri).body(chapterDto);
+                .fromCurrentContextPath().path("/api/books/" + bookId + "/chapters/" + chapterDtoResponse.id()).toUriString());
+        return ResponseEntity.created(uri).body(chapterDtoResponse);
     }
 
     @GetMapping
-    public Page<ChapterSummary> getBookChapters(
+    public Page<ChapterSummaryDtoResponse> getBookChapters(
         @PathVariable Long bookId,
         @RequestParam(required = false, defaultValue = "0") int page,
         @RequestParam(required = false, defaultValue = "25") int size,
@@ -52,16 +52,16 @@ public class ChapterController {
         return chapterService.getBookChapters(bookId, pageable);
     }
     @GetMapping("/{id}")
-    public ChapterDto getChapter(@PathVariable Long bookId,
-                                        @PathVariable Long id) {
+    public ChapterDtoResponse getChapter(@PathVariable Long bookId,
+                                         @PathVariable Long id) {
         return chapterService.getChapterDtoForView(bookId, id);
     }
 
     @PutMapping("/{id}")
-    public ChapterDto updateChapter(@PathVariable Long bookId,
-                                           @PathVariable Long id,
-                                           @RequestBody ChapterUpdateRequest chapterUpdateRequest) {
-        return chapterService.updateChapter(bookId, id, chapterUpdateRequest);
+    public ChapterDtoResponse updateChapter(@PathVariable Long bookId,
+                                            @PathVariable Long id,
+                                            @RequestBody ChapterUpdateDtoRequest chapterUpdateDtoRequest) {
+        return chapterService.updateChapter(bookId, id, chapterUpdateDtoRequest);
     }
 
     @DeleteMapping("/{id}")

@@ -1,8 +1,8 @@
 package com.neoxenus.webnovelreader.bookmarkcollection.mapper.impl;
 
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.BookmarkCollectionDto;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateRequest;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.response.BookmarkCollectionDtoResponse;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateDtoRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateDtoRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
 import com.neoxenus.webnovelreader.bookmarkcollection.mapper.BookmarkCollectionMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,9 @@ import java.util.List;
 public class BookmarkCollectionMapperImpl implements BookmarkCollectionMapper {
 
     @Override
-    public BookmarkCollectionDto toDto(BookmarkCollection collection) {
+    public BookmarkCollectionDtoResponse toDto(BookmarkCollection collection) {
 
-        return BookmarkCollectionDto.builder()
+        return BookmarkCollectionDtoResponse.builder()
                 .id(collection.getId())
                 .isDefault(collection.getIsDefault())
                 .isPublic(collection.getIsPublic())
@@ -31,12 +31,12 @@ public class BookmarkCollectionMapperImpl implements BookmarkCollectionMapper {
     }
 
     @Override
-    public List<BookmarkCollectionDto> toDto(List<BookmarkCollection> collections) {
+    public List<BookmarkCollectionDtoResponse> toDto(List<BookmarkCollection> collections) {
         return collections.stream().map( this::toDto).toList();
     }
 
     @Override
-    public BookmarkCollection toCollection(BookmarkCollectionCreateRequest request) {
+    public BookmarkCollection toCollection(BookmarkCollectionCreateDtoRequest request) {
 
         BookmarkCollection collection = new BookmarkCollection();
         collection.setIsDefault(false);
@@ -49,7 +49,7 @@ public class BookmarkCollectionMapperImpl implements BookmarkCollectionMapper {
     }
 
     @Override
-    public BookmarkCollection toCollection(BookmarkCollection toUpdate, BookmarkCollectionUpdateRequest request) {
+    public BookmarkCollection toCollection(BookmarkCollection toUpdate, BookmarkCollectionUpdateDtoRequest request) {
         if(toUpdate == null || request == null)
             return null;
         toUpdate.setIsPublic(request.isPublic());

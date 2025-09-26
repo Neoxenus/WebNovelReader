@@ -1,6 +1,6 @@
 package com.neoxenus.webnovelreader.book.repo;
 
-import com.neoxenus.webnovelreader.book.dto.BookIdBookRatingDto;
+import com.neoxenus.webnovelreader.book.dto.response.BookIdBookRatingDtoResponse;
 import com.neoxenus.webnovelreader.book.dto.projection.BookRatingAverages;
 import com.neoxenus.webnovelreader.book.entity.BookRating;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,7 +21,7 @@ public interface BookRatingRepository extends JpaRepository<BookRating, Long> {
             """)
     BookRatingAverages getAveragesByBookId(@Param("bookId") Long bookId);
     @Query("""
-    SELECT new com.neoxenus.webnovelreader.book.dto.BookIdBookRatingDto(
+    SELECT new com.neoxenus.webnovelreader.book.dto.response.BookIdBookRatingDtoResponse(
         br.book.id,
         COUNT(br),
         AVG(br.storyDevelopment),
@@ -32,6 +32,6 @@ public interface BookRatingRepository extends JpaRepository<BookRating, Long> {
     FROM BookRating br
     GROUP BY br.book.id
 """)
-    List<BookIdBookRatingDto> getAllAverageRatings();
+    List<BookIdBookRatingDtoResponse> getAllAverageRatings();
     BookRating findByBookIdAndUserId(Long bookId, Long userId);
 }

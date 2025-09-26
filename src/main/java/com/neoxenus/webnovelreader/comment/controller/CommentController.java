@@ -1,9 +1,9 @@
 package com.neoxenus.webnovelreader.comment.controller;
 
-import com.neoxenus.webnovelreader.comment.dto.CommentDto;
-import com.neoxenus.webnovelreader.comment.dto.request.CommentCreateRequest;
-import com.neoxenus.webnovelreader.comment.dto.request.CommentUpdateRequest;
-import com.neoxenus.webnovelreader.comment.dto.request.VoteRequest;
+import com.neoxenus.webnovelreader.comment.dto.response.CommentDtoResponse;
+import com.neoxenus.webnovelreader.comment.dto.request.CommentCreateDtoRequest;
+import com.neoxenus.webnovelreader.comment.dto.request.CommentUpdateDtoRequest;
+import com.neoxenus.webnovelreader.comment.dto.request.VoteDtoRequest;
 import com.neoxenus.webnovelreader.comment.enums.CommentTargetType;
 import com.neoxenus.webnovelreader.comment.service.CommentService;
 import com.neoxenus.webnovelreader.comment.service.CommentVoteService;
@@ -21,21 +21,21 @@ public class CommentController {
     private final CommentVoteService voteService;
     @PostMapping("/{targetType}/{targetId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto postComment(       @PathVariable CommentTargetType targetType,
-                                         @PathVariable Long targetId,
-                                         @RequestBody CommentCreateRequest request) {
+    public CommentDtoResponse postComment(@PathVariable CommentTargetType targetType,
+                                          @PathVariable Long targetId,
+                                          @RequestBody CommentCreateDtoRequest request) {
 
         return commentService.createComment(targetType, targetId, request);
     }
     @GetMapping("/{targetType}/{targetId}/comments")
-    public List<CommentDto> getComments( @PathVariable CommentTargetType targetType,
-                                         @PathVariable Long targetId) {
+    public List<CommentDtoResponse> getComments(@PathVariable CommentTargetType targetType,
+                                                @PathVariable Long targetId) {
         return commentService.getComments(targetType, targetId);
     }
 
     @PatchMapping("/comments/{id}")
-    public CommentDto editComment(  @PathVariable Long id,
-                                    @RequestBody CommentUpdateRequest request) {
+    public CommentDtoResponse editComment(@PathVariable Long id,
+                                          @RequestBody CommentUpdateDtoRequest request) {
         return commentService.updateComment(id, request);
     }
 
@@ -46,8 +46,8 @@ public class CommentController {
     }
 
     @PostMapping("/comments/{id}/vote")
-    public CommentDto voteOnComment(    @PathVariable Long id,
-                                        @RequestBody VoteRequest vote) {
+    public CommentDtoResponse voteOnComment(@PathVariable Long id,
+                                            @RequestBody VoteDtoRequest vote) {
         return voteService.vote(id, vote);
     }
 

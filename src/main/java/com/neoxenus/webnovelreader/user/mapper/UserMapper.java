@@ -1,20 +1,20 @@
 package com.neoxenus.webnovelreader.user.mapper;
 
 import com.neoxenus.webnovelreader.user.entity.User;
-import com.neoxenus.webnovelreader.user.dto.request.UserCreateRequest;
-import com.neoxenus.webnovelreader.user.dto.UserDto;
-import com.neoxenus.webnovelreader.user.dto.request.UserUpdateRequest;
+import com.neoxenus.webnovelreader.user.dto.request.UserCreateDtoRequest;
+import com.neoxenus.webnovelreader.user.dto.response.UserDtoResponse;
+import com.neoxenus.webnovelreader.user.dto.request.UserUpdateDtoRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public interface UserMapper {
-    UserDto toDto(User user);
+    UserDtoResponse toDto(User user);
 
-    List<UserDto> toDto(List<User> users);
+    List<UserDtoResponse> toDto(List<User> users);
 
-    User toUser(UserCreateRequest user);
+    User toUser(UserCreateDtoRequest user);
 
-    User toUser(User user, UserUpdateRequest userUpdateRequest);
+    User toUser(User user, UserUpdateDtoRequest userUpdateDtoRequest);
 }

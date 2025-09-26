@@ -1,8 +1,8 @@
 package com.neoxenus.webnovelreader.user.mapper.impl;
 
-import com.neoxenus.webnovelreader.user.dto.UserDto;
-import com.neoxenus.webnovelreader.user.dto.request.UserCreateRequest;
-import com.neoxenus.webnovelreader.user.dto.request.UserUpdateRequest;
+import com.neoxenus.webnovelreader.user.dto.response.UserDtoResponse;
+import com.neoxenus.webnovelreader.user.dto.request.UserCreateDtoRequest;
+import com.neoxenus.webnovelreader.user.dto.request.UserUpdateDtoRequest;
 import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.enums.UserRole;
 import com.neoxenus.webnovelreader.user.mapper.UserMapper;
@@ -13,10 +13,10 @@ import java.util.Set;
 
 @Component
 public class UserMapperImpl implements UserMapper {
-    public UserDto toDto(User user){
+    public UserDtoResponse toDto(User user){
         if(user == null)
             return null;
-        return UserDto.builder()
+        return UserDtoResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
@@ -26,13 +26,13 @@ public class UserMapperImpl implements UserMapper {
                 .build();
     }
 
-    public List<UserDto> toDto(List<User> users){
+    public List<UserDtoResponse> toDto(List<User> users){
         if(users == null)
             return null;
         return users.stream().map(this::toDto).toList();
     }
 
-    public User toUser(UserCreateRequest user){
+    public User toUser(UserCreateDtoRequest user){
         if(user == null)
             return null;
         return User.builder()
@@ -43,7 +43,7 @@ public class UserMapperImpl implements UserMapper {
                 .build();
     }
 
-    public User toUser(User user, UserUpdateRequest request){
+    public User toUser(User user, UserUpdateDtoRequest request){
         if(user == null || request == null)
             return null;
         user.setAvatar(request.avatar());

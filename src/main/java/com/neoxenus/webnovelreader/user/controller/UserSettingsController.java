@@ -1,7 +1,7 @@
 package com.neoxenus.webnovelreader.user.controller;
 
-import com.neoxenus.webnovelreader.user.dto.UserDto;
-import com.neoxenus.webnovelreader.user.dto.request.UserUpdateRequest;
+import com.neoxenus.webnovelreader.user.dto.response.UserDtoResponse;
+import com.neoxenus.webnovelreader.user.dto.request.UserUpdateDtoRequest;
 import com.neoxenus.webnovelreader.user.service.UserSettingsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +18,10 @@ public class UserSettingsController {
     private final UserSettingsService service;
 
     @PatchMapping("/{id}")
-    public UserDto updateUser(@PathVariable Long id,
-                              @RequestParam("avatar") MultipartFile avatar)
+    public UserDtoResponse updateUser(@PathVariable Long id,
+                                      @RequestParam("avatar") MultipartFile avatar)
             throws IOException {
-        UserUpdateRequest request = UserUpdateRequest.builder()
+        UserUpdateDtoRequest request = UserUpdateDtoRequest.builder()
                 .mimeType(avatar.getContentType())
                 .avatar(avatar.getBytes())
                 .build();

@@ -2,9 +2,9 @@ package com.neoxenus.webnovelreader.user.service.impl;
 
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
-import com.neoxenus.webnovelreader.user.dto.ImageDto;
-import com.neoxenus.webnovelreader.user.dto.UserDto;
-import com.neoxenus.webnovelreader.user.dto.request.UserCreateRequest;
+import com.neoxenus.webnovelreader.user.dto.response.ImageDtoResponse;
+import com.neoxenus.webnovelreader.user.dto.response.UserDtoResponse;
+import com.neoxenus.webnovelreader.user.dto.request.UserCreateDtoRequest;
 import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.enums.UserRole;
 import com.neoxenus.webnovelreader.user.event.UserCreatedEvent;
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public UserDto saveUser(UserCreateRequest request) throws UsernameExistsException {
+    public UserDtoResponse saveUser(UserCreateDtoRequest request) throws UsernameExistsException {
         if(userRepository.existsByUsername(request.username())){
             log.info("Username {} already exists", request.username());
             throw new UsernameExistsException("Username " + request.username() + " already exists");
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto getUser(Long id) {
+    public UserDtoResponse getUser(Long id) {
         return userMapper.toDto(findById(id));
     }
 
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<UserDto> getUsers() {
+    public List<UserDtoResponse> getUsers() {
         log.info("Getting all users from database");
         return userMapper.toDto(userRepository.findAll());
     }
@@ -137,9 +137,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public ImageDto getAvatar(Long id) {
+    public ImageDtoResponse getAvatar(Long id) {
         User user = findById(id);
-        return new ImageDto(user.getAvatarMimeType(), user.getAvatar());
+        return new ImageDtoResponse(user.getAvatarMimeType(), user.getAvatar());
     }
 
 

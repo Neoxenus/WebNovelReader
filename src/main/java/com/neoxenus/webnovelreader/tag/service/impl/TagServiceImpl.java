@@ -3,8 +3,8 @@ package com.neoxenus.webnovelreader.tag.service.impl;
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.exceptions.EntityAlreadyInUseException;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
-import com.neoxenus.webnovelreader.tag.dto.TagDto;
-import com.neoxenus.webnovelreader.tag.dto.request.TagRequest;
+import com.neoxenus.webnovelreader.tag.dto.response.TagDtoResponse;
+import com.neoxenus.webnovelreader.tag.dto.request.TagDtoRequest;
 import com.neoxenus.webnovelreader.tag.entity.Tag;
 import com.neoxenus.webnovelreader.tag.enums.TagType;
 import com.neoxenus.webnovelreader.tag.mapper.TagMapper;
@@ -27,25 +27,25 @@ public class TagServiceImpl implements TagService {
     private final TagMapper mapper;
 
     @Override
-    public List<TagDto> getTagsByType(TagType type) {
+    public List<TagDtoResponse> getTagsByType(TagType type) {
         return mapper.toDto(repository.findTagByTagType(type));
     }
 
     @Override
-    public TagDto getById(Long id) {
+    public TagDtoResponse getById(Long id) {
         return mapper.toDto(repository.findById(id)
                 .orElseThrow(() -> new NoSuchEntityException("No tag with an id: " + id)));
     }
 
     @Override
-    public TagDto saveTag(TagRequest request) {
+    public TagDtoResponse saveTag(TagDtoRequest request) {
         Tag savedTag = repository.save(mapper.toTag(request, null));
         //todo: validation
         return mapper.toDto(savedTag);
     }
 
     @Override
-    public TagDto updateTag(Long id, TagRequest request) {
+    public TagDtoResponse updateTag(Long id, TagDtoRequest request) {
         Optional<Tag> optionalTag = repository.findById(id);
         if(optionalTag.isPresent()) {
             Tag tagById = optionalTag.get();

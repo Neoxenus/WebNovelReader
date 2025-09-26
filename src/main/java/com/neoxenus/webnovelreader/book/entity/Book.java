@@ -29,6 +29,7 @@ public class Book {
 
     private String yearOfPublishing;
 
+    //todo: check annotation settings
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 

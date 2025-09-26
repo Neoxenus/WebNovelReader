@@ -3,10 +3,10 @@ package com.neoxenus.webnovelreader.chapter.service.impl;
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.book.repo.BookRepository;
 import com.neoxenus.webnovelreader.book.service.ViewCountService;
-import com.neoxenus.webnovelreader.chapter.dto.ChapterDto;
-import com.neoxenus.webnovelreader.chapter.dto.ChapterSummary;
-import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateRequest;
-import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateRequest;
+import com.neoxenus.webnovelreader.chapter.dto.response.ChapterDtoResponse;
+import com.neoxenus.webnovelreader.chapter.dto.response.ChapterSummaryDtoResponse;
+import com.neoxenus.webnovelreader.chapter.dto.request.ChapterCreateDtoRequest;
+import com.neoxenus.webnovelreader.chapter.dto.request.ChapterUpdateDtoRequest;
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import com.neoxenus.webnovelreader.chapter.mapper.ChapterMapper;
 import com.neoxenus.webnovelreader.chapter.repo.ChapterRepository;
@@ -37,7 +37,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     @Transactional
-    public ChapterDto addChapter(Long bookId, ChapterCreateRequest request) throws NoSuchEntityException {
+    public ChapterDtoResponse addChapter(Long bookId, ChapterCreateDtoRequest request) throws NoSuchEntityException {
         Chapter chapter = chapterMapper.toChapter(request);
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NoSuchEntityException("No such book for id: " + bookId));
         boolean numberAlreadyExists = chapterRepository.existsByBookIdAndChapterNumber(bookId, request.chapterNumber());
@@ -55,7 +55,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public Page<ChapterSummary> getBookChapters(Long bookId, Pageable pageable) {
+    public Page<ChapterSummaryDtoResponse> getBookChapters(Long bookId, Pageable pageable) {
         return chapterMapper.toSummary(chapterRepository.findAllByBookId(bookId, pageable));
     }
 
@@ -64,7 +64,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     @Transactional
-    public ChapterDto getChapterDtoForView(Long bookId, Long chapterId) {
+    public ChapterDtoResponse getChapterDtoForView(Long bookId, Long chapterId) {
         Chapter chapter = chapterRepository.findById(chapterId)
                 .orElseThrow(() -> new NoSuchEntityException("No chapter for and id: " + chapterId));
 
@@ -92,11 +92,11 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     @Transactional
-    public ChapterDto updateChapter(Long bookId, Long chapterId, ChapterUpdateRequest chapterUpdateRequest) {
+    public ChapterDtoResponse updateChapter(Long bookId, Long chapterId, ChapterUpdateDtoRequest chapterUpdateDtoRequest) {
         Optional<Chapter> optionalChapter = chapterRepository.findById(chapterId);
         if(optionalChapter.isPresent()) {
             Chapter chapterById = optionalChapter.get();
-            Chapter updatedChapter = chapterMapper.toChapter(chapterById, chapterUpdateRequest);
+            Chapter updatedChapter = chapterMapper.toChapter(chapterById, chapterUpdateDtoRequest);
             return chapterMapper.toDto(chapterRepository.save(updatedChapter));
         } else {
             throw new NoSuchEntityException("No chapter for this id: " + chapterId);

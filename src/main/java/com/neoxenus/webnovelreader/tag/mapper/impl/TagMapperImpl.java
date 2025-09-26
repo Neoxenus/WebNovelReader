@@ -1,8 +1,8 @@
 package com.neoxenus.webnovelreader.tag.mapper.impl;
 
-import com.neoxenus.webnovelreader.tag.dto.TagDto;
-import com.neoxenus.webnovelreader.tag.dto.TagSummaryDto;
-import com.neoxenus.webnovelreader.tag.dto.request.TagRequest;
+import com.neoxenus.webnovelreader.tag.dto.response.TagDtoResponse;
+import com.neoxenus.webnovelreader.tag.dto.response.TagSummaryDtoResponse;
+import com.neoxenus.webnovelreader.tag.dto.request.TagDtoRequest;
 import com.neoxenus.webnovelreader.tag.entity.Tag;
 import com.neoxenus.webnovelreader.tag.mapper.TagMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,8 @@ import java.util.List;
 public class TagMapperImpl implements TagMapper {
 
     @Override
-    public TagDto toDto(Tag tag) {
-        return TagDto.builder()
+    public TagDtoResponse toDto(Tag tag) {
+        return TagDtoResponse.builder()
                 .id(tag.getId())
                 .name(tag.getName())
                 .description(tag.getDescription())
@@ -25,13 +25,13 @@ public class TagMapperImpl implements TagMapper {
     }
 
     @Override
-    public List<TagDto> toDto(List<Tag> tags) {
+    public List<TagDtoResponse> toDto(List<Tag> tags) {
         return tags.stream().map(this::toDto).toList();
     }
 
     @Override
-    public TagSummaryDto toSummaryDto(Tag tag) {
-        return TagSummaryDto.builder()
+    public TagSummaryDtoResponse toSummaryDto(Tag tag) {
+        return TagSummaryDtoResponse.builder()
                 .id(tag.getId())
                 .name(tag.getName())
                 .tagType(tag.getTagType())
@@ -39,12 +39,12 @@ public class TagMapperImpl implements TagMapper {
     }
 
     @Override
-    public List<TagSummaryDto> toSummaryDto(List<Tag> tags) {
+    public List<TagSummaryDtoResponse> toSummaryDto(List<Tag> tags) {
         return tags.stream().map(this::toSummaryDto).toList();
     }
 
     @Override
-    public Tag toTag(TagRequest request, Tag tag) {
+    public Tag toTag(TagDtoRequest request, Tag tag) {
         if(tag == null) {
             return Tag.builder()
                     .tagType(request.tagType())

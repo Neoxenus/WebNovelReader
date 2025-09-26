@@ -1,9 +1,9 @@
 package com.neoxenus.webnovelreader.bookmark.mapper.impl;
 
 import com.neoxenus.webnovelreader.book.mapper.BookMapper;
-import com.neoxenus.webnovelreader.bookmark.dto.BookmarkDto;
-import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateRequest;
-import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkUpdateRequest;
+import com.neoxenus.webnovelreader.bookmark.dto.response.BookmarkDtoResponse;
+import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkCreateDtoRequest;
+import com.neoxenus.webnovelreader.bookmark.dto.request.BookmarkUpdateDtoRequest;
 import com.neoxenus.webnovelreader.bookmark.entity.Bookmark;
 import com.neoxenus.webnovelreader.bookmark.mapper.BookmarkMapper;
 import com.neoxenus.webnovelreader.bookmarkcollection.mapper.BookmarkCollectionMapper;
@@ -22,8 +22,8 @@ public class BookmarkMapperImpl implements BookmarkMapper {
     private final BookmarkCollectionMapper collectionMapper;
 
     @Override
-    public BookmarkDto toDto(Bookmark bookmark) {
-        return BookmarkDto.builder()
+    public BookmarkDtoResponse toDto(Bookmark bookmark) {
+        return BookmarkDtoResponse.builder()
                 .id(bookmark.getId())
                 .book(bookMapper.toDto(bookmark.getBook()))
                 .chapter(chapterMapper.toDto(bookmark.getChapter()))
@@ -35,12 +35,12 @@ public class BookmarkMapperImpl implements BookmarkMapper {
     }
 
     @Override
-    public List<BookmarkDto> toDto(List<Bookmark> bookmark) {
+    public List<BookmarkDtoResponse> toDto(List<Bookmark> bookmark) {
         return bookmark.stream().map(this::toDto).toList();
     }
 
     @Override
-    public Bookmark toBookmark(BookmarkCreateRequest request) {
+    public Bookmark toBookmark(BookmarkCreateDtoRequest request) {
         Bookmark bookmark = new Bookmark();
         bookmark.setType(request.type());
         bookmark.setNote(request.note());
@@ -48,7 +48,7 @@ public class BookmarkMapperImpl implements BookmarkMapper {
     }
 
     @Override
-    public Bookmark toBookmark(Bookmark toUpdate, BookmarkUpdateRequest request) {
+    public Bookmark toBookmark(Bookmark toUpdate, BookmarkUpdateDtoRequest request) {
         if(toUpdate == null || request == null)
             return null;
         toUpdate.setNote(request.note());

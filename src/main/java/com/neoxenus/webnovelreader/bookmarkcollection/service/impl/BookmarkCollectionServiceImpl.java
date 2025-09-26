@@ -1,13 +1,13 @@
 package com.neoxenus.webnovelreader.bookmarkcollection.service.impl;
 
-import com.neoxenus.webnovelreader.bookmark.dto.BookmarkDto;
+import com.neoxenus.webnovelreader.bookmark.dto.response.BookmarkDtoResponse;
 import com.neoxenus.webnovelreader.bookmark.entity.Bookmark;
 import com.neoxenus.webnovelreader.bookmark.mapper.BookmarkMapper;
 import com.neoxenus.webnovelreader.bookmark.repo.BookmarkRepository;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.BookmarkCollectionDto;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateRequest;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateRequest;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.CollectionReorderRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.response.BookmarkCollectionDtoResponse;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateDtoRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateDtoRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.CollectionReorderDtoRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
 import com.neoxenus.webnovelreader.bookmarkcollection.mapper.BookmarkCollectionMapper;
 import com.neoxenus.webnovelreader.bookmarkcollection.repo.BookmarkCollectionRepository;
@@ -42,7 +42,7 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
 
     @Override
     @Transactional
-    public BookmarkCollectionDto createCollection(BookmarkCollectionCreateRequest request) {
+    public BookmarkCollectionDtoResponse createCollection(BookmarkCollectionCreateDtoRequest request) {
         User currentUser = userService.getCurrentUser();
         BookmarkCollection collection = mapper.toCollection(request);
         collection.setUser(currentUser);
@@ -66,15 +66,15 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
     }
 
     @Override
-    public List<BookmarkCollectionDto> getCollections() {
+    public List<BookmarkCollectionDtoResponse> getCollections() {
         User currentUser = userService.getCurrentUser();
         List<BookmarkCollection> collections = repository.findByUserId(currentUser.getId());
         return mapper.toDto(collections).stream()
-                .sorted(Comparator.comparingInt(BookmarkCollectionDto::position)).collect(Collectors.toList());
+                .sorted(Comparator.comparingInt(BookmarkCollectionDtoResponse::position)).collect(Collectors.toList());
     }
 
     @Override
-    public List<BookmarkDto> loadCollectionContent(Long id) {
+    public List<BookmarkDtoResponse> loadCollectionContent(Long id) {
         verifyUserAccessToBookmarkCollection(id);
         List<Bookmark> bookmarks = bookmarkRepository.findBookmarksByCollectionsId(id);
         return bookmarkMapper.toDto(bookmarks);
@@ -82,7 +82,7 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
 
     @Override
     @Transactional
-    public BookmarkCollectionDto updateCollection(Long id, BookmarkCollectionUpdateRequest request) {
+    public BookmarkCollectionDtoResponse updateCollection(Long id, BookmarkCollectionUpdateDtoRequest request) {
         Optional<BookmarkCollection> optionalBookmarkCollection = repository.findById(id);
         if(optionalBookmarkCollection.isPresent()){
             BookmarkCollection collection = optionalBookmarkCollection.get();
@@ -95,7 +95,7 @@ public class BookmarkCollectionServiceImpl implements BookmarkCollectionService 
     }
 
     @Override
-    public List<BookmarkCollectionDto> reorder(List<CollectionReorderRequest> request) {
+    public List<BookmarkCollectionDtoResponse> reorder(List<CollectionReorderDtoRequest> request) {
         return null;
     }
 

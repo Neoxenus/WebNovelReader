@@ -1,9 +1,9 @@
 package com.neoxenus.webnovelreader.comment.service;
 
-import com.neoxenus.webnovelreader.comment.dto.CommentDto;
-import com.neoxenus.webnovelreader.comment.dto.request.VoteRequest;
+import com.neoxenus.webnovelreader.comment.dto.response.CommentDtoResponse;
+import com.neoxenus.webnovelreader.comment.dto.request.VoteDtoRequest;
 
 public interface CommentVoteService {
 
-    CommentDto vote(Long id, VoteRequest request);
+    CommentDtoResponse vote(Long id, VoteDtoRequest request);
 }

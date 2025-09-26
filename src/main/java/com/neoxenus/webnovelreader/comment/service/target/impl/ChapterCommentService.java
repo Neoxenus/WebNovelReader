@@ -3,8 +3,8 @@ package com.neoxenus.webnovelreader.comment.service.target.impl;
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
 import com.neoxenus.webnovelreader.chapter.repo.ChapterRepository;
 import com.neoxenus.webnovelreader.comment.entity.Comment;
-import com.neoxenus.webnovelreader.comment.dto.request.CommentCreateRequest;
-import com.neoxenus.webnovelreader.comment.dto.CommentDto;
+import com.neoxenus.webnovelreader.comment.dto.request.CommentCreateDtoRequest;
+import com.neoxenus.webnovelreader.comment.dto.response.CommentDtoResponse;
 import com.neoxenus.webnovelreader.comment.enums.CommentTargetType;
 import com.neoxenus.webnovelreader.comment.mapper.CommentMapper;
 import com.neoxenus.webnovelreader.comment.repo.CommentRepository;
@@ -33,13 +33,13 @@ public class ChapterCommentService implements CommentTargetService {
     }
 
     @Override
-    public List<CommentDto> getComments(Long targetId) {
+    public List<CommentDtoResponse> getComments(Long targetId) {
         List<Comment> comments = commentRepository.findAllByChapterIdAndParentIsNull(targetId);
         return commentMapper.toDto(comments);
     }
 
     @Override
-    public CommentDto createComment(Long targetId, CommentCreateRequest request) {
+    public CommentDtoResponse createComment(Long targetId, CommentCreateDtoRequest request) {
 
         Comment comment = commentMapper.toComment(request);
         Chapter chapter = chapterRepository

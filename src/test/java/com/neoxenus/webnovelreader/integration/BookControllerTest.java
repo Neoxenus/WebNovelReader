@@ -2,8 +2,8 @@ package com.neoxenus.webnovelreader.integration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.neoxenus.webnovelreader.book.dto.BookDto;
-import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
+import com.neoxenus.webnovelreader.book.dto.response.BookDtoResponse;
+import com.neoxenus.webnovelreader.book.dto.request.BookCreateDtoRequest;
 import com.neoxenus.webnovelreader.book.service.BookService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,7 @@ public class BookControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private BookDto book;
+    private BookDtoResponse book;
 
     private String token = "";
 
@@ -52,8 +52,8 @@ public class BookControllerTest {
         token = jsonNode.get("access_token").asText();
 
 
-        BookCreateRequest request =
-                new BookCreateRequest("test book", "1000", 1L, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        BookCreateDtoRequest request =
+                new BookCreateDtoRequest("test book", "1000", 1L, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         book = bookService.saveBook(request);
     }
 
@@ -72,8 +72,8 @@ public class BookControllerTest {
     void saveBookPositive() throws Exception {
 
 
-        BookCreateRequest request =
-                new BookCreateRequest("test book for post", "1000", 1L, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        BookCreateDtoRequest request =
+                new BookCreateDtoRequest("test book for post", "1000", 1L, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         mockMvc.perform(post("/api/books")
                 .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,8 +88,8 @@ public class BookControllerTest {
     void saveBookNegative() throws Exception {
 
 
-        BookCreateRequest request =
-                new BookCreateRequest("test book for post", "1000", 1L, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        BookCreateDtoRequest request =
+                new BookCreateDtoRequest("test book for post", "1000", 1L, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         mockMvc.perform(post("/api/books")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)

@@ -2,9 +2,9 @@ package com.neoxenus.webnovelreader.comment.mapper.impl;
 
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.chapter.etitity.Chapter;
-import com.neoxenus.webnovelreader.comment.dto.CommentDto;
-import com.neoxenus.webnovelreader.comment.dto.request.CommentCreateRequest;
-import com.neoxenus.webnovelreader.comment.dto.request.CommentUpdateRequest;
+import com.neoxenus.webnovelreader.comment.dto.response.CommentDtoResponse;
+import com.neoxenus.webnovelreader.comment.dto.request.CommentCreateDtoRequest;
+import com.neoxenus.webnovelreader.comment.dto.request.CommentUpdateDtoRequest;
 import com.neoxenus.webnovelreader.comment.entity.Comment;
 import com.neoxenus.webnovelreader.comment.mapper.CommentMapper;
 import com.neoxenus.webnovelreader.user.mapper.UserMapper;
@@ -20,10 +20,10 @@ import java.util.function.Function;
 public class CommentMapperImpl implements CommentMapper {
     private final UserMapper userMapper;
     @Override
-    public CommentDto toDto(Comment comment) {
+    public CommentDtoResponse toDto(Comment comment) {
         if(Objects.isNull(comment))
             return null;
-        return CommentDto.builder()
+        return CommentDtoResponse.builder()
                 .id(comment.getId())
                 .user(userMapper.toDto(comment.getUser()))
                 .bookId(getNullable(comment.getBook(), Book::getId))
@@ -38,10 +38,10 @@ public class CommentMapperImpl implements CommentMapper {
     }
 
     @Override
-    public CommentDto toDtoWithoutReplies(Comment comment) {
+    public CommentDtoResponse toDtoWithoutReplies(Comment comment) {
         if(Objects.isNull(comment))
             return null;
-        return CommentDto.builder()
+        return CommentDtoResponse.builder()
                 .id(comment.getId())
                 .user(userMapper.toDto(comment.getUser()))
                 .bookId(getNullable(comment.getBook(), Book::getId))
@@ -59,17 +59,17 @@ public class CommentMapperImpl implements CommentMapper {
     }
 
     @Override
-    public List<CommentDto> toDto(List<Comment> comment) {
+    public List<CommentDtoResponse> toDto(List<Comment> comment) {
         return comment.stream().map(this::toDto).toList();
     }
 
     @Override
-    public List<CommentDto> toDtoWithoutReplies(List<Comment> comment) {
+    public List<CommentDtoResponse> toDtoWithoutReplies(List<Comment> comment) {
         return comment.stream().map(this::toDtoWithoutReplies).toList();
     }
 
     @Override
-    public Comment toComment(CommentCreateRequest createRequest) {
+    public Comment toComment(CommentCreateDtoRequest createRequest) {
         if(createRequest != null){
             Comment comment = new Comment();
             comment.setContent(createRequest.content());
@@ -82,7 +82,7 @@ public class CommentMapperImpl implements CommentMapper {
     }
 
     @Override
-    public Comment toComment(Comment toUpdate, CommentUpdateRequest updateRequest) {
+    public Comment toComment(Comment toUpdate, CommentUpdateDtoRequest updateRequest) {
         if(toUpdate != null && updateRequest != null) {
             toUpdate.setContent(updateRequest.content());
             return toUpdate;

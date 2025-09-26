@@ -1,7 +1,7 @@
 package com.neoxenus.webnovelreader.comment.service.impl;
 
-import com.neoxenus.webnovelreader.comment.dto.CommentDto;
-import com.neoxenus.webnovelreader.comment.dto.request.VoteRequest;
+import com.neoxenus.webnovelreader.comment.dto.response.CommentDtoResponse;
+import com.neoxenus.webnovelreader.comment.dto.request.VoteDtoRequest;
 import com.neoxenus.webnovelreader.comment.entity.Comment;
 import com.neoxenus.webnovelreader.comment.entity.CommentVote;
 import com.neoxenus.webnovelreader.comment.enums.VoteType;
@@ -32,7 +32,7 @@ public class CommentVoteServiceImpl implements CommentVoteService {
     private final UserService userService;
     @Override
     @Transactional
-    public CommentDto vote(Long id, VoteRequest request) {
+    public CommentDtoResponse vote(Long id, VoteDtoRequest request) {
         User currentUser = userService.getCurrentUser();
         Comment comment = commentRepo.findById(id).orElseThrow(
                 () -> new NoSuchEntityException("No comments for an id: " + id)

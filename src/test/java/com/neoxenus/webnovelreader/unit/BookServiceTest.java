@@ -1,7 +1,7 @@
 package com.neoxenus.webnovelreader.unit;
 
-import com.neoxenus.webnovelreader.book.dto.BookDto;
-import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
+import com.neoxenus.webnovelreader.book.dto.response.BookDtoResponse;
+import com.neoxenus.webnovelreader.book.dto.request.BookCreateDtoRequest;
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.book.mapper.impl.BookMapperImpl;
 import com.neoxenus.webnovelreader.book.repo.BookRepository;
@@ -62,23 +62,23 @@ public class BookServiceTest {
 
     @Test
     void saveBookPositive() {
-        BookCreateRequest request =
-                new BookCreateRequest(book.getTitle(), book.getYearOfPublishing(), 1L, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        BookCreateDtoRequest request =
+                new BookCreateDtoRequest(book.getTitle(), book.getYearOfPublishing(), 1L, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         Book savedBook = new Book();
         savedBook.setTitle("test book");
         savedBook.setYearOfPublishing("2025");
 
-        BookDto bookDto = BookDto.builder()
+        BookDtoResponse bookDtoResponse = BookDtoResponse.builder()
                 .title(savedBook.getTitle())
                 .yearOfPublishing(savedBook.getYearOfPublishing())
                 .build();
 
         when(bookMapper.toBook(request)).thenReturn(savedBook);
         when(bookRepository.save(savedBook)).thenReturn(book);
-        when(bookMapper.toDto(book)).thenReturn(bookDto);
+        when(bookMapper.toDto(book)).thenReturn(bookDtoResponse);
 
-        assertEquals(bookDto, bookService.saveBook(request));
+        assertEquals(bookDtoResponse, bookService.saveBook(request));
     }
 
     @Test
@@ -92,8 +92,8 @@ public class BookServiceTest {
 
     @Test
     void saveBookWithNullTagIds() {
-        BookCreateRequest request =
-                new BookCreateRequest(book.getTitle(), book.getYearOfPublishing(), 1L, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        BookCreateDtoRequest request =
+                new BookCreateDtoRequest(book.getTitle(), book.getYearOfPublishing(), 1L, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         when(bookMapper.toBook(request)).thenThrow(new IllegalArgumentException());
 

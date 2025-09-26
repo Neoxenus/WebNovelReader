@@ -1,8 +1,8 @@
 package com.neoxenus.webnovelreader.comment.service;
 
-import com.neoxenus.webnovelreader.comment.dto.request.CommentCreateRequest;
-import com.neoxenus.webnovelreader.comment.dto.CommentDto;
-import com.neoxenus.webnovelreader.comment.dto.request.CommentUpdateRequest;
+import com.neoxenus.webnovelreader.comment.dto.request.CommentCreateDtoRequest;
+import com.neoxenus.webnovelreader.comment.dto.response.CommentDtoResponse;
+import com.neoxenus.webnovelreader.comment.dto.request.CommentUpdateDtoRequest;
 import com.neoxenus.webnovelreader.comment.enums.CommentTargetType;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 
@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface CommentService {
 
-    List<CommentDto> getComments(CommentTargetType type, Long targetId);
+    List<CommentDtoResponse> getComments(CommentTargetType type, Long targetId);
 
-    CommentDto createComment(CommentTargetType type, Long targetId, CommentCreateRequest request);
+    CommentDtoResponse createComment(CommentTargetType type, Long targetId, CommentCreateDtoRequest request);
 
-    CommentDto updateComment(Long commentId, CommentUpdateRequest request) throws NoSuchEntityException;
+    CommentDtoResponse updateComment(Long commentId, CommentUpdateDtoRequest request) throws NoSuchEntityException;
     void deleteComment(Long commentId) throws NoSuchEntityException;
 }

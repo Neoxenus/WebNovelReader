@@ -1,10 +1,10 @@
 package com.neoxenus.webnovelreader.book.controller;
 
-import com.neoxenus.webnovelreader.book.dto.BookDto;
-import com.neoxenus.webnovelreader.book.dto.BookRatingDto;
-import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
-import com.neoxenus.webnovelreader.book.dto.request.BookRatingRequest;
-import com.neoxenus.webnovelreader.book.dto.request.BookUpdateRequest;
+import com.neoxenus.webnovelreader.book.dto.response.BookDtoResponse;
+import com.neoxenus.webnovelreader.book.dto.response.BookRatingDtoResponse;
+import com.neoxenus.webnovelreader.book.dto.request.BookCreateDtoRequest;
+import com.neoxenus.webnovelreader.book.dto.request.BookRatingDtoRequest;
+import com.neoxenus.webnovelreader.book.dto.request.BookUpdateDtoRequest;
 import com.neoxenus.webnovelreader.book.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,18 +30,18 @@ public class BookController {
 
 
     @PostMapping
-    public ResponseEntity<BookDto> createBook(@RequestBody BookCreateRequest book){
-        BookDto bookDto = bookService.saveBook(book);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/books/" + bookDto.id()).toUriString());
-        return ResponseEntity.created(uri).body(bookDto);
+    public ResponseEntity<BookDtoResponse> createBook(@RequestBody BookCreateDtoRequest book){
+        BookDtoResponse bookDtoResponse = bookService.saveBook(book);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/books/" + bookDtoResponse.id()).toUriString());
+        return ResponseEntity.created(uri).body(bookDtoResponse);
     }
 
     @GetMapping("/{id}")
-    public BookDto getBook(@PathVariable Long id){
+    public BookDtoResponse getBook(@PathVariable Long id){
         return bookService.getBookDtoById(id);
     }
     @GetMapping
-    public Page<BookDto> getAllBooks(
+    public Page<BookDtoResponse> getAllBooks(
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size,
             @RequestParam(required = false, defaultValue = "id") String sortBy,
@@ -56,8 +56,8 @@ public class BookController {
     }
 
     @PatchMapping("/{id}")
-    public BookDto updateBook(@PathVariable Long id, @RequestBody BookUpdateRequest bookUpdateRequest) {
-        return bookService.updateBook(id, bookUpdateRequest);
+    public BookDtoResponse updateBook(@PathVariable Long id, @RequestBody BookUpdateDtoRequest bookUpdateDtoRequest) {
+        return bookService.updateBook(id, bookUpdateDtoRequest);
     }
 
     @DeleteMapping("/{id}")
@@ -67,7 +67,7 @@ public class BookController {
     }
 
     @PostMapping("/{id}/rate")
-    public BookRatingDto rateBook(@PathVariable Long id, @RequestBody BookRatingRequest request){
+    public BookRatingDtoResponse rateBook(@PathVariable Long id, @RequestBody BookRatingDtoRequest request){
         return bookService.rateBook(id, request);
     }
 }

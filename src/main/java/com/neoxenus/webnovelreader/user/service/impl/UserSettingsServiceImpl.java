@@ -2,8 +2,8 @@ package com.neoxenus.webnovelreader.user.service.impl;
 
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
-import com.neoxenus.webnovelreader.user.dto.UserDto;
-import com.neoxenus.webnovelreader.user.dto.request.UserUpdateRequest;
+import com.neoxenus.webnovelreader.user.dto.response.UserDtoResponse;
+import com.neoxenus.webnovelreader.user.dto.request.UserUpdateDtoRequest;
 import com.neoxenus.webnovelreader.user.entity.User;
 import com.neoxenus.webnovelreader.user.mapper.UserMapper;
 import com.neoxenus.webnovelreader.user.repo.UserRepository;
@@ -29,7 +29,7 @@ public class UserSettingsServiceImpl implements UserSettingsService {
 
     @Override
     @Transactional
-    public UserDto updateUser(Long id, UserUpdateRequest request) throws NoSuchEntityException, UsernameExistsException {
+    public UserDtoResponse updateUser(Long id, UserUpdateDtoRequest request) throws NoSuchEntityException, UsernameExistsException {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             validateAvatar(request.avatar());

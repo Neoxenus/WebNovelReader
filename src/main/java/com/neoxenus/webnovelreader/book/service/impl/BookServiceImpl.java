@@ -1,10 +1,10 @@
 package com.neoxenus.webnovelreader.book.service.impl;
 
-import com.neoxenus.webnovelreader.book.dto.BookDto;
-import com.neoxenus.webnovelreader.book.dto.BookRatingDto;
-import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
-import com.neoxenus.webnovelreader.book.dto.request.BookRatingRequest;
-import com.neoxenus.webnovelreader.book.dto.request.BookUpdateRequest;
+import com.neoxenus.webnovelreader.book.dto.response.BookDtoResponse;
+import com.neoxenus.webnovelreader.book.dto.response.BookRatingDtoResponse;
+import com.neoxenus.webnovelreader.book.dto.request.BookCreateDtoRequest;
+import com.neoxenus.webnovelreader.book.dto.request.BookRatingDtoRequest;
+import com.neoxenus.webnovelreader.book.dto.request.BookUpdateDtoRequest;
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.book.entity.BookRating;
 import com.neoxenus.webnovelreader.book.mapper.BookMapper;
@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public BookDto saveBook(BookCreateRequest book) {
+    public BookDtoResponse saveBook(BookCreateDtoRequest book) {
         Book savedBook = bookRepository.save(bookMapper.toBook(book));
         bookRepository.flush();
         //todo: check for uniqueness
@@ -49,7 +49,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public BookDto getBookDtoById(Long id) {
+    public BookDtoResponse getBookDtoById(Long id) {
         return bookMapper.toDto(getBookById(id));
     }
 
@@ -60,7 +60,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<BookDto> getBooks(Pageable pageable) {
+    public Page<BookDtoResponse> getBooks(Pageable pageable) {
         return bookMapper.toDto(
                 bookRepository.findAll(pageable)
         );
@@ -68,7 +68,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public BookDto updateBook(Long id, BookUpdateRequest bookRequest) {
+    public BookDtoResponse updateBook(Long id, BookUpdateDtoRequest bookRequest) {
         Optional<Book> optionalBook = bookRepository.findById(id);
         if(optionalBook.isPresent()) {
 
@@ -82,13 +82,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookRatingDto getRatingForBook(Long id) {
+    public BookRatingDtoResponse getRatingForBook(Long id) {
         return ratingMapper.toDto(ratingRepository.getAveragesByBookId(id));
     }
 
     @Override
     @Transactional
-    public BookRatingDto rateBook(Long id, BookRatingRequest request) {
+    public BookRatingDtoResponse rateBook(Long id, BookRatingDtoRequest request) {
         User user = userService.getCurrentUser();
         if(user == null) {
             log.error("User must be logged in to rate books");

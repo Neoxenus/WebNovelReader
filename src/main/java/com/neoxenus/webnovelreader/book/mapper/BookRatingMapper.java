@@ -1,15 +1,15 @@
 package com.neoxenus.webnovelreader.book.mapper;
 
-import com.neoxenus.webnovelreader.book.dto.BookIdBookRatingDto;
-import com.neoxenus.webnovelreader.book.dto.BookRatingDto;
+import com.neoxenus.webnovelreader.book.dto.response.BookIdBookRatingDtoResponse;
+import com.neoxenus.webnovelreader.book.dto.response.BookRatingDtoResponse;
 import com.neoxenus.webnovelreader.book.dto.projection.BookRatingAverages;
-import com.neoxenus.webnovelreader.book.dto.request.BookRatingRequest;
+import com.neoxenus.webnovelreader.book.dto.request.BookRatingDtoRequest;
 import com.neoxenus.webnovelreader.book.entity.BookRating;
 
 public interface BookRatingMapper {
-    BookRatingDto toDto(BookRatingAverages rating);
-    BookRatingDto toDto(BookIdBookRatingDto rating);
+    BookRatingDtoResponse toDto(BookRatingAverages rating);
+    BookRatingDtoResponse toDto(BookIdBookRatingDtoResponse rating);
 
-    BookRating toRating(BookRatingRequest request);
-    BookRating toRating(BookRating rating, BookRatingRequest request);
+    BookRating toRating(BookRatingDtoRequest request);
+    BookRating toRating(BookRating rating, BookRatingDtoRequest request);
 }

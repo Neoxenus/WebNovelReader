@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RedisConfig {
-
+//todo: cache
 //    @Bean
 //    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
 //

@@ -1,9 +1,9 @@
 package com.neoxenus.webnovelreader.user.controller;
 
 import com.neoxenus.webnovelreader.exceptions.UsernameExistsException;
-import com.neoxenus.webnovelreader.user.dto.ImageDto;
-import com.neoxenus.webnovelreader.user.dto.UserDto;
-import com.neoxenus.webnovelreader.user.dto.request.UserCreateRequest;
+import com.neoxenus.webnovelreader.user.dto.response.ImageDtoResponse;
+import com.neoxenus.webnovelreader.user.dto.response.UserDtoResponse;
+import com.neoxenus.webnovelreader.user.dto.request.UserCreateDtoRequest;
 import com.neoxenus.webnovelreader.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,26 +27,26 @@ public class UserController {
 
 
     @GetMapping
-    public List<UserDto> getUsers(){
+    public List<UserDtoResponse> getUsers(){
         return userService.getUsers();
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> saveUser(@Validated @RequestBody UserCreateRequest user)
+    public ResponseEntity<UserDtoResponse> saveUser(@Validated @RequestBody UserCreateDtoRequest user)
                                             throws UsernameExistsException {
-        UserDto userDto = userService.saveUser(user);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/" + userDto.id()).toUriString());
-        return ResponseEntity.created(uri).body(userDto);
+        UserDtoResponse userDtoResponse = userService.saveUser(user);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/" + userDtoResponse.id()).toUriString());
+        return ResponseEntity.created(uri).body(userDtoResponse);
     }
 
 
     @GetMapping("/{id}")
-    public UserDto getUser(@PathVariable Long id){
+    public UserDtoResponse getUser(@PathVariable Long id){
         return userService.getUser(id);
     }
     @GetMapping("/{id}/avatar")
     public ResponseEntity<byte[]> getUserAvatar(@PathVariable Long id){
-        ImageDto image = userService.getAvatar(id);
+        ImageDtoResponse image = userService.getAvatar(id);
         if (image == null) return ResponseEntity.notFound().build();
 
         HttpHeaders headers = new HttpHeaders();

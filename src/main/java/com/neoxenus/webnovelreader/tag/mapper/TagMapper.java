@@ -1,18 +1,18 @@
 package com.neoxenus.webnovelreader.tag.mapper;
 
-import com.neoxenus.webnovelreader.tag.dto.TagDto;
-import com.neoxenus.webnovelreader.tag.dto.TagSummaryDto;
-import com.neoxenus.webnovelreader.tag.dto.request.TagRequest;
+import com.neoxenus.webnovelreader.tag.dto.response.TagDtoResponse;
+import com.neoxenus.webnovelreader.tag.dto.response.TagSummaryDtoResponse;
+import com.neoxenus.webnovelreader.tag.dto.request.TagDtoRequest;
 import com.neoxenus.webnovelreader.tag.entity.Tag;
 
 import java.util.List;
 
 public interface TagMapper {
-    TagDto toDto(Tag tag);
-    List<TagDto> toDto(List<Tag> tag);
+    TagDtoResponse toDto(Tag tag);
+    List<TagDtoResponse> toDto(List<Tag> tag);
 
-    TagSummaryDto toSummaryDto(Tag tag);
-    List<TagSummaryDto> toSummaryDto(List<Tag> tag);
+    TagSummaryDtoResponse toSummaryDto(Tag tag);
+    List<TagSummaryDtoResponse> toSummaryDto(List<Tag> tag);
 
-    Tag toTag(TagRequest request, Tag tag);
+    Tag toTag(TagDtoRequest request, Tag tag);
 }

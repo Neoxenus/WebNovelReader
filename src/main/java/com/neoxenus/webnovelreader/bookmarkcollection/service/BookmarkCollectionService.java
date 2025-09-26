@@ -1,25 +1,25 @@
 package com.neoxenus.webnovelreader.bookmarkcollection.service;
 
-import com.neoxenus.webnovelreader.bookmark.dto.BookmarkDto;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.BookmarkCollectionDto;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateRequest;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateRequest;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.CollectionReorderRequest;
+import com.neoxenus.webnovelreader.bookmark.dto.response.BookmarkDtoResponse;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.response.BookmarkCollectionDtoResponse;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateDtoRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateDtoRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.CollectionReorderDtoRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
 import com.neoxenus.webnovelreader.user.entity.User;
 
 import java.util.List;
 
 public interface BookmarkCollectionService {
-    BookmarkCollectionDto createCollection(BookmarkCollectionCreateRequest request);
+    BookmarkCollectionDtoResponse createCollection(BookmarkCollectionCreateDtoRequest request);
     BookmarkCollection getCollectionById(Long id);
     List<BookmarkCollection> getCollectionById(List<Long> ids);
 
-    List<BookmarkCollectionDto> getCollections();
-    List<BookmarkDto> loadCollectionContent(Long id);
+    List<BookmarkCollectionDtoResponse> getCollections();
+    List<BookmarkDtoResponse> loadCollectionContent(Long id);
 
-    BookmarkCollectionDto updateCollection(Long id, BookmarkCollectionUpdateRequest request);
-    List<BookmarkCollectionDto> reorder(List<CollectionReorderRequest> request);
+    BookmarkCollectionDtoResponse updateCollection(Long id, BookmarkCollectionUpdateDtoRequest request);
+    List<BookmarkCollectionDtoResponse> reorder(List<CollectionReorderDtoRequest> request);
 
     BookmarkCollection updateCount(Long id, int delta);
 

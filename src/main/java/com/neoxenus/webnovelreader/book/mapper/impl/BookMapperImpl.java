@@ -1,12 +1,12 @@
 package com.neoxenus.webnovelreader.book.mapper.impl;
 
-import com.neoxenus.webnovelreader.book.dto.BookDto;
-import com.neoxenus.webnovelreader.book.dto.BookRatingDto;
-import com.neoxenus.webnovelreader.book.dto.request.BookCreateRequest;
-import com.neoxenus.webnovelreader.book.dto.request.BookUpdateRequest;
+import com.neoxenus.webnovelreader.book.dto.response.BookDtoResponse;
+import com.neoxenus.webnovelreader.book.dto.response.BookRatingDtoResponse;
+import com.neoxenus.webnovelreader.book.dto.request.BookCreateDtoRequest;
+import com.neoxenus.webnovelreader.book.dto.request.BookUpdateDtoRequest;
 import com.neoxenus.webnovelreader.book.entity.Book;
 import com.neoxenus.webnovelreader.book.mapper.BookMapper;
-import com.neoxenus.webnovelreader.chapter.dto.ChapterSummary;
+import com.neoxenus.webnovelreader.chapter.dto.response.ChapterSummaryDtoResponse;
 import com.neoxenus.webnovelreader.chapter.mapper.ChapterMapper;
 import com.neoxenus.webnovelreader.chapter.repo.ChapterRepository;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
@@ -35,12 +35,12 @@ public class BookMapperImpl implements BookMapper {
     private final TagRepository tagRepository;
 
     private final TagMapper tagMapper;
-
-    private BookDto toDtoHelper(Book book, boolean withChapters) {
+//todo: try static implementation
+    private BookDtoResponse toDtoHelper(Book book, boolean withChapters) {
         if(book == null)
             return null;
 
-        List<ChapterSummary> chapterPage = null;
+        List<ChapterSummaryDtoResponse> chapterPage = null;
         if(withChapters) {
             Pageable pageable = PageRequest.of(0, 25, Sort.by("chapterNumber").descending());
             chapterPage = chapterMapper.toSummary(
@@ -49,7 +49,7 @@ public class BookMapperImpl implements BookMapper {
                             .getContent();
         }
 
-        BookDto.BookDtoBuilder builder = BookDto.builder()
+        BookDtoResponse.BookDtoResponseBuilder builder = BookDtoResponse.builder()
                 .id(book.getId())
                 .title(book.getTitle())
                 .yearOfPublishing(book.getYearOfPublishing());
@@ -65,7 +65,7 @@ public class BookMapperImpl implements BookMapper {
                 .totalViews(book.getTotalViews())
                 .uniqueViews(book.getUniqueViews())
                 .rating(
-                        BookRatingDto.builder()
+                        BookRatingDtoResponse.builder()
                                 .ratingCount(book.getRatingCount())
                                 .storyDevelopment(book.getAvgStoryDevelopment())
                                 .writingQuality(book.getAvgWritingQuality())
@@ -89,22 +89,22 @@ public class BookMapperImpl implements BookMapper {
         return tags.stream().filter(e -> e.getTagType().equals(type)).toList();
     }
     @Override
-    public BookDto toDto(Book book) {
+    public BookDtoResponse toDto(Book book) {
         return toDtoHelper(book, true);
     }
 
-    private BookDto toDtoWithoutChapters(Book book) {
+    private BookDtoResponse toDtoWithoutChapters(Book book) {
         return toDtoHelper(book, false);
     }
 
     @Override
-    public Page<BookDto> toDto(Page<Book> bookList) {
+    public Page<BookDtoResponse> toDto(Page<Book> bookList) {
         if (bookList == null)
             return null;
         return bookList.map(this::toDtoWithoutChapters);
     }
     @Override
-    public Book toBook(BookCreateRequest request) {
+    public Book toBook(BookCreateDtoRequest request) {
         if(request == null)
             return null;
         List<Tag> tags = aggregateTags(request.languageOfOriginal(), request.authorIds(), request.translatorIds(), request.genreIds(), request.eventIds(), request.publisherIds());
@@ -137,7 +137,7 @@ public class BookMapperImpl implements BookMapper {
     }
 
     @Override
-    public Book toBook(Book toUpdate, BookUpdateRequest request) {
+    public Book toBook(Book toUpdate, BookUpdateDtoRequest request) {
         if(toUpdate == null || request == null)
             return null;
         List<Tag> tags = aggregateTags(request.languageOfOriginal(), request.authorIds(), request.translatorIds(), request.genreIds(), request.eventIds(), request.publisherIds());

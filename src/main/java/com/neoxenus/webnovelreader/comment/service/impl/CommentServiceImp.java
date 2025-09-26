@@ -1,9 +1,9 @@
 package com.neoxenus.webnovelreader.comment.service.impl;
 
 import com.neoxenus.webnovelreader.comment.entity.Comment;
-import com.neoxenus.webnovelreader.comment.dto.request.CommentCreateRequest;
-import com.neoxenus.webnovelreader.comment.dto.CommentDto;
-import com.neoxenus.webnovelreader.comment.dto.request.CommentUpdateRequest;
+import com.neoxenus.webnovelreader.comment.dto.request.CommentCreateDtoRequest;
+import com.neoxenus.webnovelreader.comment.dto.response.CommentDtoResponse;
+import com.neoxenus.webnovelreader.comment.dto.request.CommentUpdateDtoRequest;
 import com.neoxenus.webnovelreader.comment.enums.CommentTargetType;
 import com.neoxenus.webnovelreader.comment.mapper.CommentMapper;
 import com.neoxenus.webnovelreader.comment.repo.CommentRepository;
@@ -27,7 +27,7 @@ public class CommentServiceImp implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
-    public CommentDto updateComment(Long commentId, CommentUpdateRequest request) {
+    public CommentDtoResponse updateComment(Long commentId, CommentUpdateDtoRequest request) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if(optionalComment.isPresent()){
             Comment commentById = optionalComment.get();
@@ -51,12 +51,12 @@ public class CommentServiceImp implements CommentService {
     }
 
     @Override
-    public List<CommentDto> getComments(CommentTargetType type, Long targetId) {
+    public List<CommentDtoResponse> getComments(CommentTargetType type, Long targetId) {
         return factory.getService(type).getComments(targetId);
     }
 
     @Override
-    public CommentDto createComment(CommentTargetType type, Long targetId, CommentCreateRequest request) {
+    public CommentDtoResponse createComment(CommentTargetType type, Long targetId, CommentCreateDtoRequest request) {
         return factory.getService(type).createComment(targetId, request);
     }
 

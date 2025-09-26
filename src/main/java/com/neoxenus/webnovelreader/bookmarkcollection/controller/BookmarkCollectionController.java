@@ -1,9 +1,9 @@
 package com.neoxenus.webnovelreader.bookmarkcollection.controller;
 
-import com.neoxenus.webnovelreader.bookmark.dto.BookmarkDto;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.BookmarkCollectionDto;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateRequest;
-import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateRequest;
+import com.neoxenus.webnovelreader.bookmark.dto.response.BookmarkDtoResponse;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.response.BookmarkCollectionDtoResponse;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionCreateDtoRequest;
+import com.neoxenus.webnovelreader.bookmarkcollection.dto.request.BookmarkCollectionUpdateDtoRequest;
 import com.neoxenus.webnovelreader.bookmarkcollection.service.BookmarkCollectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +24,8 @@ public class BookmarkCollectionController {
 
 
     @PostMapping
-    ResponseEntity<BookmarkCollectionDto> createCollection(@RequestBody BookmarkCollectionCreateRequest request) {
-        BookmarkCollectionDto bookmarkCollectionDto = service.createCollection(request);
+    ResponseEntity<BookmarkCollectionDtoResponse> createCollection(@RequestBody BookmarkCollectionCreateDtoRequest request) {
+        BookmarkCollectionDtoResponse bookmarkCollectionDto = service.createCollection(request);
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                 .fromCurrentContextPath()
@@ -35,17 +35,17 @@ public class BookmarkCollectionController {
     }
 
     @GetMapping
-    List<BookmarkCollectionDto> getCollections() {
+    List<BookmarkCollectionDtoResponse> getCollections() {
         return service.getCollections();
     }
 
     @GetMapping("/{id}")
-    List<BookmarkDto> getCollectionContent(@PathVariable Long id) {
+    List<BookmarkDtoResponse> getCollectionContent(@PathVariable Long id) {
         return service.loadCollectionContent(id);
     }
 
     @PatchMapping("/{id}")
-    BookmarkCollectionDto updateCollection(@PathVariable Long id, @RequestBody BookmarkCollectionUpdateRequest request) {
+    BookmarkCollectionDtoResponse updateCollection(@PathVariable Long id, @RequestBody BookmarkCollectionUpdateDtoRequest request) {
         return service.updateCollection(id, request);
     }
 

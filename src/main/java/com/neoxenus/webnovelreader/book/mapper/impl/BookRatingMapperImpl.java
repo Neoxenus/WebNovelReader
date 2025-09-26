@@ -1,9 +1,9 @@
 package com.neoxenus.webnovelreader.book.mapper.impl;
 
-import com.neoxenus.webnovelreader.book.dto.BookIdBookRatingDto;
-import com.neoxenus.webnovelreader.book.dto.BookRatingDto;
+import com.neoxenus.webnovelreader.book.dto.response.BookIdBookRatingDtoResponse;
+import com.neoxenus.webnovelreader.book.dto.response.BookRatingDtoResponse;
 import com.neoxenus.webnovelreader.book.dto.projection.BookRatingAverages;
-import com.neoxenus.webnovelreader.book.dto.request.BookRatingRequest;
+import com.neoxenus.webnovelreader.book.dto.request.BookRatingDtoRequest;
 import com.neoxenus.webnovelreader.book.entity.BookRating;
 import com.neoxenus.webnovelreader.book.mapper.BookRatingMapper;
 import org.springframework.stereotype.Component;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 public class BookRatingMapperImpl implements BookRatingMapper {
 
     @Override
-    public BookRatingDto toDto(BookRatingAverages rating) {
+    public BookRatingDtoResponse toDto(BookRatingAverages rating) {
         if(rating == null) {
-            return new BookRatingDto();
+            return new BookRatingDtoResponse();
         }
 
         long count = rating.getRatingCount() != null ? rating.getRatingCount() : 0L;
@@ -26,7 +26,7 @@ public class BookRatingMapperImpl implements BookRatingMapper {
 
         double average = (characterDesign + worldBackground + storyDevelopment + writingQuality) / 4d;
 
-        return BookRatingDto.builder()
+        return BookRatingDtoResponse.builder()
                 .ratingCount(count)
                 .characterDesign(characterDesign)
                 .worldBackground(worldBackground)
@@ -37,8 +37,8 @@ public class BookRatingMapperImpl implements BookRatingMapper {
     }
 
     @Override
-    public BookRatingDto toDto(BookIdBookRatingDto rating) {
-        return BookRatingDto.builder()
+    public BookRatingDtoResponse toDto(BookIdBookRatingDtoResponse rating) {
+        return BookRatingDtoResponse.builder()
                 .ratingCount(rating.ratingsCount())
                 .characterDesign(rating.avgCharacterDesign())
                 .worldBackground(rating.avgWorldBackground())
@@ -53,7 +53,7 @@ public class BookRatingMapperImpl implements BookRatingMapper {
     }
 
     @Override
-    public BookRating toRating(BookRatingRequest request) {
+    public BookRating toRating(BookRatingDtoRequest request) {
 
         BookRating rating = new BookRating();
         rating.setCharacterDesign(request.characterDesign());
@@ -64,7 +64,7 @@ public class BookRatingMapperImpl implements BookRatingMapper {
     }
 
     @Override
-    public BookRating toRating(BookRating rating, BookRatingRequest request) {
+    public BookRating toRating(BookRating rating, BookRatingDtoRequest request) {
         if(rating == null) {
             return toRating(request);
         }
