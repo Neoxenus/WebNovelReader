@@ -47,7 +47,7 @@ public class UserController {
     @GetMapping("/{id}/avatar")
     public ResponseEntity<byte[]> getUserAvatar(@PathVariable Long id){
         ImageDtoResponse image = userService.getAvatar(id);
-        if (image == null) return ResponseEntity.notFound().build();
+        if (image.bytes() == null) return ResponseEntity.notFound().build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", image.mimeType());
