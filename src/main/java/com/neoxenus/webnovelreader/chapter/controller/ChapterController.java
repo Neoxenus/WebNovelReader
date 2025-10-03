@@ -20,7 +20,7 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/books/{bookId}/chapters")
+@RequestMapping("/books/{bookId}/chapters")
 @Slf4j
 public class ChapterController {
 

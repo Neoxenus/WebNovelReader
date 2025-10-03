@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/token")
+@RequestMapping("/token")
 @Slf4j
 public class TokenController {
     private final TokenService tokenService;

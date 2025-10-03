@@ -32,7 +32,7 @@ public class SecurityConfig  {
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter(authenticationManager, jwtService);
-        filter.setFilterProcessesUrl("/api/login");
+        filter.setFilterProcessesUrl("/login");
         return filter;
     }
 
@@ -45,28 +45,28 @@ public class SecurityConfig  {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(POST, "/api/users").permitAll()
-                        .requestMatchers("/api/login", "/api/token/refresh").permitAll()
+                        .requestMatchers(POST, "/users").permitAll()
+                        .requestMatchers("/login", "/token/refresh").permitAll()
 
-                        .requestMatchers(GET, "/api/users").hasAnyAuthority("ADMIN")
-                        .requestMatchers(GET, "/api/users/*/avatar").permitAll()
-                        .requestMatchers(GET, "/api/users/**").hasAnyAuthority("USER")
-                        .requestMatchers(PUT, "/api/users/**").hasAnyAuthority("USER")
+                        .requestMatchers(GET, "/users").hasAnyAuthority("ADMIN")
+                        .requestMatchers(GET, "/users/*/avatar").permitAll()
+                        .requestMatchers(GET, "/users/**").hasAnyAuthority("USER")
+                        .requestMatchers(PUT, "/users/**").hasAnyAuthority("USER")
                         .requestMatchers(DELETE, "/api/users/**").hasAnyAuthority("ADMIN")
 
-                        .requestMatchers(POST,"/api/books").hasAnyAuthority("ADMIN")
-                        .requestMatchers(POST, "/api/books/*/rate").hasAnyAuthority("USER")
-                        .requestMatchers(GET, "/api/books", "api/books/**").permitAll()
-                        .requestMatchers(PATCH, "/api/books/**").hasAuthority("ADMIN")
-                        .requestMatchers(PUT, "/api/books/**").hasAuthority("ADMIN")
-                        .requestMatchers(DELETE, "/api/books/**").hasAuthority("ADMIN")
+                        .requestMatchers(POST,"/books").hasAnyAuthority("ADMIN")
+                        .requestMatchers(POST, "/books/*/rate").hasAnyAuthority("USER")
+                        .requestMatchers(GET, "/books", "api/books/**").permitAll()
+                        .requestMatchers(PATCH, "/books/**").hasAuthority("ADMIN")
+                        .requestMatchers(PUT, "/books/**").hasAuthority("ADMIN")
+                        .requestMatchers(DELETE, "/books/**").hasAuthority("ADMIN")
 
-                        .requestMatchers(PATCH,  "/api/comments/**").authenticated()
-                        .requestMatchers(DELETE,  "/api/comments/**").authenticated()
-                        .requestMatchers(POST,"/api/*/*/comments").authenticated()
+                        .requestMatchers(PATCH,  "/comments/**").authenticated()
+                        .requestMatchers(DELETE,  "/comments/**").authenticated()
+                        .requestMatchers(POST,"/*/*/comments").authenticated()
 
-                        .requestMatchers("/api/bookmarks", "/api/bookmarks/**").authenticated()
-                        .requestMatchers("api/bookmark-collection", "/api/bookmark-collection/**").authenticated()
+                        .requestMatchers("/bookmarks", "/api/bookmarks/**").authenticated()
+                        .requestMatchers("/bookmark-collection", "/bookmark-collection/**").authenticated()
 
                         .anyRequest().permitAll()
                 )

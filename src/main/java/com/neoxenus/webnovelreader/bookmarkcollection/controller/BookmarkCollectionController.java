@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bookmark-collections")
+@RequestMapping("/bookmark-collections")
 @RequiredArgsConstructor
 public class BookmarkCollectionController {
 
