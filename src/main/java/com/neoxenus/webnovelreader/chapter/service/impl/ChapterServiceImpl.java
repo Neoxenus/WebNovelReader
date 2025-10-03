@@ -15,6 +15,9 @@ import com.neoxenus.webnovelreader.exceptions.EntityAlreadyExistsException;
 import com.neoxenus.webnovelreader.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     @Transactional
+    @CachePut(value = "CHAPTER_CACHE", key = "#result.id()")
     public ChapterDtoResponse addChapter(Long bookId, ChapterCreateDtoRequest request) throws NoSuchEntityException {
         Chapter chapter = chapterMapper.toChapter(request);
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NoSuchEntityException("No such book for id: " + bookId));
@@ -64,6 +68,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     @Transactional
+    @Cacheable(value = "CHAPTER_CACHE", key = "#chapterId")
     public ChapterDtoResponse getChapterDtoForView(Long bookId, Long chapterId) {
         Chapter chapter = chapterRepository.findById(chapterId)
                 .orElseThrow(() -> new NoSuchEntityException("No chapter for and id: " + chapterId));
@@ -92,6 +97,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     @Transactional
+    @CachePut(value = "CHAPTER_CACHE", key = "#result.id()")
     public ChapterDtoResponse updateChapter(Long bookId, Long chapterId, ChapterUpdateDtoRequest chapterUpdateDtoRequest) {
         Optional<Chapter> optionalChapter = chapterRepository.findById(chapterId);
         if(optionalChapter.isPresent()) {
@@ -105,6 +111,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "CHAPTER_CACHE", key = "#chapterId")
     public void deleteChapter(Long bookId, Long chapterId) {
         if(chapterRepository.existsById(chapterId)){
             log.info("Deleting chapter with id: {}", chapterId);
