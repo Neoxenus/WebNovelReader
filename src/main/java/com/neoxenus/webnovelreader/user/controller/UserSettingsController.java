@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @Slf4j
 public class UserSettingsController {
     private final UserSettingsService service;
