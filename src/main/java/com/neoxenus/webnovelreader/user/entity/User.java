@@ -1,5 +1,6 @@
 package com.neoxenus.webnovelreader.user.entity;
 
+import com.neoxenus.webnovelreader.bookmarkcollection.entity.BookmarkCollection;
 import com.neoxenus.webnovelreader.user.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 
 import java.sql.Types;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -49,12 +51,14 @@ public class User {
     private Set<UserRole> roles;
 
     @CreationTimestamp
+//    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private UserSettings settings;
 
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<BookmarkCollection> collections;
 
     @Lob
     @Column(name = "avatar")

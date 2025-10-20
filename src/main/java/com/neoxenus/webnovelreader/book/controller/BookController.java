@@ -31,6 +31,7 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<BookDtoResponse> createBook(@RequestBody BookCreateDtoRequest book){
+        log.info("Got request for saving: {}", book);
         BookDtoResponse bookDtoResponse = bookService.saveBook(book);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/books/" + bookDtoResponse.id()).toUriString());
         return ResponseEntity.created(uri).body(bookDtoResponse);

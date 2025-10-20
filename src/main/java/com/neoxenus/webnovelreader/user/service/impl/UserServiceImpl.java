@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         userEntity = userRepository.save(userEntity);
-        userRepository.flush();
+//        userRepository.flush();
 
         eventPublisher.publishEvent(new UserCreatedEvent(this, userEntity));
 
@@ -133,6 +133,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void deleteUser(Long id) {
+        //todo: check all deletion properly
         userRepository.deleteById(id);
     }
 
