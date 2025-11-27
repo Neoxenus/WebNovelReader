@@ -31,7 +31,7 @@ public class TagController {
     }
 
     @PatchMapping("/{id}")
-    public TagDtoResponse uddateTag(@PathVariable Long id, @RequestBody TagDtoRequest request){
+    public TagDtoResponse updateTag(@PathVariable Long id, @RequestBody TagDtoRequest request){
         return service.updateTag(id, request);
     }
     @GetMapping("/type/{type}")

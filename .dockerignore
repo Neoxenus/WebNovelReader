@@ -1,0 +1,10 @@
+.git
+.idea
+target
+build
+mvnw
+mvnw.cmd
+.mvn
+**/*.class
+*.log
+.env

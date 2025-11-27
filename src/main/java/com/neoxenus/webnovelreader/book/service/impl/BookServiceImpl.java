@@ -40,6 +40,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public BookDtoResponse saveBook(BookCreateDtoRequest book) {
+        log.info("Saving book {}", book);
         Book savedBook = bookRepository.save(bookMapper.toBook(book));
 //        bookRepository.flush();
         //todo: check for uniqueness
@@ -50,6 +51,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public BookDtoResponse getBookDtoById(Long id) {
+        log.info("Getting book DTO with id {}", id);
         return bookMapper.toDto(getBookById(id));
     }
 
@@ -61,6 +63,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Page<BookDtoResponse> getBooks(Pageable pageable) {
+        log.info("Getting book page: {}", pageable);
         return bookMapper.toDto(
                 bookRepository.findAll(pageable)
         );

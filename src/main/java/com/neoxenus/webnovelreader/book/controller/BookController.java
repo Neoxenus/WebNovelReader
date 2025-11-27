@@ -31,7 +31,7 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<BookDtoResponse> createBook(@RequestBody BookCreateDtoRequest book){
-        log.info("Got request for saving: {}", book);
+        log.info("Got request for saving a book: {}", book);
         BookDtoResponse bookDtoResponse = bookService.saveBook(book);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/books/" + bookDtoResponse.id()).toUriString());
         return ResponseEntity.created(uri).body(bookDtoResponse);
@@ -39,6 +39,7 @@ public class BookController {
 
     @GetMapping("/{id}")
     public BookDtoResponse getBook(@PathVariable Long id){
+        log.info("Got request for fetching book with id: {}", id);
         return bookService.getBookDtoById(id);
     }
     @GetMapping
@@ -48,6 +49,9 @@ public class BookController {
             @RequestParam(required = false, defaultValue = "id") String sortBy,
             @RequestParam(required = false, defaultValue = "asc") String sortDir
             ){
+        log.info("Got request for fetching book's page with number {}, size {}, sortBy {} and sortDir {}", page, size, sortBy, sortDir);
+
+
         Sort sort = sortDir.equalsIgnoreCase("asc") ?
                 Sort.by(sortBy).ascending() :
                 Sort.by(sortBy).descending();
@@ -58,17 +62,20 @@ public class BookController {
 
     @PatchMapping("/{id}")
     public BookDtoResponse updateBook(@PathVariable Long id, @RequestBody BookUpdateDtoRequest bookUpdateDtoRequest) {
+        log.info("Got request for updating a book with id: {} and new data {}", id, bookUpdateDtoRequest);
         return bookService.updateBook(id, bookUpdateDtoRequest);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBook(@PathVariable Long id) {
+        log.info("Got request for deleting a book with id: {}", id);
         bookService.deleteBook(id);
     }
 
     @PostMapping("/{id}/rate")
     public BookRatingDtoResponse rateBook(@PathVariable Long id, @RequestBody BookRatingDtoRequest request){
+        log.info("Got request for rating a book with id: {} and rating: {}", id, request);
         return bookService.rateBook(id, request);
     }
 }

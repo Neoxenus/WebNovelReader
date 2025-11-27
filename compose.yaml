@@ -2,44 +2,61 @@ version: "3.9"
 
 services:
   db:
-    image: postgres:16
+    image: postgres:16-alpine
     container_name: postgres-db
     restart: always
     environment:
-      POSTGRES_DB: web-reader
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
-    image: redis:8.2.0
+    image: redis:7-alpine
     container_name: redis-db
     restart: always
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT}:6379"
     volumes:
       - redis-data:/data
     command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   app:
     build: .
     container_name: web-novel-reader-app
+    restart: always
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     ports:
-      - "8080:8080"
-    volumes:
-      - /src/main/resources/secrets.properties:/app/secrets.properties
+      - "${APP_PORT}:8080"
     environment:
-      SPRING_CONFIG_IMPORT: optional:secrets.properties
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/web-reader?characterEncoding=UTF-8
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 1111
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      DB_HOST: db
+
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+
+      SPRING_DATA_REDIS_HOST: ${REDIS_HOST}
+      SPRING_DATA_REDIS_PORT: ${REDIS_PORT}
+
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${DDL_AUTO}
+      JWT_SECRET: ${JWT_SECRET}
+
 volumes:
   postgres-data:
   redis-data:

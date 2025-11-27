@@ -1,4 +1,22 @@
-FROM openjdk:24-jdk
+# --- Stage 1: Build ---
+FROM maven:3.9-eclipse-temurin-21-alpine AS builder
 WORKDIR /app
-COPY target/WebNovelReader-0.0.1-SNAPSHOT.jar /app/WebNovelReader.jar
-ENTRYPOINT ["java", "-jar", "WebNovelReader.jar"]
+
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# --- Stage 2: Run (Production Image) ---
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+
+COPY --from=builder /app/target/*.jar app.jar
+
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
