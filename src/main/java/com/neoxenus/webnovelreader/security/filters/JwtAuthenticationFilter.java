@@ -1,5 +1,6 @@
 package com.neoxenus.webnovelreader.security.filters;
 
+import com.neoxenus.webnovelreader.security.dto.request.LoginDtoRequest;
 import com.neoxenus.webnovelreader.security.utils.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -26,6 +28,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final JwtService jwtService;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtService jwtService) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
@@ -37,13 +41,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(
             HttpServletRequest request,
             HttpServletResponse response) throws AuthenticationException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        log.info("Username is: {}", username); log.info("Password is: {}", password);
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username, password );
 
-        return authenticationManager.authenticate(authenticationToken);
+        try{
+            LoginDtoRequest loginRequest = objectMapper.readValue(request.getInputStream(), LoginDtoRequest.class);
+
+            log.info("Attempting authentication for username: {}", loginRequest.username());
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.username(),
+                            loginRequest.password()
+                    );
+            return authenticationManager.authenticate(authenticationToken);
+        } catch (IOException e) {
+            throw new AuthenticationServiceException("Failed to parse authentication request body", e);
+        }
     }
 
     @Override
