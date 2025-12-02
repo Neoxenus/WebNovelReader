@@ -1,4 +1,4 @@
-Web Novel Reader API
+## Web Novel Reader API
 
 ## API Documentation
 Once the application is running, you can access the OpenAPI documentation locally:
